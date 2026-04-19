@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Digital Personality Generator | OCEAN Model</title>
+  <link rel="stylesheet" href="/css/styles.css"/>
+  <script src="/js/vendor/chart.js"></script>
+</head>
+<body>
+<div class="bg-stars"></div>
+<div id="toast-container"></div>
+<nav id="navbar">
+  <div class="container">
+    <div class="nav-inner">
+      <div class="nav-logo" id="nav-logo"><span>✦</span> Personality<span>Lab</span></div>
+      <div class="nav-links">
+        <button class="nav-btn" id="nav-dashboard">Dashboard</button>
+        <button class="nav-btn" id="nav-take-test">Take Test</button>
+        <button class="nav-btn" id="nav-history">History</button>
+      </div>
+      <div class="nav-user">
+        <div class="nav-avatar" id="nav-avatar">?</div>
+        <span class="name" id="nav-user-name"></span>
+        <button class="btn btn-sm btn-ghost" id="nav-logout">Logout</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<div id="page-landing" class="page active">
+  <section class="hero">
+    <div class="container">
+      <div class="hero-badge">🧬 Science-based personality assessment</div>
+      <h1 class="hero-title">Discover Your<br/><span class="gradient-text">Digital Self</span></h1>
+      <p class="hero-subtitle">Unlock deep insights into your personality with the gold-standard Big Five OCEAN model. 25 questions. Instant results.</p>
+      <div class="hero-actions">
+        <button class="btn btn-primary btn-lg" id="btn-get-started">Start Assessment →</button>
+        <button class="btn btn-outline btn-lg" id="btn-landing-login">Sign In</button>
+      </div>
+      <div class="traits-grid">
+        <div class="trait-pill"><div class="trait-dot" style="background:#a855f7"></div>Openness</div>
+        <div class="trait-pill"><div class="trait-dot" style="background:#00d4aa"></div>Conscientiousness</div>
+        <div class="trait-pill"><div class="trait-dot" style="background:#f5c842"></div>Extraversion</div>
+        <div class="trait-pill"><div class="trait-dot" style="background:#ff6b6b"></div>Agreeableness</div>
+        <div class="trait-pill"><div class="trait-dot" style="background:#4fc3f7"></div>Neuroticism</div>
+      </div>
+    </div>
+  </section>
+  <section style="padding:80px 0;border-top:1px solid rgba(255,255,255,0.05);">
+    <div class="container">
+      <div style="text-align:center;margin-bottom:48px;">
+        <h2 style="font-family:var(--font-display);font-size:2rem;font-weight:800;margin-bottom:12px;">What You'll Discover</h2>
+        <p style="color:var(--text-secondary);">A complete personality breakdown backed by decades of psychological research.</p>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;">
+        <div class="card" style="text-align:center;padding:32px 24px;"><div style="font-size:2.5rem;margin-bottom:16px;">🧠</div><h3 style="font-family:var(--font-display);font-weight:700;margin-bottom:8px;">Trait Scores</h3><p style="color:var(--text-secondary);font-size:.9rem;">Percentage scores across all 5 OCEAN dimensions</p></div>
+        <div class="card" style="text-align:center;padding:32px 24px;"><div style="font-size:2.5rem;margin-bottom:16px;">📊</div><h3 style="font-family:var(--font-display);font-weight:700;margin-bottom:8px;">Radar Chart</h3><p style="color:var(--text-secondary);font-size:.9rem;">Visual representation of your personality profile</p></div>
+        <div class="card" style="text-align:center;padding:32px 24px;"><div style="font-size:2.5rem;margin-bottom:16px;">💡</div><h3 style="font-family:var(--font-display);font-weight:700;margin-bottom:8px;">Insights</h3><p style="color:var(--text-secondary);font-size:.9rem;">Personalized career and life suggestions</p></div>
+        <div class="card" style="text-align:center;padding:32px 24px;"><div style="font-size:2.5rem;margin-bottom:16px;">📄</div><h3 style="font-family:var(--font-display);font-weight:700;margin-bottom:8px;">PDF Report</h3><p style="color:var(--text-secondary);font-size:.9rem;">Download a shareable professional report</p></div>
+      </div>
+    </div>
+  </section>
+</div>
+<div id="page-auth" class="page">
+  <div class="auth-card">
+    <div class="auth-logo">
+      <div class="icon">✦</div>
+      <h2>PersonalityLab</h2>
+      <p>Big Five OCEAN Assessment</p>
+    </div>
+    <div class="auth-tabs">
+      <button class="auth-tab active" data-tab="login">Sign In</button>
+      <button class="auth-tab" data-tab="register">Register</button>
+    </div>
+    <form id="form-login" class="auth-form active" novalidate>
+      <div class="form-group"><label for="login-email">Email</label><input type="email" id="login-email" placeholder="you@example.com" autocomplete="email" required/></div>
+      <div class="form-group"><label for="login-password">Password</label><input type="password" id="login-password" placeholder="Your password" autocomplete="current-password" required/></div>
+      <button type="submit" class="btn btn-primary btn-full" style="margin-top:8px;">Sign In →</button>
+    </form>
+    <form id="form-register" class="auth-form" novalidate>
+      <div class="form-group"><label for="reg-name">Full Name</label><input type="text" id="reg-name" placeholder="Your full name" autocomplete="name" required/></div>
+      <div class="form-group"><label for="reg-email">Email</label><input type="email" id="reg-email" placeholder="you@example.com" autocomplete="email" required/></div>
+      <div class="form-group"><label for="reg-password">Password</label><input type="password" id="reg-password" placeholder="Min 6 characters" autocomplete="new-password" required/></div>
+      <button type="submit" class="btn btn-primary btn-full" style="margin-top:8px;">Create Account →</button>
+    </form>
+    <div class="auth-footer"><button onclick="showPage('landing')" class="btn btn-ghost btn-sm" style="margin-top:12px;">← Back to Home</button></div>
+  </div>
+</div>
+<div id="page-dashboard" class="page">
+  <div class="container">
+    <div class="dashboard-header">
+      <div class="dashboard-welcome"><h1>Welcome back, <span id="dash-user-name">User</span> 👋</h1><p>Ready to explore your personality today?</p></div>
+      <button class="btn btn-primary" onclick="startQuiz()">✦ Take New Assessment</button>
+    </div>
+    <div class="stats-row">
+      <div class="stat-card"><span class="stat-icon">🧪</span><span class="stat-label">Tests Taken</span><span class="stat-value" id="dash-total-tests">0</span></div>
+      <div class="stat-card"><span class="stat-icon">🌟</span><span class="stat-label">Latest Type</span><span class="stat-value" style="font-size:1rem;line-height:1.4" id="dash-last-type">—</span><span style="font-size:.78rem;color:var(--text-muted)" id="dash-last-date"></span></div>
+      <div class="stat-card"><span class="stat-icon">📅</span><span class="stat-label">Member Since</span><span class="stat-value" style="font-size:1.1rem" id="dash-member-since">—</span></div>
+    </div>
+    <div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:36px;">
+      <button id="btn-view-latest" class="btn btn-outline" style="display:none;">View Latest Result →</button>
+      <button class="btn btn-ghost" onclick="showHistory()">📂 View All History</button>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;">
+      <div class="card"><h3 style="font-family:var(--font-display);font-weight:700;margin-bottom:12px;font-size:1rem;">🧬 About the OCEAN Model</h3><p style="color:var(--text-secondary);font-size:.9rem;line-height:1.7;">The Big Five personality model is the most widely accepted framework in personality psychology. It measures five core dimensions: Openness, Conscientiousness, Extraversion, Agreeableness, and Neuroticism.</p></div>
+      <div class="card"><h3 style="font-family:var(--font-display);font-weight:700;margin-bottom:12px;font-size:1rem;">⌨️ Keyboard Shortcuts</h3><div style="display:flex;flex-direction:column;gap:8px;font-size:.88rem;color:var(--text-secondary);"><div style="display:flex;justify-content:space-between;"><span>Select answer</span><kbd style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:4px;padding:2px 8px;font-size:.8rem;">1–5</kbd></div><div style="display:flex;justify-content:space-between;"><span>Next question</span><kbd style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:4px;padding:2px 8px;font-size:.8rem;">→</kbd></div><div style="display:flex;justify-content:space-between;"><span>Previous question</span><kbd style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:4px;padding:2px 8px;font-size:.8rem;">←</kbd></div></div></div>
+    </div>
+  </div>
+</div>
+<div id="page-quiz" class="page">
+  <div class="container" style="max-width:680px;">
+    <div class="quiz-header"><h1>Personality Assessment</h1><p>Rate how much each statement describes you on a scale of 1–5</p></div>
+    <div class="progress-bar-container"><div class="progress-bar-fill" style="width:0%"></div></div>
+    <div class="progress-text">0 of 25 answered</div>
+    <div id="question-container"></div>
+    <div class="quiz-nav">
+      <button class="btn btn-ghost" id="btn-quiz-prev" style="display:none;">← Previous</button>
+      <div style="flex:1"></div>
+      <button class="btn btn-primary" id="btn-quiz-next" disabled>Next →</button>
+      <button class="btn btn-teal" id="btn-quiz-submit" style="display:none;" disabled>Submit Assessment ✦</button>
+    </div>
+  </div>
+</div>
+<div id="page-results" class="page">
+  <div class="container">
+    <div class="results-hero">
+      <p style="color:var(--text-muted);font-size:.85rem;margin-bottom:8px;" id="result-completed-at"></p>
+      <div class="personality-type-badge"><h2 id="result-personality-type">Loading…</h2></div>
+      <div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:16px;" id="result-dominant-traits"></div>
+    </div>
+    <div class="results-grid">
+      <div class="radar-card"><h3>Personality Radar</h3><div class="chart-container"><canvas id="radar-chart"></canvas></div></div>
+      <div class="radar-card"><h3>Trait Breakdown</h3><div class="traits-breakdown" id="result-traits-breakdown"></div></div>
+    </div>
+    <div class="summary-card"><h3>📝 Personality Summary</h3><p id="result-summary"></p></div>
+    <div class="suggestions-card"><h3>💡 Personalized Suggestions</h3><div class="suggestions-list" id="result-suggestions"></div></div>
+    <div class="results-actions">
+      <button class="btn btn-primary" id="btn-download-pdf">📄 Download PDF Report</button>
+      <button class="btn btn-outline" id="btn-retake-quiz">↺ Retake Assessment</button>
+      <button class="btn btn-ghost" id="btn-view-history">📂 View History</button>
+    </div>
+  </div>
+</div>
+<div id="page-history" class="page">
+  <div class="container">
+    <div class="history-header"><h1>Test History</h1><button class="btn btn-primary" onclick="startQuiz()">+ New Assessment</button></div>
+    <div class="history-list" id="history-list"></div>
+  </div>
+</div>
+<script src="/js/tokenhelper.js"></script>
+<script src="/js/app.js"></script>
+</body>
+</html>
