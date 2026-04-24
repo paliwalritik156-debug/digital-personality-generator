@@ -270,7 +270,7 @@ nav{position:sticky;top:0;z-index:100;background:rgba(245,243,238,0.9);backdrop-
   <div id="hlist"></div>
 </div>
 <script>
-let tk=localStorage.getItem('piq_tk'),us=JSON.parse(localStorage.getItem('piq_us')||'null'),qs=[],ans={},cq=0,crid=null,rchart=null;
+let tk=localStorage.getItem('piq_token'),us=JSON.parse(localStorage.getItem('piq_user')||'null'),qs=[],ans={},cq=0,crid=null,rchart=null;
 const TR=['openness','conscientiousness','extraversion','agreeableness','neuroticism'];
 const TL={openness:'Openness',conscientiousness:'Conscientiousness',extraversion:'Extraversion',agreeableness:'Agreeableness',neuroticism:'Neuroticism'};
 const TC={openness:'#6A2AC8',conscientiousness:'#2A6BC8',extraversion:'#C8502A',agreeableness:'#2A8A5A',neuroticism:'#C8922A'};
@@ -286,8 +286,8 @@ function updateNav(){const a=document.getElementById('naa');if(tk&&us){a.innerHT
 function tAuth(m){const r=m==='reg';document.getElementById('lf').classList.toggle('hidden',r);document.getElementById('rf').classList.toggle('hidden',!r);document.getElementById('at').textContent=r?'Create account':'Welcome back';document.getElementById('as').textContent=r?'Start free':'Sign in to access your reports';document.getElementById('am').style.display='none';}
 async function doLogin(){const e=document.getElementById('le').value.trim(),p=document.getElementById('lp').value;if(!e||!p)return aMsg('Fill all fields');const d=await api('/api/auth/login','POST',{email:e,password:p});if(d.success){saveS(d);showPage('pd');toast('Welcome back');}else aMsg(d.message||'Login failed');}
 async function doRegister(){const n=document.getElementById('rn').value.trim(),e=document.getElementById('re').value.trim(),p=document.getElementById('rp').value;if(!n||!e||!p)return aMsg('Fill all fields');if(p.length<6)return aMsg('Password min 6 chars');const d=await api('/api/auth/register','POST',{name:n,email:e,password:p});if(d.success){saveS(d);showPage('pd');toast('Account created');}else aMsg(d.message||'Failed');}
-function saveS(d){tk=d.token;us=d.user;localStorage.setItem('piq_tk',tk);localStorage.setItem('piq_us',JSON.stringify(us));updateNav();}
-function doLogout(){tk=null;us=null;localStorage.removeItem('piq_tk');localStorage.removeItem('piq_us');updateNav();showPage('phome');toast('Logged out');}
+function saveS(d){tk=d.token;us=d.user;localStorage.setItem('piq_token',tk);localStorage.setItem('piq_user',JSON.stringify(us));updateNav();}
+function doLogout(){tk=null;us=null;localStorage.removeItem('piq_token');localStorage.removeItem('piq_user');updateNav();showPage('phome');toast('Logged out');}
 async function loadDash(){if(!us)return;document.getElementById('dn').textContent=us.name.split(' ')[0];const d=await api('/api/history');if(d.success&&d.data.length){document.getElementById('dt').textContent=d.count;const l=d.data[0];document.getElementById('dd').textContent=l.dominantTrait?TL[l.dominantTrait]:'none';document.getElementById('dl').textContent=new Date(l.completedAt).toLocaleDateString('en-IN',{month:'short',day:'numeric'});document.getElementById('dhl').innerHTML=d.data.slice(0,3).map(r=>hCard(r)).join('');}}
 function handleStart(){if(!tk){showPage('pa','reg');return;}loadQuiz();}
 async function loadQuiz(){showPage('pl');animL();const d=await api('/api/questions');if(!d.success){toast('Failed to load');showPage('phome');return;}qs=d.data;ans={};cq=0;renderQ();showPage('pq');}
