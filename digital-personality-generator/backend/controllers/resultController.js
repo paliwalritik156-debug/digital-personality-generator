@@ -74,7 +74,7 @@ const downloadPDF = async (req, res) => {
     doc.text(`Date: ${new Date(result.completedAt).toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' })}`);
     doc.moveDown(1);
     doc.fillColor('#1a1a2e').fontSize(16).font('Helvetica-Bold').text('Personality Type:');
-    doc.fontSize(14).font('Helvetica').fillColor('#7c5cfc').text(result.personalityType);
+    doc.fontSize(14).font('Helvetica').fillColor('#7c5cfc').text((result.personalityType||'').replace(/[^\w\s]/g,'').trim());
     doc.moveDown(1);
     doc.fillColor('#1a1a2e').fontSize(16).font('Helvetica-Bold').text('Trait Scores');
     doc.moveDown(0.5);
