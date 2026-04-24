@@ -93,11 +93,11 @@ const downloadPDF = async (req, res) => {
       doc.moveDown(1.5);
     });
     doc.moveDown(1);
-    doc.fillColor('#1a1a2e').fontSize(16).font('Helvetica-Bold').text('Personality Summary');
+    doc.text('', 50, doc.y);doc.fillColor('#1a1a2e').fontSize(16).font('Helvetica-Bold').text('Personality Summary', 50, doc.y, {width:490});
     doc.moveDown(0.5);
     doc.text('', 50, doc.y);doc.fillColor('#333').fontSize(11).font('Helvetica').text(result.summary, 50, doc.y, { lineGap: 6, width: 490 });
     doc.moveDown(1.5);
-    doc.fillColor('#1a1a2e').fontSize(16).font('Helvetica-Bold').text('Personalized Suggestions');
+    doc.text('', 50, doc.y);doc.fillColor('#1a1a2e').fontSize(16).font('Helvetica-Bold').text('Personalized Suggestions', 50, doc.y, {width:490});
     doc.moveDown(0.5);
     result.suggestions.forEach((s, i) => {
       doc.text('', 50, doc.y);doc.fillColor('#333').fontSize(11).font('Helvetica').text(`${i+1}. ${s}`, { lineGap: 4, width: 512 });
