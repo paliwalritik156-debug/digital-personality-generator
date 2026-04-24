@@ -298,7 +298,7 @@ function pickA(id,v){ans[id]=v;renderQ();}
 function nextQ(){if(!ans[qs[cq]._id])return toast('Please select a rating');if(cq===qs.length-1){submitQ();return;}cq++;renderQ();}
 function prevQ(){if(cq>0){cq--;renderQ();}}
 document.addEventListener('keydown',function(e){if(document.getElementById('pq').classList.contains('hidden'))return;const q=qs[cq];if(!q)return;if(['1','2','3','4','5'].includes(e.key))pickA(q._id,parseInt(e.key));if(e.key==='ArrowRight')nextQ();if(e.key==='ArrowLeft')prevQ();});
-async function submitQ(){showPage('pl');animL();const arr=Object.entries(ans).map(function(e){return{questionId:e[0],value:e[1]};});const d=await api('/api/submit','POST',{answers:arr});clearInterval(li2);if(d.success){crid=d.result&&d.result.id?d.result.id:d.resultId;const f=await api('/api/result/'+crid);if(f.success)renderR(f.data,f.suggestions,f.descriptions);}else{toast('Failed: '+d.message);showPage('pq');}}
+async function submitQ(){showPage('pl');animL();const arr=Object.entries(ans).map(function(e){return{questionId:e[0],value:e[1]};});const d=await api('/api/submit','POST',{answers:arr});clearInterval(li2);if(d.success){crid=d.result&&d.result.sessionId?d.result.sessionId:(d.result&&d.result.id?d.result.id:d.resultId);const f=await api('/api/result/'+crid);if(f.success)renderR(f.data,f.suggestions,f.descriptions);}else{toast('Failed: '+d.message);showPage('pq');}}
 function renderR(r,sg,desc){
 document.getElementById('rnt').textContent=(us?us.name:'Your')+' Profile';
 document.getElementById('rd').textContent=new Date(r.completedAt).toLocaleDateString('en-IN',{year:'numeric',month:'long',day:'numeric'});
