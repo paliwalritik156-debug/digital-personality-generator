@@ -82,13 +82,15 @@ const downloadPDF = async (req, res) => {
     const traitLabels = { openness:'Openness', conscientiousness:'Conscientiousness', extraversion:'Extraversion', agreeableness:'Agreeableness', neuroticism:'Neuroticism' };
     Object.entries(result.scores).forEach(([trait, score]) => {
       const s = typeof score === 'object' ? score.score : score;
-      doc.fillColor('#333').fontSize(11).font('Helvetica-Bold').text(`${traitLabels[trait]}`);
-      const barY = doc.y + 2;
-      doc.rect(50, barY, 350, 12).fill('#e0e0e0');
-      const barWidth = Math.round((s / 100) * 350);
-      doc.rect(50, barY, barWidth, 12).fill(traitColors[trait] || '#666');
-      doc.fillColor(traitColors[trait] || '#666').fontSize(10).font('Helvetica').text(`${s}%`, 410, barY);
-      doc.moveDown(1.8);
+      const rowY = doc.y;
+      doc.fillColor('#333').fontSize(10).font('Helvetica-Bold').text(`${traitLabels[trait]}`, 50, rowY, {width:120});
+      const barX = 175;
+      const barW = 280;
+      const filledW = Math.round((s / 100) * barW);
+      doc.rect(barX, rowY + 2, barW, 10).fill('#e0e0e0');
+      doc.rect(barX, rowY + 2, filledW, 10).fill(traitColors[trait] || '#666');
+      doc.fillColor(traitColors[trait] || '#333').fontSize(10).font('Helvetica').text(`${s}%`, barX + barW + 8, rowY);
+      doc.moveDown(1.5);
     });
     doc.moveDown(1);
     doc.fillColor('#1a1a2e').fontSize(16).font('Helvetica-Bold').text('Personality Summary');
