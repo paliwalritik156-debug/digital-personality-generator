@@ -99,8 +99,15 @@ const downloadPDF = async (req, res) => {
     doc.moveDown(1.5);
     doc.text('', 50, doc.y);doc.fillColor('#1a1a2e').fontSize(16).font('Helvetica-Bold').text('Personalized Suggestions', 50, doc.y, {width:490});
     doc.moveDown(0.5);
-    result.suggestions.forEach((s, i) => {
-      doc.text('', 50, doc.y);doc.fillColor('#333').fontSize(11).font('Helvetica').text(`${i+1}. ${s}`, { lineGap: 4, width: 512 });
+    const pdfSuggestions = result.suggestions && result.suggestions.length > 0 ? result.suggestions : [
+      'Try incorporating small new experiences weekly to expand your comfort zone.',
+      'Experiment with time-blocking or habit stacking to build productive routines.',
+      'Deep-focus roles like programming, writing, or research suit your nature.',
+      'Set clear social boundaries to protect your energy levels.',
+      'Practice mindfulness or journaling to build emotional resilience.'
+    ];
+    pdfSuggestions.forEach((s, i) => {
+      doc.text('', 50, doc.y);doc.fillColor('#333').fontSize(11).font('Helvetica').text(`${i+1}. ${s}`, { lineGap: 4, width: 490 });
       doc.moveDown(0.5);
     });
     doc.moveDown(2);
