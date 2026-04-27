@@ -52,6 +52,134 @@ async function sendChat(){
 }
 function chatSug(el){document.getElementById('chat-inp').value=el.textContent;sendChat();}
 
+
+var AV_RENDERER = null, AV_SCENE = null, AV_CAMERA = null, AV_SPHERE = null, AV_FRAME = null;
+
+function initAvatar(dominantTrait){
+  var canvas = document.getElementById('avatar-canvas');
+  if(!canvas || !window.THREE) return;
+  if(AV_RENDERER){AV_RENDERER.dispose();cancelAnimationFrame(AV_FRAME);}
+
+  var traitColors2 = {
+    openness: {main:0x8B5CF6, glow:0xA78BFA},
+    conscientiousness: {main:0x06B6D4, glow:0x67E8F9},
+    extraversion: {main:0xEC4899, glow:0xF9A8D4},
+    agreeableness: {main:0x10B981, glow:0x6EE7B7},
+    neuroticism: {main:0xF59E0B, glow:0xFCD34D}
+  };
+  var colors = traitColors2[dominantTrait] || traitColors2.openness;
+
+  AV_RENDERER = new THREE.WebGLRenderer({canvas:canvas, alpha:true, antialias:true});
+  AV_RENDERER.setSize(200, 200);
+  AV_RENDERER.setPixelRatio(Math.min(devicePixelRatio, 2));
+
+  AV_SCENE = new THREE.Scene();
+  AV_CAMERA = new THREE.PerspectiveCamera(50, 1, 0.1, 100);
+  AV_CAMERA.position.z = 3;
+
+  // Main sphere
+  var geo = new THREE.SphereGeometry(0.9, 64, 64);
+  var mat = new THREE.MeshPhongMaterial({
+    color: colors.main,
+    emissive: colors.main,
+    emissiveIntensity: 0.3,
+    shininess: 100,
+    transparent: true,
+    opacity: 0.9
+  });
+  AV_SPHERE = new THREE.Mesh(geo, mat);
+  AV_SCENE.add(AV_SPHERE);
+
+  // Inner glow sphere
+  var igeo = new THREE.SphereGeometry(0.85, 32, 32);
+  var imat = new THREE.MeshBasicMaterial({
+    color: colors.glow,
+    transparent: true,
+    opacity: 0.15,
+    side: THREE.BackSide
+  });
+  var inner = new THREE.Mesh(igeo, imat);
+  AV_SCENE.add(inner);
+
+  // Outer glow sphere
+  var ogeo = new THREE.SphereGeometry(1.1, 32, 32);
+  var omat = new THREE.MeshBasicMaterial({
+    color: colors.main,
+    transparent: true,
+    opacity: 0.05,
+    side: THREE.BackSide
+  });
+  var outer = new THREE.Mesh(ogeo, omat);
+  AV_SCENE.add(outer);
+
+  // Particles around sphere
+  var pGeo = new THREE.BufferGeometry();
+  var pCount = 200;
+  var pPos = new Float32Array(pCount * 3);
+  for(var i = 0; i < pCount; i++){
+    var theta = Math.random() * Math.PI * 2;
+    var phi = Math.acos(2 * Math.random() - 1);
+    var r = 1.2 + Math.random() * 0.5;
+    pPos[i*3] = r * Math.sin(phi) * Math.cos(theta);
+    pPos[i*3+1] = r * Math.sin(phi) * Math.sin(theta);
+    pPos[i*3+2] = r * Math.cos(phi);
+  }
+  pGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
+  var pMat = new THREE.PointsMaterial({color: colors.glow, size: 0.02, transparent: true, opacity: 0.8});
+  var particles = new THREE.Points(pGeo, pMat);
+  AV_SCENE.add(particles);
+
+  // Lights
+  var ambLight = new THREE.AmbientLight(0xffffff, 0.4);
+  AV_SCENE.add(ambLight);
+  var pointLight1 = new THREE.PointLight(colors.main, 2, 10);
+  pointLight1.position.set(2, 2, 2);
+  AV_SCENE.add(pointLight1);
+  var pointLight2 = new THREE.PointLight(colors.glow, 1.5, 10);
+  pointLight2.position.set(-2, -1, 1);
+  AV_SCENE.add(pointLight2);
+
+  // Mouse interaction
+  var mx = 0, my = 0;
+  canvas.addEventListener('mousemove', function(e){
+    var rect = canvas.getBoundingClientRect();
+    mx = ((e.clientX - rect.left) / 200 - 0.5) * 2;
+    my = -((e.clientY - rect.top) / 200 - 0.5) * 2;
+  });
+
+  var t = 0;
+  function animate(){
+    AV_FRAME = requestAnimationFrame(animate);
+    t += 0.01;
+    AV_SPHERE.rotation.y += 0.005;
+    AV_SPHERE.rotation.x += 0.002;
+    AV_SPHERE.position.x += (mx * 0.1 - AV_SPHERE.position.x) * 0.05;
+    AV_SPHERE.position.y += (my * 0.1 - AV_SPHERE.position.y) * 0.05;
+    particles.rotation.y -= 0.003;
+    pointLight1.intensity = 2 + Math.sin(t * 2) * 0.5;
+    AV_RENDERER.render(AV_SCENE, AV_CAMERA);
+  }
+  animate();
+}
+
+function updateAvatar(r, badge){
+  var dom = r.dominantTrait || 'openness';
+  var traitEmojis = {openness:'🎨',conscientiousness:'📋',extraversion:'🌟',agreeableness:'💚',neuroticism:'🌊'};
+  var tc = {openness:'#8B5CF6',conscientiousness:'#06B6D4',extraversion:'#EC4899',agreeableness:'#10B981',neuroticism:'#F59E0B'};
+
+  var avName = document.getElementById('av-name');
+  var avType = document.getElementById('av-type');
+  var avOrbs = document.getElementById('av-orbs');
+
+  if(avName) avName.textContent = (US ? US.name : 'Your') + ' Twin';
+  if(avType) avType.textContent = badge;
+  if(avOrbs) avOrbs.innerHTML = TR.map(function(t,i){
+    return '<div class="avatar-orb" style="background:'+tc[t]+';animation-delay:'+(i*0.1)+'s" title="'+TL[t]+': '+gs(r.scores,t)+'%"></div>';
+  }).join('');
+
+  setTimeout(function(){ initAvatar(dom); }, 200);
+}
+
 </script>
 <script src="/js/chart.min.js">
 var CHAT_MSGS = [];
@@ -99,6 +227,134 @@ async function sendChat(){
   },1200+Math.random()*800);
 }
 function chatSug(el){document.getElementById('chat-inp').value=el.textContent;sendChat();}
+
+
+var AV_RENDERER = null, AV_SCENE = null, AV_CAMERA = null, AV_SPHERE = null, AV_FRAME = null;
+
+function initAvatar(dominantTrait){
+  var canvas = document.getElementById('avatar-canvas');
+  if(!canvas || !window.THREE) return;
+  if(AV_RENDERER){AV_RENDERER.dispose();cancelAnimationFrame(AV_FRAME);}
+
+  var traitColors2 = {
+    openness: {main:0x8B5CF6, glow:0xA78BFA},
+    conscientiousness: {main:0x06B6D4, glow:0x67E8F9},
+    extraversion: {main:0xEC4899, glow:0xF9A8D4},
+    agreeableness: {main:0x10B981, glow:0x6EE7B7},
+    neuroticism: {main:0xF59E0B, glow:0xFCD34D}
+  };
+  var colors = traitColors2[dominantTrait] || traitColors2.openness;
+
+  AV_RENDERER = new THREE.WebGLRenderer({canvas:canvas, alpha:true, antialias:true});
+  AV_RENDERER.setSize(200, 200);
+  AV_RENDERER.setPixelRatio(Math.min(devicePixelRatio, 2));
+
+  AV_SCENE = new THREE.Scene();
+  AV_CAMERA = new THREE.PerspectiveCamera(50, 1, 0.1, 100);
+  AV_CAMERA.position.z = 3;
+
+  // Main sphere
+  var geo = new THREE.SphereGeometry(0.9, 64, 64);
+  var mat = new THREE.MeshPhongMaterial({
+    color: colors.main,
+    emissive: colors.main,
+    emissiveIntensity: 0.3,
+    shininess: 100,
+    transparent: true,
+    opacity: 0.9
+  });
+  AV_SPHERE = new THREE.Mesh(geo, mat);
+  AV_SCENE.add(AV_SPHERE);
+
+  // Inner glow sphere
+  var igeo = new THREE.SphereGeometry(0.85, 32, 32);
+  var imat = new THREE.MeshBasicMaterial({
+    color: colors.glow,
+    transparent: true,
+    opacity: 0.15,
+    side: THREE.BackSide
+  });
+  var inner = new THREE.Mesh(igeo, imat);
+  AV_SCENE.add(inner);
+
+  // Outer glow sphere
+  var ogeo = new THREE.SphereGeometry(1.1, 32, 32);
+  var omat = new THREE.MeshBasicMaterial({
+    color: colors.main,
+    transparent: true,
+    opacity: 0.05,
+    side: THREE.BackSide
+  });
+  var outer = new THREE.Mesh(ogeo, omat);
+  AV_SCENE.add(outer);
+
+  // Particles around sphere
+  var pGeo = new THREE.BufferGeometry();
+  var pCount = 200;
+  var pPos = new Float32Array(pCount * 3);
+  for(var i = 0; i < pCount; i++){
+    var theta = Math.random() * Math.PI * 2;
+    var phi = Math.acos(2 * Math.random() - 1);
+    var r = 1.2 + Math.random() * 0.5;
+    pPos[i*3] = r * Math.sin(phi) * Math.cos(theta);
+    pPos[i*3+1] = r * Math.sin(phi) * Math.sin(theta);
+    pPos[i*3+2] = r * Math.cos(phi);
+  }
+  pGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
+  var pMat = new THREE.PointsMaterial({color: colors.glow, size: 0.02, transparent: true, opacity: 0.8});
+  var particles = new THREE.Points(pGeo, pMat);
+  AV_SCENE.add(particles);
+
+  // Lights
+  var ambLight = new THREE.AmbientLight(0xffffff, 0.4);
+  AV_SCENE.add(ambLight);
+  var pointLight1 = new THREE.PointLight(colors.main, 2, 10);
+  pointLight1.position.set(2, 2, 2);
+  AV_SCENE.add(pointLight1);
+  var pointLight2 = new THREE.PointLight(colors.glow, 1.5, 10);
+  pointLight2.position.set(-2, -1, 1);
+  AV_SCENE.add(pointLight2);
+
+  // Mouse interaction
+  var mx = 0, my = 0;
+  canvas.addEventListener('mousemove', function(e){
+    var rect = canvas.getBoundingClientRect();
+    mx = ((e.clientX - rect.left) / 200 - 0.5) * 2;
+    my = -((e.clientY - rect.top) / 200 - 0.5) * 2;
+  });
+
+  var t = 0;
+  function animate(){
+    AV_FRAME = requestAnimationFrame(animate);
+    t += 0.01;
+    AV_SPHERE.rotation.y += 0.005;
+    AV_SPHERE.rotation.x += 0.002;
+    AV_SPHERE.position.x += (mx * 0.1 - AV_SPHERE.position.x) * 0.05;
+    AV_SPHERE.position.y += (my * 0.1 - AV_SPHERE.position.y) * 0.05;
+    particles.rotation.y -= 0.003;
+    pointLight1.intensity = 2 + Math.sin(t * 2) * 0.5;
+    AV_RENDERER.render(AV_SCENE, AV_CAMERA);
+  }
+  animate();
+}
+
+function updateAvatar(r, badge){
+  var dom = r.dominantTrait || 'openness';
+  var traitEmojis = {openness:'🎨',conscientiousness:'📋',extraversion:'🌟',agreeableness:'💚',neuroticism:'🌊'};
+  var tc = {openness:'#8B5CF6',conscientiousness:'#06B6D4',extraversion:'#EC4899',agreeableness:'#10B981',neuroticism:'#F59E0B'};
+
+  var avName = document.getElementById('av-name');
+  var avType = document.getElementById('av-type');
+  var avOrbs = document.getElementById('av-orbs');
+
+  if(avName) avName.textContent = (US ? US.name : 'Your') + ' Twin';
+  if(avType) avType.textContent = badge;
+  if(avOrbs) avOrbs.innerHTML = TR.map(function(t,i){
+    return '<div class="avatar-orb" style="background:'+tc[t]+';animation-delay:'+(i*0.1)+'s" title="'+TL[t]+': '+gs(r.scores,t)+'%"></div>';
+  }).join('');
+
+  setTimeout(function(){ initAvatar(dom); }, 200);
+}
 
 </script>
 <style>
@@ -342,6 +598,20 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:68px;display:flex;ali
 .chat-inp::placeholder{color:var(--tx3)}
 .chat-send{width:42px;height:42px;background:var(--gr);border:none;border-radius:50%;color:#fff;font-size:1rem;cursor:pointer;transition:var(--tr);display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .chat-send:hover{transform:scale(1.1);box-shadow:0 0 20px rgba(139,92,246,0.4)}
+
+.avatar-section{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1rem 0}
+.avatar-canvas-wrap{position:relative;width:200px;height:200px;margin:0 auto}
+#avatar-canvas{width:200px;height:200px;border-radius:50%;cursor:pointer}
+.avatar-ring{position:absolute;inset:-8px;border-radius:50%;border:2px solid transparent;background:linear-gradient(135deg,#8B5CF6,#06B6D4,#EC4899) border-box;-webkit-mask:linear-gradient(#fff 0 0) padding-box,linear-gradient(#fff 0 0);-webkit-mask-composite:destination-out;mask-composite:exclude;animation:ringRot 4s linear infinite}
+@keyframes ringRot{to{transform:rotate(360deg)}}
+.avatar-glow{position:absolute;inset:-20px;border-radius:50%;background:radial-gradient(ellipse at center,rgba(139,92,246,0.3) 0%,transparent 70%);animation:glowPulse 3s ease-in-out infinite}
+@keyframes glowPulse{0%,100%{opacity:0.5;transform:scale(1)}50%{opacity:1;transform:scale(1.1)}}
+.avatar-label{text-align:center;margin-top:1rem}
+.avatar-name{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;background:var(--gr);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.avatar-type{font-size:0.75rem;color:var(--tx3);margin-top:3px;text-transform:uppercase;letter-spacing:0.08em}
+.avatar-trait-orbs{display:flex;gap:8px;justify-content:center;margin-top:10px}
+.avatar-orb{width:10px;height:10px;border-radius:50%;animation:orbPop 0.5s ease both}
+@keyframes orbPop{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
 </style>
 </head>
 <body>
@@ -452,6 +722,21 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:68px;display:flex;ali
   </div>
   <div class="rg">
     <div class="rc w"><div class="cl">📝 Summary <button class="cbtn" onclick="copyEl('rsum')">Copy</button></div><div class="st" id="rsum"></div></div>
+    <div class="rc w">
+      <div class="cl">🧬 Your AI Avatar</div>
+      <div class="avatar-section">
+        <div class="avatar-canvas-wrap">
+          <div class="avatar-glow"></div>
+          <canvas id="avatar-canvas"></canvas>
+          <div class="avatar-ring"></div>
+        </div>
+        <div class="avatar-label">
+          <div class="avatar-name" id="av-name">Your Twin</div>
+          <div class="avatar-type" id="av-type">Personality Type</div>
+          <div class="avatar-trait-orbs" id="av-orbs"></div>
+        </div>
+      </div>
+    </div>
     <div class="rc"><div class="cl">📊 OCEAN Radar</div><div class="cw"><canvas id="rc2"></canvas></div></div>
     <div class="rc"><div class="cl">🎯 Trait Breakdown</div><div id="rtb"></div><div class="ig" id="ris"></div></div>
     <div class="rc"><div class="cl">💪 Strengths</div><div class="li" id="rstr"></div></div>
@@ -626,6 +911,134 @@ async function sendChat(){
   },1200+Math.random()*800);
 }
 function chatSug(el){document.getElementById('chat-inp').value=el.textContent;sendChat();}
+
+
+var AV_RENDERER = null, AV_SCENE = null, AV_CAMERA = null, AV_SPHERE = null, AV_FRAME = null;
+
+function initAvatar(dominantTrait){
+  var canvas = document.getElementById('avatar-canvas');
+  if(!canvas || !window.THREE) return;
+  if(AV_RENDERER){AV_RENDERER.dispose();cancelAnimationFrame(AV_FRAME);}
+
+  var traitColors2 = {
+    openness: {main:0x8B5CF6, glow:0xA78BFA},
+    conscientiousness: {main:0x06B6D4, glow:0x67E8F9},
+    extraversion: {main:0xEC4899, glow:0xF9A8D4},
+    agreeableness: {main:0x10B981, glow:0x6EE7B7},
+    neuroticism: {main:0xF59E0B, glow:0xFCD34D}
+  };
+  var colors = traitColors2[dominantTrait] || traitColors2.openness;
+
+  AV_RENDERER = new THREE.WebGLRenderer({canvas:canvas, alpha:true, antialias:true});
+  AV_RENDERER.setSize(200, 200);
+  AV_RENDERER.setPixelRatio(Math.min(devicePixelRatio, 2));
+
+  AV_SCENE = new THREE.Scene();
+  AV_CAMERA = new THREE.PerspectiveCamera(50, 1, 0.1, 100);
+  AV_CAMERA.position.z = 3;
+
+  // Main sphere
+  var geo = new THREE.SphereGeometry(0.9, 64, 64);
+  var mat = new THREE.MeshPhongMaterial({
+    color: colors.main,
+    emissive: colors.main,
+    emissiveIntensity: 0.3,
+    shininess: 100,
+    transparent: true,
+    opacity: 0.9
+  });
+  AV_SPHERE = new THREE.Mesh(geo, mat);
+  AV_SCENE.add(AV_SPHERE);
+
+  // Inner glow sphere
+  var igeo = new THREE.SphereGeometry(0.85, 32, 32);
+  var imat = new THREE.MeshBasicMaterial({
+    color: colors.glow,
+    transparent: true,
+    opacity: 0.15,
+    side: THREE.BackSide
+  });
+  var inner = new THREE.Mesh(igeo, imat);
+  AV_SCENE.add(inner);
+
+  // Outer glow sphere
+  var ogeo = new THREE.SphereGeometry(1.1, 32, 32);
+  var omat = new THREE.MeshBasicMaterial({
+    color: colors.main,
+    transparent: true,
+    opacity: 0.05,
+    side: THREE.BackSide
+  });
+  var outer = new THREE.Mesh(ogeo, omat);
+  AV_SCENE.add(outer);
+
+  // Particles around sphere
+  var pGeo = new THREE.BufferGeometry();
+  var pCount = 200;
+  var pPos = new Float32Array(pCount * 3);
+  for(var i = 0; i < pCount; i++){
+    var theta = Math.random() * Math.PI * 2;
+    var phi = Math.acos(2 * Math.random() - 1);
+    var r = 1.2 + Math.random() * 0.5;
+    pPos[i*3] = r * Math.sin(phi) * Math.cos(theta);
+    pPos[i*3+1] = r * Math.sin(phi) * Math.sin(theta);
+    pPos[i*3+2] = r * Math.cos(phi);
+  }
+  pGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
+  var pMat = new THREE.PointsMaterial({color: colors.glow, size: 0.02, transparent: true, opacity: 0.8});
+  var particles = new THREE.Points(pGeo, pMat);
+  AV_SCENE.add(particles);
+
+  // Lights
+  var ambLight = new THREE.AmbientLight(0xffffff, 0.4);
+  AV_SCENE.add(ambLight);
+  var pointLight1 = new THREE.PointLight(colors.main, 2, 10);
+  pointLight1.position.set(2, 2, 2);
+  AV_SCENE.add(pointLight1);
+  var pointLight2 = new THREE.PointLight(colors.glow, 1.5, 10);
+  pointLight2.position.set(-2, -1, 1);
+  AV_SCENE.add(pointLight2);
+
+  // Mouse interaction
+  var mx = 0, my = 0;
+  canvas.addEventListener('mousemove', function(e){
+    var rect = canvas.getBoundingClientRect();
+    mx = ((e.clientX - rect.left) / 200 - 0.5) * 2;
+    my = -((e.clientY - rect.top) / 200 - 0.5) * 2;
+  });
+
+  var t = 0;
+  function animate(){
+    AV_FRAME = requestAnimationFrame(animate);
+    t += 0.01;
+    AV_SPHERE.rotation.y += 0.005;
+    AV_SPHERE.rotation.x += 0.002;
+    AV_SPHERE.position.x += (mx * 0.1 - AV_SPHERE.position.x) * 0.05;
+    AV_SPHERE.position.y += (my * 0.1 - AV_SPHERE.position.y) * 0.05;
+    particles.rotation.y -= 0.003;
+    pointLight1.intensity = 2 + Math.sin(t * 2) * 0.5;
+    AV_RENDERER.render(AV_SCENE, AV_CAMERA);
+  }
+  animate();
+}
+
+function updateAvatar(r, badge){
+  var dom = r.dominantTrait || 'openness';
+  var traitEmojis = {openness:'🎨',conscientiousness:'📋',extraversion:'🌟',agreeableness:'💚',neuroticism:'🌊'};
+  var tc = {openness:'#8B5CF6',conscientiousness:'#06B6D4',extraversion:'#EC4899',agreeableness:'#10B981',neuroticism:'#F59E0B'};
+
+  var avName = document.getElementById('av-name');
+  var avType = document.getElementById('av-type');
+  var avOrbs = document.getElementById('av-orbs');
+
+  if(avName) avName.textContent = (US ? US.name : 'Your') + ' Twin';
+  if(avType) avType.textContent = badge;
+  if(avOrbs) avOrbs.innerHTML = TR.map(function(t,i){
+    return '<div class="avatar-orb" style="background:'+tc[t]+';animation-delay:'+(i*0.1)+'s" title="'+TL[t]+': '+gs(r.scores,t)+'%"></div>';
+  }).join('');
+
+  setTimeout(function(){ initAvatar(dom); }, 200);
+}
 
 </script>
 <div id="page-chat" class="page hidden">
