@@ -217,6 +217,33 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:68px;display:flex;ali
 .toast{position:fixed;bottom:2rem;right:2rem;z-index:9999;background:var(--glass2);border:1px solid var(--bdr2);color:var(--tx);padding:12px 20px;border-radius:14px;font-size:0.87rem;font-weight:500;display:none;backdrop-filter:blur(30px);box-shadow:0 20px 60px rgba(0,0,0,0.5),0 0 30px rgba(139,92,246,0.2);animation:tin 0.4s cubic-bezier(0.34,1.56,0.64,1)}
 @keyframes tin{from{transform:translateX(120%) scale(0.8);opacity:0}to{transform:translateX(0) scale(1);opacity:1}}
 @media(max-width:768px){#pa{grid-template-columns:1fr}.al{display:none}.rg{grid-template-columns:1fr}.tg,.bg2{grid-template-columns:1fr}.er{flex-direction:column}.ea{transform:rotate(90deg);margin:0 auto}nav{padding:0 1.2rem}.hero h1{font-size:3.2rem}.h-stats{gap:2rem}}
+
+.share-wrap{margin-top:0.5rem}
+.pcard{width:100%;max-width:420px;margin:0 auto;background:linear-gradient(135deg,#0D0B1E 0%,#130B2E 50%,#0B1A2E 100%);border:1px solid rgba(139,92,246,0.3);border-radius:28px;padding:2.5rem;text-align:center;position:relative;overflow:hidden;box-shadow:0 40px 80px rgba(0,0,0,0.6),0 0 60px rgba(139,92,246,0.15)}
+.pcard::before{content:'';position:absolute;top:-100%;left:-100%;width:300%;height:300%;background:conic-gradient(from 0deg at 50% 50%,transparent 0deg,rgba(139,92,246,0.06) 60deg,transparent 120deg,rgba(6,182,212,0.04) 180deg,transparent 240deg,rgba(236,72,153,0.05) 300deg,transparent 360deg);animation:rot2 10s linear infinite}
+@keyframes rot2{to{transform:rotate(360deg)}}
+.pcard::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at top,rgba(139,92,246,0.12) 0%,transparent 60%),radial-gradient(ellipse at bottom,rgba(6,182,212,0.08) 0%,transparent 60%);pointer-events:none}
+.pc-inner{position:relative;z-index:1}
+.pc-logo{font-family:'Syne',sans-serif;font-size:0.75rem;font-weight:700;color:rgba(255,255,255,0.3);text-transform:uppercase;letter-spacing:0.2em;margin-bottom:1.5rem}
+.pc-avatar{width:80px;height:80px;margin:0 auto 1.2rem;background:linear-gradient(135deg,#8B5CF6,#06B6D4);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2.2rem;box-shadow:0 0 30px rgba(139,92,246,0.4),0 0 60px rgba(139,92,246,0.2);animation:avatarGlow 3s ease-in-out infinite}
+@keyframes avatarGlow{0%,100%{box-shadow:0 0 30px rgba(139,92,246,0.4),0 0 60px rgba(139,92,246,0.2)}50%{box-shadow:0 0 50px rgba(139,92,246,0.6),0 0 80px rgba(6,182,212,0.3)}}
+.pc-name{font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;background:linear-gradient(135deg,#8B5CF6,#06B6D4,#EC4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-size:200%;animation:ga 4s ease infinite;margin-bottom:0.3rem;letter-spacing:-0.02em}
+.pc-type{font-size:0.8rem;color:rgba(167,139,250,0.8);text-transform:uppercase;letter-spacing:0.15em;font-weight:600;margin-bottom:1.8rem}
+.pc-traits{display:grid;grid-template-columns:repeat(3,1fr);gap:0.6rem;margin-bottom:1.8rem}
+.pc-trait{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:0.6rem 0.4rem}
+.pc-trait-val{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:800;margin-bottom:2px}
+.pc-trait-lbl{font-size:0.58rem;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.08em}
+.pc-quote{font-size:0.82rem;color:rgba(255,255,255,0.5);font-style:italic;line-height:1.6;margin-bottom:1.5rem;padding:0 0.5rem}
+.pc-bar-row{margin-bottom:0.6rem;text-align:left}
+.pc-bar-lbl{font-size:0.65rem;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px;display:flex;justify-content:space-between}
+.pc-bar-track{background:rgba(255,255,255,0.06);border-radius:6px;height:5px;overflow:hidden}
+.pc-bar-fill{height:100%;border-radius:6px;transition:width 1.4s cubic-bezier(0.4,0,0.2,1)}
+.pc-footer{font-size:0.65rem;color:rgba(255,255,255,0.2);text-transform:uppercase;letter-spacing:0.15em;margin-top:1.5rem;padding-top:1.2rem;border-top:1px solid rgba(255,255,255,0.06)}
+.share-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:1.2rem}
+.btn-dl{background:linear-gradient(135deg,#8B5CF6,#06B6D4);border:none;color:#fff;padding:12px 24px;border-radius:30px;font-family:'Space Grotesk',sans-serif;font-size:0.88rem;font-weight:600;cursor:pointer;transition:var(--tr)}
+.btn-dl:hover{transform:translateY(-2px);box-shadow:0 15px 40px rgba(139,92,246,0.4)}
+.btn-sh{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:#fff;padding:12px 24px;border-radius:30px;font-family:'Space Grotesk',sans-serif;font-size:0.88rem;cursor:pointer;transition:var(--tr)}
+.btn-sh:hover{border-color:rgba(139,92,246,0.4);background:rgba(139,92,246,0.1)}
 </style>
 </head>
 <body>
@@ -342,19 +369,27 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:68px;display:flex;ali
     <div class="rc w"><div class="cl">🔮 Evolution Model</div><div class="er" id="revo"></div></div>
     <div class="rc w"><div class="cl">🎥 Life Trailer</div><div class="trl" id="rtrl"></div></div>
     <div class="rc w">
-      <div class="cl">🚀 Share Your Result</div>
-      <div class="shcard">
-        <div class="shi">
-          <div class="shn" id="shn">PersonaIQ</div>
-          <div class="sht" id="sht">Your Personality Type</div>
-          <div class="shtr" id="shtr"></div>
-          <div class="shbt">
-            <button class="btn-p" onclick="downloadPDF()">📄 Download PDF</button>
-            <button class="btn-g" onclick="shareResult()">🔗 Share</button>
-          </div>
+    <div class="cl">🚀 Your Personality Card</div>
+    <div class="share-wrap">
+      <div class="pcard" id="personality-card">
+        <div class="pc-inner">
+          <div class="pc-logo">PersonaIQ — AI Intelligence</div>
+          <div class="pc-avatar" id="pc-avatar">🧠</div>
+          <div class="pc-name" id="pc-name">Your Name</div>
+          <div class="pc-type" id="pc-type">Personality Type</div>
+          <div class="pc-traits" id="pc-traits"></div>
+          <div class="pc-quote" id="pc-quote"></div>
+          <div id="pc-bars"></div>
+          <div class="pc-footer">personaiq.app &nbsp;|&nbsp; Powered by OCEAN Model</div>
         </div>
       </div>
+      <div class="share-actions">
+        <button class="btn-dl" onclick="downloadPDF()">📄 Download PDF</button>
+        <button class="btn-sh" onclick="shareCard()">📤 Share Card</button>
+        <button class="btn-sh" onclick="copyLink()">🔗 Copy Link</button>
+      </div>
     </div>
+  </div></div>
   </div>
   <div class="ra">
     <button class="btn-p" onclick="downloadPDF()">📄 Download PDF</button>
@@ -447,12 +482,27 @@ const ev=r.evolution||{present:'A thoughtful observer navigating self-discovery'
 document.getElementById('revo').innerHTML='<div class="ei"><div class="el" style="color:var(--cy)">Present</div><div class="et">'+ev.present+'</div></div><div class="ea">to</div><div class="ei"><div class="el" style="color:var(--gn)">Future</div><div class="et">'+ev.future+'</div></div><div class="ea">to</div><div class="ei"><div class="el" style="color:var(--pu2)">Path</div><div class="et">'+ev.path+'</div></div>';
 const trl=r.lifeTrailer||{title:'The Architect of Quiet Storms',genre:'Psychological Drama',narrative:'In a world that rewards noise, one person dares to be still. The most powerful revolutions begin within.'};
 document.getElementById('rtrl').innerHTML='<div class="trlt">'+trl.title+'</div><div class="trlg">'+trl.genre+'</div><div class="trln">'+trl.narrative+'</div>';
-showPage('pr');}
+updateShareCard(r,badge);showPage('pr');}
 function hCard(r){const dom=r.personalityType||TL[r.dominantTrait]||'Balanced';const date=new Date(r.completedAt).toLocaleDateString('en-IN',{year:'numeric',month:'short',day:'numeric'});const pills=TR.map(t=>{const s=r.scores&&r.scores[t];const sc=s?(typeof s==='object'?s.score:s):0;return'<span class="hip">'+TL[t].slice(0,3)+': '+sc+'%</span>';}).join('');return'<div class="hi" onclick="viewR('+JSON.stringify(r.sessionId||r._id)+')"><div class="hil"><h4>'+dom+'</h4><p>'+date+'</p><div class="hips">'+pills+'</div></div><div class="hia">to</div></div>';}
 async function loadHist(){const d=await api('/api/history');const l=document.getElementById('hlist');const h=d.results||d.data||[];if(!d.success||!h.length){l.innerHTML='<p style="color:var(--tx3);text-align:center;padding:4rem">No assessments yet. <a onclick="loadQuiz()" style="color:var(--pu2);cursor:pointer;font-weight:500">Take your first</a></p>';return;}l.innerHTML=h.map(r=>hCard(r)).join('');}
 async function viewR(id){showPage('pl');animL();CRID=id;const f=await api('/api/result/'+id);clearInterval(li);if(f.success)renderR(f.result||f.data);else toast('Could not load');}
 async function downloadPDF(){if(!CRID)return toast('No result to download');toast('Generating PDF');try{const res=await fetch('/api/result/'+CRID+'/pdf',{headers:{'Authorization':'Bearer '+TK}});if(!res.ok){toast('PDF failed');return;}const blob=await res.blob();const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='PersonaIQ-Report.pdf';a.click();URL.revokeObjectURL(url);toast('PDF Downloaded!');}catch(e){toast('Error: '+e.message);}}
-function shareResult(){if(navigator.share)navigator.share({title:'My PersonaIQ Result',url:window.location.href});else{navigator.clipboard.writeText(window.location.href).then(()=>toast('Link copied!'));}}
+function shareCard(){if(navigator.share){navigator.share({title:'My PersonaIQ AI Profile',text:'Check out my AI personality analysis on PersonaIQ!',url:window.location.href});}else{navigator.clipboard.writeText(window.location.href).then(()=>toast('Link copied! Share it anywhere 🔗'));}}
+function copyLink(){navigator.clipboard.writeText(window.location.href).then(()=>toast('Link copied! 🔗'));}
+function shareResult(){shareCard();}
+function updateShareCard(r,badge){
+  const avatarEmojis={openness:'🎨',conscientiousness:'📋',extraversion:'🌟',agreeableness:'💚',neuroticism:'🌊'};
+  const dom=r.dominantTrait||Object.entries(r.scores).sort((a,b)=>{const sa=typeof a[1]==='object'?a[1].score:a[1];const sb=typeof b[1]==='object'?b[1].score:b[1];return sb-sa;})[0][0];
+  document.getElementById('pc-avatar').textContent=avatarEmojis[dom]||'🧠';
+  document.getElementById('pc-name').textContent=US?US.name:'You';
+  document.getElementById('pc-type').textContent=badge;
+  const TR2=['openness','conscientiousness','extraversion','agreeableness','neuroticism'];
+  const TL2={openness:'Open',conscientiousness:'Conscient.',extraversion:'Extravert',agreeableness:'Agreeable',neuroticism:'Neurotic'};
+  const TC2={openness:'#8B5CF6',conscientiousness:'#06B6D4',extraversion:'#EC4899',agreeableness:'#10B981',neuroticism:'#F59E0B'};
+  document.getElementById('pc-traits').innerHTML=TR2.slice(0,3).map(t=>{const sc=gs(r.scores,t);return'<div class="pc-trait"><div class="pc-trait-val" style="color:'+TC2[t]+'">'+sc+'%</div><div class="pc-trait-lbl">'+TL2[t]+'</div></div>';}).join('');
+  document.getElementById('pc-quote').textContent='"'+( r.summary?r.summary.slice(0,100)+'…':'Your unique personality, revealed by AI.')+'"';
+  document.getElementById('pc-bars').innerHTML=TR2.map(t=>{const sc=gs(r.scores,t);return'<div class="pc-bar-row"><div class="pc-bar-lbl"><span>'+TL2[t]+'</span><span style="color:'+TC2[t]+'">'+sc+'%</span></div><div class="pc-bar-track"><div class="pc-bar-fill" style="width:'+sc+'%;background:'+TC2[t]+'"></div></div></div>';}).join('');
+}
 updateNav();
 if(TK&&US)showPage('pd');else showPage('page-home');
 </script>
