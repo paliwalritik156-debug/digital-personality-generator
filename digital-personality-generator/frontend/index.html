@@ -566,7 +566,75 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:68px;display:flex;ali
 .hi:hover .hia{color:var(--pu2);transform:translateX(4px)}
 .toast{position:fixed;bottom:2rem;right:2rem;z-index:9999;background:var(--glass2);border:1px solid var(--bdr2);color:var(--tx);padding:12px 20px;border-radius:14px;font-size:0.87rem;font-weight:500;display:none;backdrop-filter:blur(30px);box-shadow:0 20px 60px rgba(0,0,0,0.5),0 0 30px rgba(139,92,246,0.2);animation:tin 0.4s cubic-bezier(0.34,1.56,0.64,1)}
 @keyframes tin{from{transform:translateX(120%) scale(0.8);opacity:0}to{transform:translateX(0) scale(1);opacity:1}}
-@media(max-width:768px){#pa{grid-template-columns:1fr}.al{display:none}.rg{grid-template-columns:1fr}.tg,.bg2{grid-template-columns:1fr}.er{flex-direction:column}.ea{transform:rotate(90deg);margin:0 auto}nav{padding:0 1.2rem}.hero h1{font-size:3.2rem}.h-stats{gap:2rem}}
+
+@media(max-width:768px){
+  body{cursor:auto}
+  #cur,#cur-ring{display:none}
+  nav{padding:0 1rem;height:60px}
+  .logo{font-size:1.1rem}
+  .nb{padding:6px 12px;font-size:0.78rem}
+  .hero{padding:6rem 1.2rem 3rem}
+  .hero h1{font-size:2.6rem;letter-spacing:-0.03em}
+  .h-sub{font-size:0.95rem}
+  .h-stats{gap:1.5rem}
+  .stn{font-size:1.6rem}
+  .h-pills{gap:6px}
+  .h-pill{padding:6px 12px;font-size:0.72rem}
+  .btn-p{padding:13px 28px;font-size:0.92rem}
+  .btn-g{padding:13px 22px;font-size:0.92rem}
+  #pa{grid-template-columns:1fr;padding-top:60px}
+  .al{display:none}
+  .ar{padding:2rem 1.2rem}
+  .acard{padding:1.8rem}
+  .act{font-size:1.4rem}
+  .dash-layout{grid-template-columns:1fr}
+  .sidebar{display:none}
+  #pd{padding:0}
+  .dash-main{padding:1.5rem 1.2rem}
+  .overview-stats{grid-template-columns:1fr 1fr}
+  .quick-actions{grid-template-columns:1fr}
+  #pq{padding:4rem 1.2rem 6rem}
+  .qs{padding:0}
+  .qcard{padding:1.5rem}
+  .q-text{font-size:1rem}
+  .rr{gap:6px}
+  .rb{border-radius:10px;font-size:1rem}
+  #pr{padding:4rem 1.2rem 3rem}
+  .rg{grid-template-columns:1fr}
+  .rc{padding:1.2rem}
+  .tg,.bg2,.brgrid{grid-template-columns:1fr}
+  .er,.evo-row{flex-direction:column}
+  .ea,.evo-arrow{transform:rotate(90deg);margin:0 auto}
+  .ra{flex-direction:column;align-items:stretch}
+  .ra .btn-p,.ra .btn-g{text-align:center;justify-content:center}
+  .rh h2{font-size:1.7rem}
+  .result-title{font-size:1.7rem}
+  #ph{padding:4rem 1.2rem 3rem}
+  .hhdr{flex-direction:column;gap:1rem;align-items:flex-start}
+  .hi{flex-wrap:wrap}
+  #page-chat{padding-top:60px}
+  .chat-wrap{padding:1rem 1.2rem 0}
+  .chat-bar{padding:0.8rem 1.2rem}
+  .chat-sugs{gap:6px}
+  .chat-sug{font-size:0.7rem;padding:4px 10px}
+  .prw{gap:0.8rem}
+  .quiz-top h2{font-size:1.2rem}
+  .pcard{padding:1.5rem}
+  .pc-name{font-size:1.3rem}
+  .share-actions{flex-direction:column}
+  .share-actions .btn-dl,.share-actions .btn-sh{width:100%;text-align:center}
+  .skel-grid{grid-template-columns:1fr}
+  .avatar-canvas-wrap{width:160px;height:160px}
+  #avatar-canvas{width:160px;height:160px}
+  .h-acts{flex-direction:column;align-items:center;gap:10px}
+  .hero-stats{gap:1.5rem}
+}
+@media(max-width:400px){
+  .hero h1{font-size:2.1rem}
+  .overview-stats{grid-template-columns:1fr}
+  .rr{gap:4px}
+}
+
 
 #page-chat{min-height:100vh;display:flex;flex-direction:column;padding-top:68px}
 .chat-wrap{display:flex;flex-direction:column;max-width:780px;width:100%;margin:0 auto;height:calc(100vh - 140px);padding:1.5rem 2rem 0}
@@ -670,6 +738,16 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:68px;display:flex;ali
 .insight-tip h4{font-family:'Syne',sans-serif;font-weight:700;margin-bottom:0.5rem;font-size:1rem}
 .insight-tip p{color:var(--tx2);font-size:0.87rem;line-height:1.7}
 @media(max-width:768px){.dash-layout{grid-template-columns:1fr}.sidebar{display:none}}
+
+.mob-nav{display:none}
+@media(max-width:768px){
+  .mob-nav{display:flex;flex-direction:column;gap:3px;cursor:pointer;padding:4px}
+  .mob-nav span{width:22px;height:2px;background:var(--tx);border-radius:2px;transition:var(--tr)}
+  .mob-menu{position:fixed;top:60px;left:0;right:0;background:rgba(5,5,8,0.97);backdrop-filter:blur(30px);border-bottom:1px solid var(--bdr);padding:1rem;z-index:150;display:none;flex-direction:column;gap:8px;animation:fsd 0.3s ease}
+  .mob-menu.open{display:flex}
+  .mob-item{padding:12px 16px;border-radius:12px;cursor:pointer;font-size:0.92rem;color:var(--tx2);border:1px solid transparent;transition:var(--tr)}
+  .mob-item:hover{background:var(--glass);border-color:var(--bdr);color:var(--tx)}
+}
 </style>
 </head>
 <body>
@@ -677,6 +755,16 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:68px;display:flex;ali
 <nav>
   <div class="logo" onclick="goHome()"><div class="logo-i">🧠</div>PersonaIQ</div>
   <div class="nav-r" id="nav-area"></div>
+  <div class="mob-nav" onclick="toggleMobMenu()" id="mob-hamburger">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+<div class="mob-menu" id="mob-menu">
+  <div class="mob-item" onclick="handleStart();closeMobMenu()">🚀 Start Assessment</div>
+  <div class="mob-item" onclick="showPage('pa','login');closeMobMenu()">🔐 Sign In</div>
+  <div class="mob-item" id="mob-hist-btn" onclick="showPage('ph');closeMobMenu()" style="display:none">📊 History</div>
+  <div class="mob-item" id="mob-chat-btn" onclick="openChat();closeMobMenu()" style="display:none">🤖 Chat Twin</div>
+  <div class="mob-item" id="mob-logout-btn" onclick="doLogout();closeMobMenu()" style="display:none">🚪 Logout</div>
 </nav>
 <div class="toast" id="toast"></div>
 <div id="page-home" class="page">
@@ -984,6 +1072,26 @@ function aMsg(m,t='e'){const e=document.getElementById('am');e.textContent=m;e.c
 function copyEl(id){navigator.clipboard.writeText(document.getElementById(id).innerText).then(()=>toast('Copied to clipboard!'));}
 async function api(p,m='GET',b=null){const o={method:m,headers:{'Content-Type':'application/json'}};if(TK)o.headers['Authorization']='Bearer '+TK;if(b)o.body=JSON.stringify(b);return(await fetch(p,o)).json();}
 
+
+function toggleMobMenu(){
+  var m=document.getElementById('mob-menu');
+  if(m)m.classList.toggle('open');
+}
+function closeMobMenu(){
+  var m=document.getElementById('mob-menu');
+  if(m)m.classList.remove('open');
+}
+function updateMobMenu(){
+  var hb=document.getElementById('mob-hist-btn');
+  var cb=document.getElementById('mob-chat-btn');
+  var lb=document.getElementById('mob-logout-btn');
+  if(TK&&US){
+    if(hb)hb.style.display='block';
+    if(cb)cb.style.display='block';
+    if(lb)lb.style.display='block';
+  }
+}
+
 function switchTab(tab, el){
   document.querySelectorAll('.dash-section').forEach(s=>s.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
@@ -1025,7 +1133,7 @@ function loadProfile(){
   if(el)el.innerHTML='Name: <strong>'+US.name+'</strong><br>Email: <strong>'+US.email+'</strong>';
 }
 
-function updateNav(){const a=document.getElementById('nav-area');if(TK&&US){a.innerHTML='<span class="nu" style="margin-right:8px">Hi, '+US.name.split(' ')[0]+'</span><button class="nb" onclick="showPage(\'ph\')">History</button><button class="nb cta" onclick="doLogout()">Logout</button>';}else{a.innerHTML='<button class="nb" onclick="showPage(\'pa\',\'login\')">Sign In</button><button class="nb cta" onclick="showPage(\'pa\',\'reg\')">Get Started</button>';}}
+function updateNav(){updateMobMenu();const a=document.getElementById('nav-area');if(TK&&US){a.innerHTML='<span class="nu" style="margin-right:8px">Hi, '+US.name.split(' ')[0]+'</span><button class="nb" onclick="showPage(\'ph\')">History</button><button class="nb cta" onclick="doLogout()">Logout</button>';}else{a.innerHTML='<button class="nb" onclick="showPage(\'pa\',\'login\')">Sign In</button><button class="nb cta" onclick="showPage(\'pa\',\'reg\')">Get Started</button>';}}
 function toggleAuth(m){const r=m==='reg';document.getElementById('lf').classList.toggle('hidden',r);document.getElementById('rf').classList.toggle('hidden',!r);document.getElementById('at').textContent=r?'Create account':'Welcome back';document.getElementById('as').textContent=r?'Start your AI personality journey':'Sign in to access your AI reports';document.getElementById('am').style.display='none';}
 async function doLogin(){const e=document.getElementById('le').value.trim(),p=document.getElementById('lp').value;if(!e||!p)return aMsg('Please fill all fields');const d=await api('/api/auth/login','POST',{email:e,password:p});if(d.success){saveS(d);showPage('pd');toast('Welcome back!');}else aMsg(d.message||'Login failed');}
 async function doRegister(){const n=document.getElementById('rn').value.trim(),e=document.getElementById('re').value.trim(),p=document.getElementById('rp').value;if(!n||!e||!p)return aMsg('Please fill all fields');if(p.length<6)return aMsg('Password min 6 chars');const d=await api('/api/auth/register','POST',{name:n,email:e,password:p});if(d.success){saveS(d);showPage('pd');toast('Account created!');}else aMsg(d.message||'Failed');}
