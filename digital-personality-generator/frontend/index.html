@@ -748,6 +748,11 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:68px;display:flex;ali
   .mob-item{padding:12px 16px;border-radius:12px;cursor:pointer;font-size:0.92rem;color:var(--tx2);border:1px solid transparent;transition:var(--tr)}
   .mob-item:hover{background:var(--glass);border-color:var(--bdr);color:var(--tx)}
 }
+
+.page{opacity:1;transform:translateY(0);transition:opacity 0.3s ease,transform 0.3s ease}
+.page-exit{opacity:0;transform:translateY(10px);pointer-events:none}
+.page-enter{animation:pageIn 0.4s cubic-bezier(0.34,1.56,0.64,1) both}
+@keyframes pageIn{from{opacity:0;transform:translateY(20px) scale(0.98)}to{opacity:1;transform:translateY(0) scale(1)}}
 </style>
 </head>
 <body>
@@ -1064,7 +1069,27 @@ const TR=['openness','conscientiousness','extraversion','agreeableness','neuroti
 const TL={openness:'Openness',conscientiousness:'Conscientiousness',extraversion:'Extraversion',agreeableness:'Agreeableness',neuroticism:'Neuroticism'};
 const TC={openness:'#8B5CF6',conscientiousness:'#06B6D4',extraversion:'#EC4899',agreeableness:'#10B981',neuroticism:'#F59E0B'};
 const LM=['Mapping your cognitive landscape','Detecting personality patterns','Building your Digital Twin','Running life simulations','Generating your AI report'];
-function showPage(n,sub){document.querySelectorAll('.page').forEach(p=>p.classList.add('hidden'));var skelRes=document.getElementById('page-loader-results');if(skelRes)skelRes.style.display='none';document.getElementById(n).classList.remove('hidden');if(n==='pa')toggleAuth(sub||'login');if(n==='ph')loadHist();if(n==='pd')loadDash();window.scrollTo(0,0);}
+function showPage(n,sub){
+  var current=document.querySelector('.page:not(.hidden)');
+  if(current){
+    current.classList.add('page-exit');
+    setTimeout(function(){
+      document.querySelectorAll('.page').forEach(function(p){p.classList.add('hidden');p.classList.remove('page-exit');});
+      var skelRes=document.getElementById('page-loader-results');if(skelRes)skelRes.style.display='none';
+      var target=document.getElementById(n);
+      if(target){target.classList.remove('hidden');target.classList.add('page-enter');setTimeout(function(){target.classList.remove('page-enter');},400);}
+      if(n==='pa')toggleAuth(sub||'login');if(n==='ph')loadHist();if(n==='pd')loadDash();
+      window.scrollTo(0,0);
+    },200);
+  } else {
+    document.querySelectorAll('.page').forEach(function(p){p.classList.add('hidden');});
+    var skelRes=document.getElementById('page-loader-results');if(skelRes)skelRes.style.display='none';
+    var target=document.getElementById(n);
+    if(target){target.classList.remove('hidden');target.classList.add('page-enter');setTimeout(function(){target.classList.remove('page-enter');},400);}
+    if(n==='pa')toggleAuth(sub||'login');if(n==='ph')loadHist();if(n==='pd')loadDash();
+    window.scrollTo(0,0);
+  }
+}
 function showResultSkeleton(){document.querySelectorAll('.page').forEach(p=>p.classList.add('hidden'));var s=document.getElementById('page-loader-results');if(s){s.style.display='block';window.scrollTo(0,0);}}
 function goHome(){TK?showPage('pd'):showPage('page-home');}
 function toast(m,d=3000){const t=document.getElementById('toast');t.textContent=m;t.style.display='block';clearTimeout(t._t);t._t=setTimeout(()=>t.style.display='none',d);}
