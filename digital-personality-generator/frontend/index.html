@@ -633,6 +633,43 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:68px;display:flex;ali
 .skel-h{width:300px;height:32px;border-radius:8px;margin:0 auto 0.5rem}
 .skel-sub{width:180px;height:16px;border-radius:6px;margin:0 auto}
 .skel-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem}
+
+#pd{padding:0;max-width:100%;margin:0}
+.dash-layout{display:grid;grid-template-columns:240px 1fr;min-height:calc(100vh - 68px);margin-top:68px}
+.sidebar{background:rgba(5,5,8,0.9);border-right:1px solid var(--bdr);backdrop-filter:blur(30px);padding:2rem 1.2rem;display:flex;flex-direction:column;gap:4px;position:sticky;top:68px;height:calc(100vh - 68px);overflow-y:auto}
+.sidebar-user{padding:1rem;margin-bottom:1rem;border-bottom:1px solid var(--bdr);padding-bottom:1.5rem}
+.sidebar-avatar{width:44px;height:44px;background:var(--gr);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.2rem;margin-bottom:0.8rem}
+.sidebar-name{font-family:'Syne',sans-serif;font-weight:700;font-size:0.95rem}
+.sidebar-email{font-size:0.72rem;color:var(--tx3);margin-top:2px}
+.sidebar-label{font-size:0.65rem;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:0.12em;padding:0.5rem 0.8rem;margin-top:0.5rem}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;cursor:pointer;transition:var(--tr);font-size:0.88rem;color:var(--tx2);border:1px solid transparent}
+.nav-item:hover{background:var(--glass);color:var(--tx);border-color:var(--bdr)}
+.nav-item.active{background:rgba(139,92,246,0.12);color:var(--pu2);border-color:rgba(139,92,246,0.2)}
+.nav-item-icon{font-size:1rem;width:20px;text-align:center}
+.nav-item-badge{margin-left:auto;background:var(--pu);color:#fff;font-size:0.6rem;font-weight:700;padding:2px 7px;border-radius:20px}
+.sidebar-bottom{margin-top:auto;padding-top:1rem;border-top:1px solid var(--bdr)}
+.dash-main{padding:2.5rem;overflow-y:auto}
+.dash-section{display:none}
+.dash-section.active{display:block;animation:fsu 0.3s ease both}
+.dash-section h3{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:700;letter-spacing:-0.02em;margin-bottom:0.4rem}
+.dash-section p{color:var(--tx2);font-size:0.88rem;margin-bottom:2rem}
+.overview-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;margin-bottom:2rem}
+.ov-stat{background:var(--glass);border:1px solid var(--bdr);border-radius:18px;padding:1.3rem;transition:var(--tr);position:relative;overflow:hidden}
+.ov-stat::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--gr);opacity:0;transition:opacity 0.3s}
+.ov-stat:hover{border-color:var(--bdr2);transform:translateY(-2px)}.ov-stat:hover::before{opacity:1}
+.ov-icon{font-size:1.4rem;margin-bottom:0.7rem}
+.ov-val{font-family:'Syne',sans-serif;font-size:1.7rem;font-weight:800;background:var(--gr);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.ov-lbl{font-size:0.72rem;color:var(--tx3);margin-top:2px;text-transform:uppercase;letter-spacing:0.06em}
+.quick-actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-bottom:2rem}
+.qa-card{background:var(--glass);border:1px solid var(--bdr);border-radius:18px;padding:1.5rem;cursor:pointer;transition:var(--tr);text-align:center}
+.qa-card:hover{border-color:var(--bdr2);transform:translateY(-3px);box-shadow:0 15px 40px rgba(139,92,246,0.15)}
+.qa-icon{font-size:2rem;margin-bottom:0.8rem}
+.qa-title{font-family:'Syne',sans-serif;font-weight:700;font-size:0.95rem;margin-bottom:0.3rem}
+.qa-desc{font-size:0.78rem;color:var(--tx2)}
+.insight-tip{background:linear-gradient(135deg,rgba(139,92,246,0.08),rgba(6,182,212,0.06));border:1px solid rgba(139,92,246,0.15);border-radius:16px;padding:1.5rem;margin-bottom:1.5rem}
+.insight-tip h4{font-family:'Syne',sans-serif;font-weight:700;margin-bottom:0.5rem;font-size:1rem}
+.insight-tip p{color:var(--tx2);font-size:0.87rem;line-height:1.7}
+@media(max-width:768px){.dash-layout{grid-template-columns:1fr}.sidebar{display:none}}
 </style>
 </head>
 <body>
@@ -698,15 +735,99 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:68px;display:flex;ali
   </div>
 </div>
 <div id="pd" class="page hidden">
-  <div class="dw"><h2>Welcome, <span id="dn">—</span></h2><p>Your AI personality intelligence hub</p></div>
-  <div class="sr">
-    <div class="sc"><div class="sci">🧪</div><div class="scv" id="dt">0</div><div class="scl">Tests Taken</div></div>
-    <div class="sc"><div class="sci">🌟</div><div class="scv" id="dd">—</div><div class="scl">Dominant Trait</div></div>
-    <div class="sc"><div class="sci">📅</div><div class="scv" id="dl">—</div><div class="scl">Last Assessment</div></div>
+  <div class="dash-layout">
+    <div class="sidebar">
+      <div class="sidebar-user">
+        <div class="sidebar-avatar">👤</div>
+        <div class="sidebar-name" id="sb-name">—</div>
+        <div class="sidebar-email" id="sb-email">—</div>
+      </div>
+      <div class="sidebar-label">Main Menu</div>
+      <div class="nav-item active" onclick="switchTab('overview',this)">
+        <span class="nav-item-icon">🏠</span>Overview
+      </div>
+      <div class="nav-item" onclick="switchTab('insights',this)">
+        <span class="nav-item-icon">🧠</span>AI Insights
+      </div>
+      <div class="nav-item" onclick="switchTab('history',this)">
+        <span class="nav-item-icon">📊</span>History
+        <span class="nav-item-badge" id="hist-badge">0</span>
+      </div>
+      <div class="nav-item" onclick="switchTab('profile',this)">
+        <span class="nav-item-icon">👤</span>Profile
+      </div>
+      <div class="sidebar-label">Actions</div>
+      <div class="nav-item" onclick="loadQuiz()">
+        <span class="nav-item-icon">🚀</span>New Assessment
+      </div>
+      <div class="nav-item" onclick="openChat()">
+        <span class="nav-item-icon">🤖</span>Chat Twin
+      </div>
+      <div class="sidebar-bottom">
+        <div class="nav-item" onclick="doLogout()">
+          <span class="nav-item-icon">🚪</span>Logout
+        </div>
+      </div>
+    </div>
+    <div class="dash-main">
+      <div class="dash-section active" id="tab-overview">
+        <h3>Welcome back, <span id="dn" style="background:var(--gr);-webkit-background-clip:text;-webkit-text-fill-color:transparent">—</span> 👋</h3>
+        <p>Your AI personality intelligence hub</p>
+        <div class="overview-stats">
+          <div class="ov-stat"><div class="ov-icon">🧪</div><div class="ov-val" id="dt">0</div><div class="ov-lbl">Tests Taken</div></div>
+          <div class="ov-stat"><div class="ov-icon">🌟</div><div class="ov-val" id="dd">—</div><div class="ov-lbl">Dominant Trait</div></div>
+          <div class="ov-stat"><div class="ov-icon">📅</div><div class="ov-val" id="dl">—</div><div class="ov-lbl">Last Test</div></div>
+        </div>
+        <div class="sh">Quick Actions</div>
+        <div class="quick-actions">
+          <div class="qa-card" onclick="loadQuiz()">
+            <div class="qa-icon">🚀</div>
+            <div class="qa-title">New Assessment</div>
+            <div class="qa-desc">Take a fresh personality test</div>
+          </div>
+          <div class="qa-card" onclick="openChat()">
+            <div class="qa-icon">🤖</div>
+            <div class="qa-title">Chat with Twin</div>
+            <div class="qa-desc">Talk to your AI personality</div>
+          </div>
+          <div class="qa-card" onclick="switchTab('history',document.querySelector('.nav-item:nth-child(5)'))">
+            <div class="qa-icon">📊</div>
+            <div class="qa-title">View History</div>
+            <div class="qa-desc">See all past results</div>
+          </div>
+        </div>
+        <div class="sh">Recent Results</div>
+        <div id="dhl"></div>
+      </div>
+      <div class="dash-section" id="tab-insights">
+        <h3>AI Insights</h3>
+        <p>Personalized intelligence based on your personality profile</p>
+        <div class="insight-tip">
+          <h4>💡 Daily Insight</h4>
+          <p id="daily-insight">Complete an assessment to unlock personalized AI insights about your personality, career paths, and growth opportunities.</p>
+        </div>
+        <div id="insights-content"><p style="color:var(--tx3);text-align:center;padding:3rem">Complete an assessment to see insights</p></div>
+      </div>
+      <div class="dash-section" id="tab-history">
+        <h3>Assessment History</h3>
+        <p>All your past personality assessments</p>
+        <div id="dash-history-list"></div>
+      </div>
+      <div class="dash-section" id="tab-profile">
+        <h3>Your Profile</h3>
+        <p>Account information and settings</p>
+        <div class="insight-tip">
+          <h4>👤 Account Details</h4>
+          <p id="profile-info">Loading profile...</p>
+        </div>
+        <div style="margin-top:1rem">
+          <button class="btn-p" onclick="loadQuiz()">Take New Assessment</button>
+          &nbsp;&nbsp;
+          <button class="btn-g" onclick="doLogout()">Logout</button>
+        </div>
+      </div>
+    </div>
   </div>
-  <div class="sh">Recent Assessments</div>
-  <div id="dhl"></div>
-  <div style="margin-top:1.5rem"><button class="btn-p" onclick="loadQuiz()">New Assessment</button></div>
 </div>
 <div id="pq" class="page hidden">
   <div class="qs">
@@ -862,13 +983,58 @@ function toast(m,d=3000){const t=document.getElementById('toast');t.textContent=
 function aMsg(m,t='e'){const e=document.getElementById('am');e.textContent=m;e.className='am '+(t==='e'?'e':'s');e.style.display='block';}
 function copyEl(id){navigator.clipboard.writeText(document.getElementById(id).innerText).then(()=>toast('Copied to clipboard!'));}
 async function api(p,m='GET',b=null){const o={method:m,headers:{'Content-Type':'application/json'}};if(TK)o.headers['Authorization']='Bearer '+TK;if(b)o.body=JSON.stringify(b);return(await fetch(p,o)).json();}
+
+function switchTab(tab, el){
+  document.querySelectorAll('.dash-section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  var sec = document.getElementById('tab-'+tab);
+  if(sec) sec.classList.add('active');
+  if(el) el.classList.add('active');
+  if(tab==='history') loadDashHistory();
+  if(tab==='insights') loadInsights();
+  if(tab==='profile') loadProfile();
+}
+function loadDashHistory(){
+  api('/api/history').then(function(d){
+    var l=document.getElementById('dash-history-list');
+    var h=d.results||d.data||[];
+    if(!h.length){l.innerHTML='<p style="color:var(--tx3);text-align:center;padding:3rem">No assessments yet</p>';return;}
+    l.innerHTML=h.map(function(r){return hCard(r);}).join('');
+  });
+}
+function loadInsights(){
+  api('/api/history').then(function(d){
+    var h=d.results||d.data||[];
+    if(!h.length)return;
+    var l=h[0];
+    var insights=[
+      'Your dominant trait suggests you are naturally creative and open to new experiences.',
+      'Based on your scores, collaborative environments suit you best.',
+      'Your personality profile indicates strong emotional intelligence.',
+      'You tend to think deeply before making decisions — a valuable strength.',
+      'Your profile shows resilience and adaptability under pressure.'
+    ];
+    document.getElementById('daily-insight').textContent=insights[Math.floor(Math.random()*insights.length)];
+    var ic=document.getElementById('insights-content');
+    ic.innerHTML='<div class="overview-stats">'+TR.map(function(t){var sc=l.scores&&l.scores[t]?(typeof l.scores[t]==="object"?l.scores[t].score:l.scores[t]):0;return'<div class="ov-stat"><div class="ov-icon" style="color:'+TC[t]+'">●</div><div class="ov-val" style="background:none;-webkit-text-fill-color:'+TC[t]+'">'+sc+'%</div><div class="ov-lbl">'+TL[t]+'</div></div>';}).join('')+'</div>';
+  });
+}
+function loadProfile(){
+  if(!US)return;
+  var el=document.getElementById('profile-info');
+  if(el)el.innerHTML='Name: <strong>'+US.name+'</strong><br>Email: <strong>'+US.email+'</strong>';
+}
+
 function updateNav(){const a=document.getElementById('nav-area');if(TK&&US){a.innerHTML='<span class="nu" style="margin-right:8px">Hi, '+US.name.split(' ')[0]+'</span><button class="nb" onclick="showPage(\'ph\')">History</button><button class="nb cta" onclick="doLogout()">Logout</button>';}else{a.innerHTML='<button class="nb" onclick="showPage(\'pa\',\'login\')">Sign In</button><button class="nb cta" onclick="showPage(\'pa\',\'reg\')">Get Started</button>';}}
 function toggleAuth(m){const r=m==='reg';document.getElementById('lf').classList.toggle('hidden',r);document.getElementById('rf').classList.toggle('hidden',!r);document.getElementById('at').textContent=r?'Create account':'Welcome back';document.getElementById('as').textContent=r?'Start your AI personality journey':'Sign in to access your AI reports';document.getElementById('am').style.display='none';}
 async function doLogin(){const e=document.getElementById('le').value.trim(),p=document.getElementById('lp').value;if(!e||!p)return aMsg('Please fill all fields');const d=await api('/api/auth/login','POST',{email:e,password:p});if(d.success){saveS(d);showPage('pd');toast('Welcome back!');}else aMsg(d.message||'Login failed');}
 async function doRegister(){const n=document.getElementById('rn').value.trim(),e=document.getElementById('re').value.trim(),p=document.getElementById('rp').value;if(!n||!e||!p)return aMsg('Please fill all fields');if(p.length<6)return aMsg('Password min 6 chars');const d=await api('/api/auth/register','POST',{name:n,email:e,password:p});if(d.success){saveS(d);showPage('pd');toast('Account created!');}else aMsg(d.message||'Failed');}
 function saveS(d){TK=d.token;US=d.user;localStorage.setItem('piq_token',TK);localStorage.setItem('piq_user',JSON.stringify(US));updateNav();}
 function doLogout(){TK=null;US=null;localStorage.removeItem('piq_token');localStorage.removeItem('piq_user');updateNav();showPage('page-home');toast('Logged out');}
-async function loadDash(){if(!US)return;document.getElementById('dn').textContent=US.name.split(' ')[0];try{const d=await api('/api/history');if(d.success){const h=d.results||d.data||[];document.getElementById('dt').textContent=h.length;if(h.length>0){const l=h[0];document.getElementById('dd').textContent=l.personalityType||TL[l.dominantTrait]||'—';document.getElementById('dl').textContent=new Date(l.completedAt).toLocaleDateString('en-IN',{month:'short',day:'numeric'});document.getElementById('dhl').innerHTML=h.slice(0,3).map(r=>hCard(r)).join('');}}}catch(e){console.error(e);}}
+async function loadDash(){if(!US)return;
+  var dn=document.getElementById('dn');if(dn)dn.textContent=US.name.split(' ')[0];
+  var sbn=document.getElementById('sb-name');if(sbn)sbn.textContent=US.name;
+  var sbe=document.getElementById('sb-email');if(sbe)sbe.textContent=US.email;try{const d=await api('/api/history');if(d.success){const h=d.results||d.data||[];document.getElementById('dt').textContent=h.length;var hb=document.getElementById('hist-badge');if(hb)hb.textContent=h.length;if(h.length>0){const l=h[0];document.getElementById('dd').textContent=l.personalityType||TL[l.dominantTrait]||'—';document.getElementById('dl').textContent=new Date(l.completedAt).toLocaleDateString('en-IN',{month:'short',day:'numeric'});document.getElementById('dhl').innerHTML=h.slice(0,3).map(r=>hCard(r)).join('');}}}catch(e){console.error(e);}}
 function handleStart(){if(!TK){showPage('pa','reg');return;}loadQuiz();}
 async function loadQuiz(){showPage('pl');animL();const d=await api('/api/questions');if(!d.success){toast('Failed to load');showPage('page-home');return;}QS=d.questions||d.data||[];ANS={};CQ=0;renderQ();showPage('pq');}
 let li;
