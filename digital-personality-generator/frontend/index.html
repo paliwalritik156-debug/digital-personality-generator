@@ -804,11 +804,11 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:68px;display:flex;ali
 .dash-section h3{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:700;letter-spacing:-0.02em;margin-bottom:0.4rem}
 .dash-section p{color:var(--tx2);font-size:0.88rem;margin-bottom:2rem}
 .overview-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;margin-bottom:2rem}
-.ov-stat{background:var(--glass);border:1px solid var(--bdr);border-radius:18px;padding:1.3rem;transition:var(--tr);position:relative;overflow:hidden}
+.ov-stat{background:var(--glass);border:1px solid var(--bdr);border-radius:18px;padding:1.3rem;transition:var(--tr);position:relative;overflow:hidden;min-width:0}
 .ov-stat::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--gr);opacity:0;transition:opacity 0.3s}
 .ov-stat:hover{border-color:var(--bdr2);transform:translateY(-2px)}.ov-stat:hover::before{opacity:1}
 .ov-icon{font-size:1.4rem;margin-bottom:0.7rem}
-.ov-val{font-family:'Syne',sans-serif;font-size:1.7rem;font-weight:800;background:var(--gr);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.ov-val{font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;background:var(--gr);-webkit-background-clip:text;-webkit-text-fill-color:transparent;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}
 .ov-lbl{font-size:0.72rem;color:var(--tx3);margin-top:2px;text-transform:uppercase;letter-spacing:0.06em}
 .quick-actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-bottom:2rem}
 .qa-card{background:var(--glass);border:1px solid var(--bdr);border-radius:18px;padding:1.5rem;cursor:pointer;transition:var(--tr);text-align:center}
@@ -846,7 +846,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:68px;display:flex;ali
     <span></span><span></span><span></span>
   </div>
 </nav>
-<div class="mob-menu" id="mob-menu">
+<div class="mob-menu" id="mob-menu" style="display:none">
   <div class="mob-item" onclick="handleStart();closeMobMenu()">🚀 Start Assessment</div>
   <div class="mob-item" onclick="showPage('pa','login');closeMobMenu()">🔐 Sign In</div>
   <div class="mob-item" id="mob-hist-btn" onclick="showPage('ph');closeMobMenu()" style="display:none">📊 History</div>
