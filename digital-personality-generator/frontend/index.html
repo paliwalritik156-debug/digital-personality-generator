@@ -180,6 +180,47 @@ function updateAvatar(r, badge){
   setTimeout(function(){ initAvatar(dom); }, 200);
 }
 
+
+function animateCounter(el, target, duration){
+  var start = 0;
+  var step = target / (duration / 16);
+  var timer = setInterval(function(){
+    start += step;
+    if(start >= target){start = target;clearInterval(timer);}
+    el.textContent = Math.round(start) + '%';
+  }, 16);
+}
+
+function animateTraitBars(){
+  setTimeout(function(){
+    TR.forEach(function(t){
+      var el = document.getElementById('tf-'+t);
+      if(el){
+        var w = el.getAttribute('data-w');
+        el.style.width = w + '%';
+      }
+      var pct = document.querySelector('.tpct[data-trait="'+t+'"]');
+      if(pct){
+        animateCounter(pct, parseInt(pct.getAttribute('data-val')), 1200);
+      }
+    });
+  }, 300);
+}
+
+function animateIntelScores(){
+  setTimeout(function(){
+    document.querySelectorAll('.iv[data-val]').forEach(function(el){
+      var target = parseInt(el.getAttribute('data-val'));
+      var start = 0;
+      var timer = setInterval(function(){
+        start += 0.2;
+        if(start >= target){start = target;clearInterval(timer);}
+        el.textContent = Math.round(start*10)/10 + '/10';
+      }, 30);
+    });
+  }, 500);
+}
+
 </script>
 <script src="/js/chart.min.js">
 var CHAT_MSGS = [];
@@ -354,6 +395,47 @@ function updateAvatar(r, badge){
   }).join('');
 
   setTimeout(function(){ initAvatar(dom); }, 200);
+}
+
+
+function animateCounter(el, target, duration){
+  var start = 0;
+  var step = target / (duration / 16);
+  var timer = setInterval(function(){
+    start += step;
+    if(start >= target){start = target;clearInterval(timer);}
+    el.textContent = Math.round(start) + '%';
+  }, 16);
+}
+
+function animateTraitBars(){
+  setTimeout(function(){
+    TR.forEach(function(t){
+      var el = document.getElementById('tf-'+t);
+      if(el){
+        var w = el.getAttribute('data-w');
+        el.style.width = w + '%';
+      }
+      var pct = document.querySelector('.tpct[data-trait="'+t+'"]');
+      if(pct){
+        animateCounter(pct, parseInt(pct.getAttribute('data-val')), 1200);
+      }
+    });
+  }, 300);
+}
+
+function animateIntelScores(){
+  setTimeout(function(){
+    document.querySelectorAll('.iv[data-val]').forEach(function(el){
+      var target = parseInt(el.getAttribute('data-val'));
+      var start = 0;
+      var timer = setInterval(function(){
+        start += 0.2;
+        if(start >= target){start = target;clearInterval(timer);}
+        el.textContent = Math.round(start*10)/10 + '/10';
+      }, 30);
+    });
+  }, 500);
 }
 
 </script>
@@ -1194,7 +1276,8 @@ RC=new Chart(document.getElementById('rc2'),{type:'radar',data:{labels:TR.map(t=
 document.getElementById('rtb').innerHTML=TR.map(t=>{const sc=gs(r.scores,t);return'<div class="tr"><span class="tn">'+TL[t]+'</span><div class="tt"><div class="tf2" id="tf-'+t+'" style="background:'+TC[t]+'" data-w="'+sc+'"></div></div><span class="tp2">'+sc+'%</span></div>';}).join('');
 setTimeout(()=>TR.forEach(t=>{const el=document.getElementById('tf-'+t);if(el)el.style.width=el.getAttribute('data-w')+'%';}),100);
 const intel=r.intelligenceScores||{creativity:7,leadership:6,analytical:7};
-document.getElementById('ris').innerHTML='<div class="ii"><div class="iv">'+intel.creativity+'/10</div><div class="il">Creativity</div></div><div class="ii"><div class="iv">'+intel.leadership+'/10</div><div class="il">Leadership</div></div><div class="ii"><div class="iv">'+intel.analytical+'/10</div><div class="il">Analytical</div></div>';
+document.getElementById('ris').innerHTML='<div class="ii"><div class="iv" data-val="'+intel.creativity+'">0/10</div><div class="il">Creativity</div></div><div class="ii"><div class="iv" data-val="'+intel.leadership+'">0/10</div><div class="il">Leadership</div></div><div class="ii"><div class="iv" data-val="'+intel.analytical+'">0/10</div><div class="il">Analytical</div></div>';
+animateIntelScores();
 const str=(r.insights&&r.insights.strengths)||['Strong self-awareness','Adaptable mindset','Genuine empathy'];
 document.getElementById('rstr').innerHTML=str.map(s=>'<div class="lit"><div class="ld"></div>'+s+'</div>').join('');
 const wk=(r.insights&&r.insights.weaknesses)||['Overthinking decisions','Difficulty with conflict','Tendency to self-doubt'];
@@ -1399,6 +1482,47 @@ function updateAvatar(r, badge){
   }).join('');
 
   setTimeout(function(){ initAvatar(dom); }, 200);
+}
+
+
+function animateCounter(el, target, duration){
+  var start = 0;
+  var step = target / (duration / 16);
+  var timer = setInterval(function(){
+    start += step;
+    if(start >= target){start = target;clearInterval(timer);}
+    el.textContent = Math.round(start) + '%';
+  }, 16);
+}
+
+function animateTraitBars(){
+  setTimeout(function(){
+    TR.forEach(function(t){
+      var el = document.getElementById('tf-'+t);
+      if(el){
+        var w = el.getAttribute('data-w');
+        el.style.width = w + '%';
+      }
+      var pct = document.querySelector('.tpct[data-trait="'+t+'"]');
+      if(pct){
+        animateCounter(pct, parseInt(pct.getAttribute('data-val')), 1200);
+      }
+    });
+  }, 300);
+}
+
+function animateIntelScores(){
+  setTimeout(function(){
+    document.querySelectorAll('.iv[data-val]').forEach(function(el){
+      var target = parseInt(el.getAttribute('data-val'));
+      var start = 0;
+      var timer = setInterval(function(){
+        start += 0.2;
+        if(start >= target){start = target;clearInterval(timer);}
+        el.textContent = Math.round(start*10)/10 + '/10';
+      }, 30);
+    });
+  }, 500);
 }
 
 </script>
