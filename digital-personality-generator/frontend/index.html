@@ -1473,9 +1473,10 @@ document.getElementById('rd').textContent=new Date(r.completedAt).toLocaleDateSt
 const badge=r.personalityType||TL[r.dominantTrait]||'Balanced';
 document.getElementById('rdom').textContent='✦ '+badge;
 document.getElementById('rsum').textContent=r.summary||'';
-document.getElementById('shn').textContent=US?US.name:'PersonaIQ';
-document.getElementById('sht').textContent=badge;
-document.getElementById('shtr').innerHTML=TR.map(t=>'<span class="shtp">'+TL[t].slice(0,3)+': '+gs(r.scores,t)+'%</span>').join('');
+var shn=document.getElementById('shn');var sht=document.getElementById('sht');var shtr=document.getElementById('shtr');
+if(shn)shn.textContent=US?US.name:'PersonaIQ';
+if(sht)sht.textContent=badge;
+if(shtr)shtr.innerHTML=TR.map(t=>'<span class="shtp">'+TL[t].slice(0,3)+': '+gs(r.scores,t)+'%</span>').join('');
 
 // Update new share card
 var tc={openness:'#8B5CF6',conscientiousness:'#06B6D4',extraversion:'#EC4899',agreeableness:'#10B981',neuroticism:'#F59E0B'};
