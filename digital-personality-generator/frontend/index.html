@@ -1150,6 +1150,12 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:68px;display:flex;ali
         </svg>
         <div class="pt"><strong id="ql">Question 1 of 25</strong><span id="qp" style="color:var(--pu2)">0% complete</span></div>
       </div>
+      <!-- Voice controls -->
+      <div style="display:flex;gap:10px;justify-content:center;margin-top:12px;flex-wrap:wrap;">
+        <button id="btn-read-q" onclick="readQuestion()" title="Listen to question" style="background:rgba(139,92,246,0.1);border:1px solid rgba(139,92,246,0.3);color:#A78BFA;padding:7px 16px;border-radius:20px;font-family:'Space Grotesk',sans-serif;font-size:0.78rem;cursor:pointer;display:flex;align-items:center;gap:6px;transition:0.3s;" onmouseover="this.style.background='rgba(139,92,246,0.2)'" onmouseout="this.style.background='rgba(139,92,246,0.1)'">🔊 Read Question</button>
+        <button id="btn-voice-ans" onclick="toggleVoiceAnswer()" title="Answer by voice" style="background:rgba(6,182,212,0.1);border:1px solid rgba(6,182,212,0.3);color:#67E8F9;padding:7px 16px;border-radius:20px;font-family:'Space Grotesk',sans-serif;font-size:0.78rem;cursor:pointer;display:flex;align-items:center;gap:6px;transition:0.3s;" onmouseover="this.style.background='rgba(6,182,212,0.2)'" onmouseout="this.style.background='rgba(6,182,212,0.1)'">🎤 Voice Answer</button>
+      </div>
+      <div id="voice-status" style="text-align:center;font-size:0.75rem;color:var(--tx3);margin-top:6px;min-height:18px;"></div>
     </div>
     <div id="qc"></div>
     <div class="qnav">
@@ -1210,7 +1216,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:68px;display:flex;ali
     <div class="pb" id="rdom">Balanced</div>
   </div>
   <div class="rg">
-    <div class="rc w"><div class="cl">📝 Summary <button class="cbtn" onclick="copyEl('rsum')">Copy</button></div><div class="st" id="rsum"></div></div>
+    <div class="rc w"><div class="cl">📝 Summary <button class="cbtn" onclick="copyEl('rsum')">Copy</button><button class="cbtn" onclick="listenToReport()" id="btn-listen" style="margin-left:6px;">🔊 Listen</button></div><div class="st" id="rsum"></div></div>
     <div class="rc w">
       <div class="cl">🧬 Your AI Avatar</div>
       <div class="avatar-section">
@@ -1539,6 +1545,111 @@ function openEmailModal(){if(!CRID)return toast('No result to email');const moda
 async function sendEmailReport(){const inp=document.getElementById('email-modal-input');const email=inp.value.trim();if(!email)return toast('Enter an email address');const emailRx=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;if(!emailRx.test(email))return toast('Invalid email address');const btn=document.getElementById('btn-send-email');btn.disabled=true;btn.textContent='Sending…';try{const d=await api('/api/result/'+CRID+'/email','POST',{email});if(d.success){document.getElementById('email-modal').style.display='none';toast('Report sent to '+email+' 📧');}else{toast(d.message||'Failed to send');}}catch(e){toast('Error: '+e.message);}finally{btn.disabled=false;btn.textContent='Send Report →';}}
 function shareResult(){if(navigator.share)navigator.share({title:'My PersonaIQ Result',url:window.location.href});else{navigator.clipboard.writeText(window.location.href).then(()=>toast('Link copied!'));}}
 
+// ============ VOICE FEATURES ============
+
+// A: Read question aloud
+function readQuestion(){
+  if(!window.speechSynthesis)return toast('Voice not supported in this browser');
+  window.speechSynthesis.cancel();
+  var q=QS[CQ];
+  if(!q)return;
+  var labels={1:'Strongly Disagree',2:'Disagree',3:'Neutral',4:'Agree',5:'Strongly Agree'};
+  var sel=ANS[q._id];
+  var txt='Question '+(CQ+1)+' of '+QS.length+'. '+q.text+'. Rate from 1 to 5. 1 means Strongly Disagree, 5 means Strongly Agree.'+(sel?' You have selected '+sel+', '+labels[sel]+'.':'');
+  var utt=new SpeechSynthesisUtterance(txt);
+  utt.rate=0.92;utt.pitch=1;utt.volume=1;
+  var voices=window.speechSynthesis.getVoices();
+  var eng=voices.find(function(v){return v.lang.startsWith('en')&&v.name.toLowerCase().includes('female');})
+    ||voices.find(function(v){return v.lang.startsWith('en');});
+  if(eng)utt.voice=eng;
+  var btn=document.getElementById('btn-read-q');
+  utt.onstart=function(){if(btn){btn.textContent='🔊 Reading...';btn.style.background='rgba(139,92,246,0.3)';}};
+  utt.onend=function(){if(btn){btn.textContent='🔊 Read Question';btn.style.background='rgba(139,92,246,0.1)';}};
+  window.speechSynthesis.speak(utt);
+}
+
+// A: Voice answer — say a number 1-5
+var _voiceRecog=null;
+var _voiceActive=false;
+function toggleVoiceAnswer(){
+  if(!('webkitSpeechRecognition' in window||'SpeechRecognition' in window)){
+    toast('Voice input not supported. Try Chrome browser.');return;
+  }
+  if(_voiceActive){
+    if(_voiceRecog)_voiceRecog.stop();
+    _voiceActive=false;
+    var btn=document.getElementById('btn-voice-ans');
+    if(btn){btn.textContent='🎤 Voice Answer';btn.style.background='rgba(6,182,212,0.1)';}
+    document.getElementById('voice-status').textContent='';
+    return;
+  }
+  var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  _voiceRecog=new SR();
+  _voiceRecog.lang='en-US';
+  _voiceRecog.interimResults=false;
+  _voiceRecog.maxAlternatives=3;
+  _voiceActive=true;
+  var btn=document.getElementById('btn-voice-ans');
+  var status=document.getElementById('voice-status');
+  if(btn){btn.textContent='🔴 Listening...';btn.style.background='rgba(236,72,153,0.2);border-color:rgba(236,72,153,0.5)';}
+  if(status)status.textContent='Say a number: 1, 2, 3, 4, or 5';
+  _voiceRecog.onresult=function(e){
+    var transcript=e.results[0][0].transcript.trim().toLowerCase();
+    var numMap={'one':1,'two':2,'three':3,'four':4,'five':5,'1':1,'2':2,'3':3,'4':4,'5':5};
+    var num=numMap[transcript]||parseInt(transcript);
+    if(num>=1&&num<=5){
+      var q=QS[CQ];
+      if(q){pickA(q._id,num);if(status)status.textContent='✅ Selected: '+num;}
+    } else {
+      if(status)status.textContent='❌ Heard "'+transcript+'" — say 1 to 5';
+    }
+    _voiceActive=false;
+    if(btn){btn.textContent='🎤 Voice Answer';btn.style.background='rgba(6,182,212,0.1)';}
+  };
+  _voiceRecog.onerror=function(e){
+    _voiceActive=false;
+    if(btn){btn.textContent='🎤 Voice Answer';btn.style.background='rgba(6,182,212,0.1)';}
+    if(status)status.textContent='Error: '+e.error+'. Try again.';
+  };
+  _voiceRecog.onend=function(){
+    _voiceActive=false;
+    if(btn){btn.textContent='🎤 Voice Answer';btn.style.background='rgba(6,182,212,0.1)';}
+  };
+  _voiceRecog.start();
+}
+
+// B: Listen to full report
+var _reportSpeaking=false;
+function listenToReport(){
+  if(!window.speechSynthesis)return toast('Voice not supported in this browser');
+  var btn=document.getElementById('btn-listen');
+  if(_reportSpeaking){
+    window.speechSynthesis.cancel();
+    _reportSpeaking=false;
+    if(btn)btn.textContent='🔊 Listen';
+    return;
+  }
+  var type=document.getElementById('rdom')?document.getElementById('rdom').textContent.replace('✦','').trim():'';
+  var summary=document.getElementById('rsum')?document.getElementById('rsum').textContent:'';
+  var name=US?US.name.split(' ')[0]:'there';
+  var txt='Hello '+name+'! Here is your PersonaIQ personality report. '
+    +'Your personality type is: '+type+'. '
+    +'Here is your summary. '+summary+'. '
+    +'This report was generated using the Big Five OCEAN personality model. '
+    +'Thank you for using PersonaIQ.';
+  var utt=new SpeechSynthesisUtterance(txt);
+  utt.rate=0.88;utt.pitch=1.05;utt.volume=1;
+  var voices=window.speechSynthesis.getVoices();
+  var eng=voices.find(function(v){return v.lang.startsWith('en')&&v.name.toLowerCase().includes('female');})
+    ||voices.find(function(v){return v.lang.startsWith('en');});
+  if(eng)utt.voice=eng;
+  _reportSpeaking=true;
+  if(btn)btn.textContent='⏹ Stop';
+  utt.onend=function(){_reportSpeaking=false;if(btn)btn.textContent='🔊 Listen';};
+  utt.onerror=function(){_reportSpeaking=false;if(btn)btn.textContent='🔊 Listen';};
+  window.speechSynthesis.speak(utt);
+  toast('🔊 Reading your report...');
+}
 async function downloadCard(){
   var card=document.getElementById('card-preview');
   if(!card)return toast('Card not found');
