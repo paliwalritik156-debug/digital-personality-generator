@@ -1484,6 +1484,27 @@ body.light-mode .mob-nav span{background:#7C3A00;}
         <button onclick="shareAnimal()" style="padding:10px 22px;background:var(--gr);border:none;border-radius:12px;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:0.85rem;font-weight:600;cursor:pointer;">🔗 Share My Animal</button>
       </div>
     </div>
+
+    <!-- Celebrity Match -->
+    <div class="rc w">
+      <div class="cl">🌟 Celebrity Personality Match</div>
+      <div id="celeb-result" style="padding:1rem 0;">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;" id="celeb-grid"></div>
+        <button onclick="shareCelebMatch()" style="margin-top:16px;padding:10px 22px;background:var(--gr);border:none;border-radius:12px;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:0.85rem;font-weight:600;cursor:pointer;display:block;margin-left:auto;margin-right:auto;">🔗 Share My Match</button>
+      </div>
+    </div>
+
+    <!-- Roast My Personality -->
+    <div class="rc w">
+      <div class="cl">😂 Roast My Personality</div>
+      <div style="padding:1rem 0;text-align:center;">
+        <div id="roast-text" style="font-size:0.95rem;color:var(--tx2);line-height:1.8;background:var(--glass);border:1px solid var(--bdr);border-radius:14px;padding:1.2rem;margin-bottom:16px;font-style:italic;min-height:60px;"></div>
+        <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+          <button onclick="generateRoast()" style="padding:10px 22px;background:linear-gradient(135deg,#EC4899,#F97316);border:none;border-radius:12px;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:0.85rem;font-weight:600;cursor:pointer;">🔥 Roast Me Again</button>
+          <button onclick="shareRoast()" style="padding:10px 22px;background:var(--gr);border:none;border-radius:12px;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:0.85rem;font-weight:600;cursor:pointer;">🔗 Share Roast</button>
+        </div>
+      </div>
+    </div>
     <div class="rc w">
       <div class="cl">🚀 Share Your Result</div>
       <div class="shcard" id="personality-share-card">
@@ -2041,6 +2062,10 @@ document.getElementById('rtrl').innerHTML='<div class="trlt">'+trl.title+'</div>
 PCTX=r;var dom=r.dominantTrait||'openness';applyPersonalityTheme(dom);
 // Render spirit animal
 if(r.scores) renderAnimal(r.scores);
+// Render celebrity match
+if(r.scores) renderCelebMatch(r.scores);
+// Generate roast
+setTimeout(function(){generateRoast();},500);
 showPage('pr');setTimeout(function(){updateAvatar(r,badge);},300);}
 function hCard(r){const dom=r.personalityType||TL[r.dominantTrait]||'Balanced';const date=new Date(r.completedAt).toLocaleDateString('en-IN',{year:'numeric',month:'short',day:'numeric'});const pills=TR.map(t=>{const s=r.scores&&r.scores[t];const sc=s?(typeof s==='object'?s.score:s):0;return'<span class="hip">'+TL[t].slice(0,3)+': '+sc+'%</span>';}).join('');return'<div class="hi" onclick="viewR('+JSON.stringify(r.sessionId||r._id)+')"><div class="hil"><h4>'+dom+'</h4><p>'+date+'</p><div class="hips">'+pills+'</div></div><div class="hia">to</div></div>';}
 async function loadHist(){
@@ -2654,6 +2679,142 @@ function copyCompatLink(){
   var link='https://digital-personality-generator.onrender.com';
   var text='Take this personality test and see our compatibility! 💞\n'+link;
   navigator.clipboard.writeText(text).then(function(){toast('Compatibility link copied! 💞');});
+}
+
+// ===== CELEBRITY MATCH =====
+var CELEBS = [
+  {name:'Albert Einstein',emoji:'🧠',field:'Scientist',scores:{openness:95,conscientiousness:75,extraversion:35,agreeableness:60,neuroticism:55}},
+  {name:'Elon Musk',emoji:'🚀',field:'Entrepreneur',scores:{openness:90,conscientiousness:80,extraversion:65,agreeableness:35,neuroticism:60}},
+  {name:'Oprah Winfrey',emoji:'🎙️',field:'Media Icon',scores:{openness:80,conscientiousness:75,extraversion:90,agreeableness:85,neuroticism:40}},
+  {name:'Steve Jobs',emoji:'💻',field:'Innovator',scores:{openness:88,conscientiousness:70,extraversion:60,agreeableness:30,neuroticism:65}},
+  {name:'Mother Teresa',emoji:'🕊️',field:'Humanitarian',scores:{openness:65,conscientiousness:90,extraversion:55,agreeableness:98,neuroticism:30}},
+  {name:'Leonardo da Vinci',emoji:'🎨',field:'Artist & Scientist',scores:{openness:99,conscientiousness:60,extraversion:45,agreeableness:65,neuroticism:50}},
+  {name:'Barack Obama',emoji:'🇺🇸',field:'Leader',scores:{openness:78,conscientiousness:85,extraversion:80,agreeableness:75,neuroticism:35}},
+  {name:'Nikola Tesla',emoji:'⚡',field:'Inventor',scores:{openness:95,conscientiousness:85,extraversion:25,agreeableness:50,neuroticism:70}},
+  {name:'Malala Yousafzai',emoji:'📚',field:'Activist',scores:{openness:82,conscientiousness:88,extraversion:70,agreeableness:90,neuroticism:45}},
+  {name:'Freddie Mercury',emoji:'🎤',field:'Musician',scores:{openness:92,conscientiousness:55,extraversion:88,agreeableness:65,neuroticism:72}},
+  {name:'Marie Curie',emoji:'🔬',field:'Scientist',scores:{openness:88,conscientiousness:95,extraversion:30,agreeableness:70,neuroticism:55}},
+  {name:'Nelson Mandela',emoji:'✊',field:'Leader',scores:{openness:75,conscientiousness:88,extraversion:72,agreeableness:92,neuroticism:28}},
+];
+
+function calcCelebMatch(userScores, celebScores){
+  var traits=['openness','conscientiousness','extraversion','agreeableness','neuroticism'];
+  var total=0;
+  traits.forEach(function(t){
+    var u=typeof userScores[t]==='object'?userScores[t].score:userScores[t];
+    var c=celebScores[t];
+    total+=100-Math.abs(u-c);
+  });
+  return Math.round(total/5);
+}
+
+function renderCelebMatch(scores){
+  var grid=document.getElementById('celeb-grid');
+  if(!grid)return;
+  var matches=CELEBS.map(function(c){
+    return{celeb:c,score:calcCelebMatch(scores,c.scores)};
+  }).sort(function(a,b){return b.score-a.score;}).slice(0,6);
+
+  window._topCeleb=matches[0].celeb;
+  grid.innerHTML=matches.map(function(m,i){
+    var isTop=i===0;
+    return'<div style="background:'+(isTop?'linear-gradient(135deg,rgba(139,92,246,0.15),rgba(6,182,212,0.1))':'var(--glass)')+';border:1px solid '+(isTop?'rgba(139,92,246,0.4)':'var(--bdr)')+';border-radius:14px;padding:1rem;text-align:center;position:relative;">'
+      +(isTop?'<div style="position:absolute;top:-8px;left:50%;transform:translateX(-50%);background:var(--gr);color:#fff;font-size:0.6rem;padding:2px 8px;border-radius:10px;font-weight:700;white-space:nowrap;">BEST MATCH</div>':'')
+      +'<div style="font-size:1.8rem;margin-bottom:6px;">'+m.celeb.emoji+'</div>'
+      +'<div style="font-family:Syne,sans-serif;font-weight:700;font-size:0.82rem;margin-bottom:2px;">'+m.celeb.name+'</div>'
+      +'<div style="font-size:0.68rem;color:var(--tx3);margin-bottom:8px;">'+m.celeb.field+'</div>'
+      +'<div style="font-family:Syne,sans-serif;font-size:1.3rem;font-weight:800;background:var(--gr);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">'+m.score+'%</div>'
+      +'</div>';
+  }).join('');
+}
+
+function shareCelebMatch(){
+  var c=window._topCeleb;
+  if(!c)return;
+  var text='🌟 My PersonaIQ Celebrity Match is '+c.name+' '+c.emoji+'\n\nDiscover your celebrity personality match 👇\nhttps://digital-personality-generator.onrender.com';
+  if(navigator.share)navigator.share({title:'My Celebrity Match',text:text});
+  else navigator.clipboard.writeText(text).then(function(){toast('Copied! 🔗');});
+}
+
+// ===== ROAST MY PERSONALITY =====
+var ROASTS = {
+  high_openness:[
+    "You scored {openness}% Openness. Basically you'd try eating sand if someone called it 'artisanal'. Your bookshelf has 47 unfinished books and you're proud of it. 📚",
+    "With {openness}% Openness, you've probably already planned 3 career changes while reading this. Your browser has 200 tabs open and you call it 'research'. 🌀",
+    "You're so open-minded your brain is basically a revolving door. {openness}% Openness means you've considered becoming a monk, a DJ, and a marine biologist — this week. 🎭",
+  ],
+  low_openness:[
+    "Only {openness}% Openness? You've been eating the same lunch for 7 years and you call it 'consistency'. Your idea of adventure is trying a new Netflix show. 📺",
+    "With {openness}% Openness, you still use Internet Explorer and think it's 'reliable'. Change is your villain origin story. 🏠",
+  ],
+  high_conscientiousness:[
+    "You're {conscientiousness}% Conscientious. Your to-do list has a to-do list. You color-code your calendar and judge people who don't. 📋",
+    "{conscientiousness}% Conscientiousness? You've already planned your retirement at age 23. Your idea of fun is optimizing your morning routine. ⏰",
+  ],
+  low_conscientiousness:[
+    "Only {conscientiousness}% Conscientiousness. You've 'started' the same project 14 times. Your room is a crime scene but you know exactly where everything is. 🌪️",
+  ],
+  high_extraversion:[
+    "You're {extraversion}% Extraverted. You've made friends with the cashier, their manager, and their dog. Silence makes you physically uncomfortable. 🎉",
+    "{extraversion}% Extraversion means you've never eaten alone in your life — not because you're popular, but because you literally cannot stop talking to strangers. 🗣️",
+  ],
+  low_extraversion:[
+    "Only {extraversion}% Extraversion. You cancelled plans to stay home and called it 'self-care'. Your social battery dies during eye contact. 🔋",
+    "With {extraversion}% Extraversion, you've rehearsed 'I'm fine thanks' in the mirror. Parties are your personal horror movie. 🏠",
+  ],
+  high_neuroticism:[
+    "You're {neuroticism}% Neurotic. You've already imagined 47 ways this could go wrong. You apologize to furniture when you bump into it. 😰",
+    "{neuroticism}% Neuroticism means you've googled your symptoms and diagnosed yourself with 3 rare diseases today. Your anxiety has anxiety. 🌊",
+  ],
+  low_neuroticism:[
+    "Only {neuroticism}% Neuroticism. You're so calm you probably slept through your own existential crisis. Nothing bothers you — which bothers everyone else. 😎",
+  ],
+  high_agreeableness:[
+    "You're {agreeableness}% Agreeable. You've said 'no problem!' to things that were absolutely a problem. You apologize when someone bumps into YOU. 🕊️",
+  ],
+  low_agreeableness:[
+    "Only {agreeableness}% Agreeableness. You've started 3 arguments today and called it 'healthy debate'. Your resting face is a TED talk on intimidation. 😤",
+  ],
+};
+
+function generateRoast(){
+  if(!RC||!RC.scores){document.getElementById('roast-text').textContent='Complete a test first to get roasted! 🔥';return;}
+  var s={
+    openness:typeof RC.scores.openness==='object'?RC.scores.openness.score:RC.scores.openness,
+    conscientiousness:typeof RC.scores.conscientiousness==='object'?RC.scores.conscientiousness.score:RC.scores.conscientiousness,
+    extraversion:typeof RC.scores.extraversion==='object'?RC.scores.extraversion.score:RC.scores.extraversion,
+    agreeableness:typeof RC.scores.agreeableness==='object'?RC.scores.agreeableness.score:RC.scores.agreeableness,
+    neuroticism:typeof RC.scores.neuroticism==='object'?RC.scores.neuroticism.score:RC.scores.neuroticism,
+  };
+  // Pick roast based on most extreme trait
+  var pool=[];
+  if(s.openness>70)pool=pool.concat(ROASTS.high_openness);
+  else pool=pool.concat(ROASTS.low_openness);
+  if(s.conscientiousness>70)pool=pool.concat(ROASTS.high_conscientiousness);
+  else pool=pool.concat(ROASTS.low_conscientiousness);
+  if(s.extraversion>65)pool=pool.concat(ROASTS.high_extraversion);
+  else pool=pool.concat(ROASTS.low_extraversion);
+  if(s.neuroticism>60)pool=pool.concat(ROASTS.high_neuroticism);
+  else pool=pool.concat(ROASTS.low_neuroticism);
+  if(s.agreeableness>70)pool=pool.concat(ROASTS.high_agreeableness);
+  else pool=pool.concat(ROASTS.low_agreeableness);
+
+  var roast=pool[Math.floor(Math.random()*pool.length)];
+  // Replace placeholders
+  roast=roast.replace('{openness}',s.openness).replace('{conscientiousness}',s.conscientiousness)
+    .replace('{extraversion}',s.extraversion).replace('{agreeableness}',s.agreeableness)
+    .replace('{neuroticism}',s.neuroticism);
+  window._currentRoast=roast;
+  var el=document.getElementById('roast-text');
+  if(el){el.style.opacity='0';setTimeout(function(){el.textContent='"'+roast+'"';el.style.opacity='1';el.style.transition='opacity 0.5s';},200);}
+}
+
+function shareRoast(){
+  var r=window._currentRoast;
+  if(!r)return;
+  var text='😂 My PersonaIQ Personality Roast:\n\n"'+r+'"\n\nGet roasted 👇\nhttps://digital-personality-generator.onrender.com';
+  if(navigator.share)navigator.share({title:'My Personality Roast',text:text});
+  else navigator.clipboard.writeText(text).then(function(){toast('Roast copied! 😂');});
 }
 
 // Contact form
