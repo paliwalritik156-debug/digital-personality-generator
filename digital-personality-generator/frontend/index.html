@@ -1402,6 +1402,10 @@ body.light-mode .mob-nav span{background:#7C3A00;}
   <div class="lb">PersonaIQ</div>
   <div class="lv"><div class="lvb"></div><div class="lvb"></div><div class="lvb"></div><div class="lvb"></div><div class="lvb"></div><div class="lvb"></div></div>
   <div class="lm" id="lm">Initialising AI analysis</div>
+  <!-- Progress bar -->
+  <div style="width:200px;height:3px;background:rgba(255,255,255,0.1);border-radius:10px;margin-top:24px;overflow:hidden;">
+    <div id="load-progress" style="height:100%;background:var(--gr);border-radius:10px;width:0%;transition:width 0.5s ease;"></div>
+  </div>
 </div>
 <div id="page-loader-results" class="page">
   <div class="skel-hero">
@@ -1504,6 +1508,15 @@ body.light-mode .mob-nav span{background:#7C3A00;}
       <div id="celeb-result" style="padding:1rem 0;">
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;" id="celeb-grid"></div>
         <button onclick="shareCelebMatch()" style="margin-top:16px;padding:10px 22px;background:var(--gr);border:none;border-radius:12px;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:0.85rem;font-weight:600;cursor:pointer;display:block;margin-left:auto;margin-right:auto;">🔗 Share My Match</button>
+      </div>
+    </div>
+
+    <!-- Movie Character Match -->
+    <div class="rc w">
+      <div class="cl">🎬 What Movie Character Are You?</div>
+      <div id="movie-result" style="padding:1rem 0;">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;" id="movie-grid"></div>
+        <button onclick="shareMovieMatch()" style="margin-top:16px;padding:10px 22px;background:linear-gradient(135deg,#EC4899,#8B5CF6);border:none;border-radius:12px;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:0.85rem;font-weight:600;cursor:pointer;display:block;margin-left:auto;margin-right:auto;">🎬 Share My Character</button>
       </div>
     </div>
 
@@ -2019,7 +2032,21 @@ async function loadDash(){if(!US)return;
 function handleStart(){if(!TK){showPage('pa','reg');return;}loadQuiz();}
 async function loadQuiz(){showPage('pl');animL();const d=await api('/api/questions');if(!d.success){toast('Failed to load');showPage('page-home');return;}QS=d.questions||d.data||[];ANS={};CQ=0;renderQ();showPage('pq');}
 let li;
-function animL(){let i=0;clearInterval(li);li=setInterval(()=>{document.getElementById('lm').textContent=LM[i%LM.length];i++;},1800);}
+function animL(){
+  let i=0;clearInterval(li);
+  li=setInterval(()=>{document.getElementById('lm').textContent=LM[i%LM.length];i++;},1800);
+  // Animate progress bar
+  var prog=document.getElementById('load-progress');
+  if(prog){
+    var p=0;
+    var pi=setInterval(function(){
+      p+=Math.random()*8;
+      if(p>90)p=90;
+      prog.style.width=p+'%';
+      if(p>=90)clearInterval(pi);
+    },300);
+  }
+}
 function gs(scores,t){const s=scores[t];return typeof s==='object'?s.score:(s||0);}
 function renderQ(){const q=QS[CQ],sel=ANS[q._id],pct=Math.round((CQ/QS.length)*100),c=TC[q.trait];window._qid=q._id;const off=163-(pct/100)*163;document.getElementById('pring').style.strokeDashoffset=off;document.getElementById('ql').textContent='Question '+(CQ+1)+' of '+QS.length;document.getElementById('qp').textContent=pct+'% complete';document.getElementById('bprev').style.display=CQ>0?'block':'none';document.getElementById('bnext').textContent=CQ===QS.length-1?'Submit Assessment':'Continue';let btns='';for(let v=1;v<=5;v++){btns+='<button class="rb'+(sel===v?' sel':'')+'" onclick="pickA(window._qid,'+v+')"><span>'+v+'</span></button>';}document.getElementById('qc').innerHTML='<div class="tp" style="background:'+c+'18;color:'+c+'">'+TL[q.trait]+'</div><div class="qcard"><div class="qtx">'+q.text+'</div><div class="rr">'+btns+'</div><div class="sl"><span>Strongly Disagree</span><span>Strongly Agree</span></div><div class="kh">Keys: <kbd class="kk">1</kbd>-<kbd class="kk">5</kbd> or <kbd class="kk">arrows</kbd></div></div>';}
 function pickA(id,v){ANS[id]=v;renderQ();}
@@ -2125,6 +2152,8 @@ PCTX=r;var dom=r.dominantTrait||'openness';applyPersonalityTheme(dom);
 if(r.scores) renderAnimal(r.scores);
 // Render celebrity match
 if(r.scores) renderCelebMatch(r.scores);
+// Render movie character match
+if(r.scores) renderMovieMatch(r.scores);
 // Render color palette
 if(r.scores) renderColorPalette(r.scores);
 // Generate wallpaper
@@ -2799,6 +2828,54 @@ function shareCelebMatch(){
   var text='🌟 My PersonaIQ Celebrity Match is '+c.name+' '+c.emoji+'\n\nDiscover your celebrity personality match 👇\nhttps://digital-personality-generator.onrender.com';
   if(navigator.share)navigator.share({title:'My Celebrity Match',text:text});
   else navigator.clipboard.writeText(text).then(function(){toast('Copied! 🔗');});
+}
+
+// ===== MOVIE CHARACTER MATCH =====
+var MOVIE_CHARS = [
+  {name:'Hermione Granger',movie:'Harry Potter',emoji:'📚',scores:{openness:75,conscientiousness:95,extraversion:55,agreeableness:70,neuroticism:50}},
+  {name:'Tony Stark',movie:'Iron Man',emoji:'🦾',scores:{openness:92,conscientiousness:65,extraversion:85,agreeableness:35,neuroticism:55}},
+  {name:'Yoda',movie:'Star Wars',emoji:'🌿',scores:{openness:88,conscientiousness:90,extraversion:30,agreeableness:85,neuroticism:15}},
+  {name:'Joker',movie:'The Dark Knight',emoji:'🃏',scores:{openness:80,conscientiousness:20,extraversion:75,agreeableness:15,neuroticism:95}},
+  {name:'Forrest Gump',movie:'Forrest Gump',emoji:'🏃',scores:{openness:45,conscientiousness:80,extraversion:55,agreeableness:95,neuroticism:30}},
+  {name:'Sherlock Holmes',movie:'Sherlock',emoji:'🔍',scores:{openness:90,conscientiousness:85,extraversion:40,agreeableness:25,neuroticism:60}},
+  {name:'Elsa',movie:'Frozen',emoji:'❄️',scores:{openness:70,conscientiousness:75,extraversion:30,agreeableness:65,neuroticism:80}},
+  {name:'Jack Sparrow',movie:'Pirates of Caribbean',emoji:'🏴‍☠️',scores:{openness:88,conscientiousness:20,extraversion:90,agreeableness:50,neuroticism:45}},
+  {name:'Atticus Finch',movie:'To Kill a Mockingbird',emoji:'⚖️',scores:{openness:72,conscientiousness:90,extraversion:55,agreeableness:92,neuroticism:25}},
+  {name:'The Joker',movie:'Joker (2019)',emoji:'😈',scores:{openness:65,conscientiousness:30,extraversion:60,agreeableness:20,neuroticism:95}},
+  {name:'Katniss Everdeen',movie:'Hunger Games',emoji:'🏹',scores:{openness:65,conscientiousness:80,extraversion:35,agreeableness:70,neuroticism:65}},
+  {name:'Walter White',movie:'Breaking Bad',emoji:'🧪',scores:{openness:78,conscientiousness:88,extraversion:45,agreeableness:30,neuroticism:70}},
+  {name:'Moana',movie:'Moana',emoji:'🌊',scores:{openness:90,conscientiousness:70,extraversion:75,agreeableness:80,neuroticism:35}},
+  {name:'Spiderman',movie:'Marvel',emoji:'🕷️',scores:{openness:78,conscientiousness:72,extraversion:70,agreeableness:88,neuroticism:55}},
+  {name:'Dumbledore',movie:'Harry Potter',emoji:'🧙',scores:{openness:95,conscientiousness:85,extraversion:65,agreeableness:88,neuroticism:20}},
+];
+
+function renderMovieMatch(scores){
+  var grid=document.getElementById('movie-grid');
+  if(!grid)return;
+  var matches=MOVIE_CHARS.map(function(c){
+    return{char:c,score:calcCelebMatch(scores,c.scores)};
+  }).sort(function(a,b){return b.score-a.score;}).slice(0,6);
+  window._topMovie=matches[0].char;
+  grid.innerHTML=matches.map(function(m,i){
+    var isTop=i===0;
+    var color=isTop?'rgba(236,72,153,0.15)':'var(--glass)';
+    var border=isTop?'rgba(236,72,153,0.4)':'var(--bdr)';
+    return'<div style="background:'+color+';border:1px solid '+border+';border-radius:14px;padding:1rem;text-align:center;position:relative;">'
+      +(isTop?'<div style="position:absolute;top:-8px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#EC4899,#8B5CF6);color:#fff;font-size:0.6rem;padding:2px 8px;border-radius:10px;font-weight:700;white-space:nowrap;">YOUR CHARACTER</div>':'')
+      +'<div style="font-size:1.8rem;margin-bottom:6px;">'+m.char.emoji+'</div>'
+      +'<div style="font-family:Syne,sans-serif;font-weight:700;font-size:0.82rem;margin-bottom:2px;">'+m.char.name+'</div>'
+      +'<div style="font-size:0.68rem;color:var(--tx3);margin-bottom:8px;">'+m.char.movie+'</div>'
+      +'<div style="font-family:Syne,sans-serif;font-size:1.3rem;font-weight:800;background:linear-gradient(135deg,#EC4899,#8B5CF6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">'+m.score+'%</div>'
+      +'</div>';
+  }).join('');
+}
+
+function shareMovieMatch(){
+  var c=window._topMovie;
+  if(!c)return;
+  var text='🎬 My PersonaIQ Movie Character Match is '+c.name+' '+c.emoji+' from '+c.movie+'!\n\nDiscover your movie character 👇\nhttps://digital-personality-generator.onrender.com';
+  if(navigator.share)navigator.share({title:'My Movie Character',text:text});
+  else navigator.clipboard.writeText(text).then(function(){toast('Copied! 🎬');});
 }
 
 // ===== ROAST MY PERSONALITY =====
