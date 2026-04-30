@@ -571,6 +571,8 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:0.5}
 .hidden{display:none!important}
 .page{position:relative;z-index:2}
+#page-home{overflow:hidden}
+#page-home.hidden footer{display:none!important}
 #cur{position:fixed;width:10px;height:10px;background:var(--pu);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:transform 0.1s,width 0.3s,height 0.3s;mix-blend-mode:screen}
 #cur-ring{position:fixed;width:36px;height:36px;border:1px solid rgba(139,92,246,0.5);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width 0.4s,height 0.4s}
 .cg #cur{width:40px;height:40px;background:rgba(139,92,246,0.15)}
@@ -1590,6 +1592,7 @@ body.light-mode .mob-nav span{background:#7C3A00;}
       </div>
     </div>
   </div>
+  </div><!-- /rg -->
   <div class="rc w">
       <div class="cl">🎨 Personality Theme</div>
       <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
@@ -1608,6 +1611,7 @@ body.light-mode .mob-nav span{background:#7C3A00;}
     <button class="btn-g" onclick="openChat()">🤖 Chat Twin</button><button class="btn-g" onclick="showPage('ph')">📂 History</button>
     <button class="btn-g" onclick="loadQuiz()">🔄 Retake</button>
   </div>
+  <div style="display:none"></div><div style="display:none"></div>
 </div>
 
 <!-- Email Modal -->
@@ -1808,6 +1812,9 @@ const TL={openness:'Openness',conscientiousness:'Conscientiousness',extraversion
 const TC={openness:'#8B5CF6',conscientiousness:'#06B6D4',extraversion:'#EC4899',agreeableness:'#10B981',neuroticism:'#F59E0B'};
 const LM=['Mapping your cognitive landscape','Detecting personality patterns','Building your Digital Twin','Running life simulations','Generating your AI report'];
 function showPage(n,sub){
+  // Always hide page-home explicitly
+  var ph=document.getElementById('page-home');
+  if(ph&&n!=='page-home') ph.classList.add('hidden');
   var current=document.querySelector('.page:not(.hidden)');
   if(current){
     current.classList.add('page-exit');
