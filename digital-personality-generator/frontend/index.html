@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PersonaIQ - AI Personality Intelligence</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="/js/three.min.js">
 var CHAT_MSGS = [];
 var PCTX = null;
@@ -1241,14 +1242,32 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:68px;display:flex;ali
     <div class="rc w"><div class="cl">🎥 Life Trailer</div><div class="trl" id="rtrl"></div></div>
     <div class="rc w">
       <div class="cl">🚀 Share Your Result</div>
-      <div class="shcard">
+      <div class="shcard" id="personality-share-card">
         <div class="shi">
-          <div class="shn" id="shn">PersonaIQ</div>
-          <div class="sht" id="sht">Your Personality Type</div>
-          <div class="shtr" id="shtr"></div>
-          <div class="shbt">
-            <button class="btn-p" onclick="downloadPDF()">📄 Download PDF</button>
-            <button class="btn-g" onclick="shareResult()">🔗 Share</button>
+          <!-- Card Preview -->
+          <div id="card-preview" style="background:linear-gradient(135deg,#0D0B1E,#1a0533,#0B1A2E);border-radius:20px;padding:2rem;margin-bottom:1.5rem;position:relative;overflow:hidden;min-height:320px;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+            <!-- Glow effects -->
+            <div style="position:absolute;top:-60px;right:-60px;width:200px;height:200px;background:radial-gradient(circle,rgba(139,92,246,0.3),transparent 70%);pointer-events:none;"></div>
+            <div style="position:absolute;bottom:-60px;left:-60px;width:200px;height:200px;background:radial-gradient(circle,rgba(6,182,212,0.2),transparent 70%);pointer-events:none;"></div>
+            <!-- Logo -->
+            <div style="font-size:0.7rem;color:rgba(139,92,246,0.7);text-transform:uppercase;letter-spacing:0.2em;margin-bottom:1.5rem;font-weight:600;">✦ PersonaIQ · OCEAN Assessment</div>
+            <!-- Name -->
+            <div id="card-name" style="font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;color:#fff;margin-bottom:0.3rem;text-align:center;"></div>
+            <!-- Type badge -->
+            <div id="card-type" style="font-size:0.72rem;color:#A78BFA;text-transform:uppercase;letter-spacing:0.15em;margin-bottom:1.8rem;font-weight:600;"></div>
+            <!-- Trait bars -->
+            <div id="card-traits" style="width:100%;max-width:320px;display:flex;flex-direction:column;gap:10px;margin-bottom:1.5rem;"></div>
+            <!-- Dominant trait -->
+            <div id="card-dominant" style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;"></div>
+            <!-- Footer -->
+            <div style="margin-top:1.5rem;font-size:0.65rem;color:rgba(255,255,255,0.25);letter-spacing:0.1em;">digital-personality-generator.onrender.com</div>
+          </div>
+          <!-- Action buttons -->
+          <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+            <button onclick="downloadCard()" style="padding:12px 24px;background:linear-gradient(135deg,#8B5CF6,#06B6D4);border:none;border-radius:12px;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:0.9rem;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:8px;">⬇️ Download Card</button>
+            <button onclick="shareToWhatsApp()" style="padding:12px 24px;background:#25D366;border:none;border-radius:12px;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:0.9rem;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:8px;">💬 WhatsApp</button>
+            <button onclick="shareToTwitter()" style="padding:12px 24px;background:#1DA1F2;border:none;border-radius:12px;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:0.9rem;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:8px;">🐦 Twitter</button>
+            <button onclick="copyShareLink()" style="padding:12px 24px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.1);border-radius:12px;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:0.9rem;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:8px;">🔗 Copy Link</button>
           </div>
         </div>
       </div>
@@ -1457,6 +1476,25 @@ document.getElementById('rsum').textContent=r.summary||'';
 document.getElementById('shn').textContent=US?US.name:'PersonaIQ';
 document.getElementById('sht').textContent=badge;
 document.getElementById('shtr').innerHTML=TR.map(t=>'<span class="shtp">'+TL[t].slice(0,3)+': '+gs(r.scores,t)+'%</span>').join('');
+
+// Update new share card
+var tc={openness:'#8B5CF6',conscientiousness:'#06B6D4',extraversion:'#EC4899',agreeableness:'#10B981',neuroticism:'#F59E0B'};
+document.getElementById('card-name').textContent=US?US.name:'Your Result';
+document.getElementById('card-type').textContent=badge;
+document.getElementById('card-traits').innerHTML=TR.map(function(t){
+  var sc=gs(r.scores,t);
+  return '<div style="display:flex;align-items:center;gap:10px;">'+
+    '<span style="font-size:0.72rem;color:rgba(255,255,255,0.5);width:70px;text-align:right;flex-shrink:0;">'+TL[t].slice(0,5)+'</span>'+
+    '<div style="flex:1;height:6px;background:rgba(255,255,255,0.08);border-radius:10px;overflow:hidden;">'+
+      '<div style="width:'+sc+'%;height:100%;background:'+tc[t]+';border-radius:10px;"></div>'+
+    '</div>'+
+    '<span style="font-size:0.75rem;font-weight:700;color:'+tc[t]+';width:32px;flex-shrink:0;">'+sc+'%</span>'+
+  '</div>';
+}).join('');
+document.getElementById('card-dominant').innerHTML=r.dominantTraits?r.dominantTraits.slice(0,3).map(function(t){
+  return '<span style="background:'+tc[t]+'22;border:1px solid '+tc[t]+'44;padding:3px 12px;border-radius:20px;font-size:0.7rem;color:'+tc[t]+';font-weight:600;">'+TL[t]+'</span>';
+}).join(''):'';
+RC=r;
 if(RC)RC.destroy();
 RC=new Chart(document.getElementById('rc2'),{type:'radar',data:{labels:TR.map(t=>TL[t]),datasets:[{data:TR.map(t=>gs(r.scores,t)),backgroundColor:'rgba(139,92,246,0.1)',borderColor:'#8B5CF6',pointBackgroundColor:TR.map(t=>TC[t]),pointRadius:5,borderWidth:2}]},options:{scales:{r:{min:0,max:100,ticks:{color:'#4A4668',stepSize:25,font:{size:9}},grid:{color:'rgba(255,255,255,0.05)'},pointLabels:{color:'#8B87A8',font:{size:10}}}},plugins:{legend:{display:false}}}});
 document.getElementById('rtb').innerHTML=TR.map(t=>{const sc=gs(r.scores,t);return'<div class="tr"><span class="tn">'+TL[t]+'</span><div class="tt"><div class="tf2" id="tf-'+t+'" style="background:'+TC[t]+'" data-w="'+sc+'"></div></div><span class="tp2">'+sc+'%</span></div>';}).join('');
@@ -1495,7 +1533,42 @@ async function downloadPDF(){if(!CRID)return toast('No result to download');toas
 function openEmailModal(){if(!CRID)return toast('No result to email');const modal=document.getElementById('email-modal');const inp=document.getElementById('email-modal-input');if(US&&US.email)inp.value=US.email;modal.style.display='flex';modal.onclick=function(e){if(e.target===modal)modal.style.display='none';};}
 async function sendEmailReport(){const inp=document.getElementById('email-modal-input');const email=inp.value.trim();if(!email)return toast('Enter an email address');const emailRx=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;if(!emailRx.test(email))return toast('Invalid email address');const btn=document.getElementById('btn-send-email');btn.disabled=true;btn.textContent='Sending…';try{const d=await api('/api/result/'+CRID+'/email','POST',{email});if(d.success){document.getElementById('email-modal').style.display='none';toast('Report sent to '+email+' 📧');}else{toast(d.message||'Failed to send');}}catch(e){toast('Error: '+e.message);}finally{btn.disabled=false;btn.textContent='Send Report →';}}
 function shareResult(){if(navigator.share)navigator.share({title:'My PersonaIQ Result',url:window.location.href});else{navigator.clipboard.writeText(window.location.href).then(()=>toast('Link copied!'));}}
-updateNav();
+
+async function downloadCard(){
+  var card=document.getElementById('card-preview');
+  if(!card)return toast('Card not found');
+  toast('Generating card...');
+  try{
+    var canvas=await html2canvas(card,{
+      backgroundColor:null,scale:2,useCORS:true,
+      logging:false,width:card.offsetWidth,height:card.offsetHeight
+    });
+    var link=document.createElement('a');
+    link.download='PersonaIQ-'+( RC?RC.personalityType:'Result')+'.png';
+    link.href=canvas.toDataURL('image/png');
+    link.click();
+    toast('Card downloaded! 🎨');
+  }catch(e){toast('Download failed: '+e.message);}
+}
+
+function shareToWhatsApp(){
+  var type=RC?RC.personalityType:'my personality';
+  var scores=RC?TR.map(function(t){return TL[t].slice(0,3)+': '+gs(RC.scores,t)+'%';}).join(' | '):'';
+  var text='🧬 My PersonaIQ Result!\n\nPersonality Type: '+type+'\n'+scores+'\n\nTake yours: https://digital-personality-generator.onrender.com';
+  window.open('https://wa.me/?text='+encodeURIComponent(text),'_blank');
+}
+
+function shareToTwitter(){
+  var type=RC?RC.personalityType:'my personality';
+  var text='Just discovered my personality type is "'+type+'" on PersonaIQ! 🧬\n\nTake the Big Five OCEAN assessment 👇';
+  window.open('https://twitter.com/intent/tweet?text='+encodeURIComponent(text)+'&url='+encodeURIComponent('https://digital-personality-generator.onrender.com'),'_blank');
+}
+
+function copyShareLink(){
+  var type=RC?RC.personalityType:'';
+  var text='My PersonaIQ personality type: '+type+' | https://digital-personality-generator.onrender.com';
+  navigator.clipboard.writeText(text).then(function(){toast('Link copied! 🔗');}).catch(function(){toast('Copy failed');});
+}updateNav();
 if(TK&&US)showPage('pd');else showPage('page-home');
 
 var CHAT_MSGS = [];
