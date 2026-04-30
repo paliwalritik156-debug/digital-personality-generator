@@ -43,7 +43,7 @@ const login = async (req, res) => {
 
 const getMe = async (req, res) => {
   try {
-    res.json({ success: true, user: { id: req.user._id, name: req.user.name, email: req.user.email, totalTests: req.user.totalTests, createdAt: req.user.createdAt } });
+    res.json({ success: true, user: { id: req.user._id, name: req.user.name, email: req.user.email, totalTests: req.user.totalTests, createdAt: req.user.createdAt, currentStreak: req.user.currentStreak || 0, longestStreak: req.user.longestStreak || 0 } });
   } catch (error) {
     res.status(500).json({ success: false, message: 'Server error.' });
   }

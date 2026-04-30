@@ -1249,6 +1249,7 @@ body.light-mode .mob-nav span{background:#7C3A00;}
         <p>Your AI personality intelligence hub</p>
         <div class="overview-stats">
           <div class="ov-stat"><div class="ov-icon">🧪</div><div class="ov-val" id="dt">0</div><div class="ov-lbl">Tests Taken</div></div>
+          <div class="ov-stat"><div class="ov-icon">🔥</div><div class="ov-val" id="streak-val" style="background:linear-gradient(135deg,#F97316,#FBBF24);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">0</div><div class="ov-lbl">Day Streak</div></div>
           <div class="ov-stat"><div class="ov-icon">🌟</div><div class="ov-val" id="dd">—</div><div class="ov-lbl">Dominant Trait</div></div>
           <div class="ov-stat"><div class="ov-icon">📅</div><div class="ov-val" id="dl">—</div><div class="ov-lbl">Last Test</div></div>
         </div>
@@ -1528,6 +1529,20 @@ body.light-mode .mob-nav span{background:#7C3A00;}
         <div style="display:flex;gap:10px;flex-wrap:wrap;">
           <button onclick="downloadPalette()" style="padding:10px 22px;background:var(--gr);border:none;border-radius:12px;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:0.85rem;font-weight:600;cursor:pointer;">⬇️ Download Palette</button>
           <button onclick="sharePalette()" style="padding:10px 22px;background:rgba(255,255,255,0.08);border:1px solid var(--bdr);border-radius:12px;color:var(--tx);font-family:'Space Grotesk',sans-serif;font-size:0.85rem;cursor:pointer;">🔗 Share</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Personality Wallpaper -->
+    <div class="rc w">
+      <div class="cl">📱 Personality Wallpaper</div>
+      <div style="padding:1rem 0;text-align:center;">
+        <p style="font-size:0.82rem;color:var(--tx2);margin-bottom:16px;">Generate a beautiful phone wallpaper based on your personality</p>
+        <canvas id="wallpaper-canvas" style="border-radius:16px;max-width:200px;box-shadow:0 8px 32px rgba(0,0,0,0.4);margin-bottom:16px;display:block;margin-left:auto;margin-right:auto;"></canvas>
+        <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+          <button onclick="generateWallpaper('dark')" style="padding:10px 18px;background:var(--gr);border:none;border-radius:12px;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:0.82rem;font-weight:600;cursor:pointer;">🌙 Dark</button>
+          <button onclick="generateWallpaper('light')" style="padding:10px 18px;background:linear-gradient(135deg,#F97316,#FBBF24);border:none;border-radius:12px;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:0.82rem;font-weight:600;cursor:pointer;">☀️ Light</button>
+          <button onclick="downloadWallpaper()" style="padding:10px 18px;background:rgba(255,255,255,0.08);border:1px solid var(--bdr);border-radius:12px;color:var(--tx);font-family:'Space Grotesk',sans-serif;font-size:0.82rem;cursor:pointer;">⬇️ Download</button>
         </div>
       </div>
     </div>
@@ -1990,7 +2005,17 @@ async function changePassword(){
 async function loadDash(){if(!US)return;
   var dn=document.getElementById('dn');if(dn)dn.textContent=US.name.split(' ')[0];
   var sbn=document.getElementById('sb-name');if(sbn)sbn.textContent=US.name;
-  var sbe=document.getElementById('sb-email');if(sbe)sbe.textContent=US.email;try{const d=await api('/api/history');if(d.success){const h=d.results||d.data||[];document.getElementById('dt').textContent=h.length;var hb=document.getElementById('hist-badge');if(hb)hb.textContent=h.length;if(h.length>0){const l=h[0];document.getElementById('dd').textContent=l.personalityType||TL[l.dominantTrait]||'—';document.getElementById('dl').textContent=new Date(l.completedAt).toLocaleDateString('en-IN',{month:'short',day:'numeric'});document.getElementById('dhl').innerHTML=h.slice(0,3).map(r=>hCard(r)).join('');}}}catch(e){console.error(e);}}
+  var sbe=document.getElementById('sb-email');if(sbe)sbe.textContent=US.email;
+  // Load streak from server
+  api('/api/auth/me').then(function(d){
+    if(d.success&&d.user){
+      updateStreakDisplay(d.user.currentStreak||0);
+      // Update US with latest streak
+      US.currentStreak=d.user.currentStreak||0;
+      US.longestStreak=d.user.longestStreak||0;
+    }
+  }).catch(function(){});
+  try{const d=await api('/api/history');if(d.success){const h=d.results||d.data||[];document.getElementById('dt').textContent=h.length;var hb=document.getElementById('hist-badge');if(hb)hb.textContent=h.length;if(h.length>0){const l=h[0];document.getElementById('dd').textContent=l.personalityType||TL[l.dominantTrait]||'—';document.getElementById('dl').textContent=new Date(l.completedAt).toLocaleDateString('en-IN',{month:'short',day:'numeric'});document.getElementById('dhl').innerHTML=h.slice(0,3).map(r=>hCard(r)).join('');}}}catch(e){console.error(e);}}
 function handleStart(){if(!TK){showPage('pa','reg');return;}loadQuiz();}
 async function loadQuiz(){showPage('pl');animL();const d=await api('/api/questions');if(!d.success){toast('Failed to load');showPage('page-home');return;}QS=d.questions||d.data||[];ANS={};CQ=0;renderQ();showPage('pq');}
 let li;
@@ -2001,7 +2026,14 @@ function pickA(id,v){ANS[id]=v;renderQ();}
 function nextQ(){if(!ANS[QS[CQ]._id])return toast('Please select a rating');if(CQ===QS.length-1){submitQ();return;}CQ++;renderQ();}
 function prevQ(){if(CQ>0){CQ--;renderQ();}}
 document.addEventListener('keydown',e=>{if(document.getElementById('pq').classList.contains('hidden'))return;const q=QS[CQ];if(!q)return;if(['1','2','3','4','5'].includes(e.key))pickA(q._id,parseInt(e.key));if(e.key==='ArrowRight')nextQ();if(e.key==='ArrowLeft')prevQ();});
-async function submitQ(){showPage('pl');animL();const arr=Object.entries(ANS).map(([qId,v])=>({questionId:qId,value:v}));const d=await api('/api/submit','POST',{answers:arr});clearInterval(li);if(d.success){CRID=d.result?d.result.sessionId:d.resultId;const f=await api('/api/result/'+CRID);if(f.success)renderR(f.result||f.data);}else{toast('Failed: '+d.message);showPage('pq');}}
+async function submitQ(){showPage('pl');animL();const arr=Object.entries(ANS).map(([qId,v])=>({questionId:qId,value:v}));const d=await api('/api/submit','POST',{answers:arr});clearInterval(li);if(d.success){
+  // Show streak toast
+  if(d.streak&&d.streak.current>1){
+    setTimeout(function(){toast('🔥 '+d.streak.current+' day streak! Keep it up!');},1500);
+  } else if(d.streak&&d.streak.current===1){
+    setTimeout(function(){toast('🎯 Streak started! Come back tomorrow!');},1500);
+  }
+  CRID=d.result?d.result.sessionId:d.resultId;const f=await api('/api/result/'+CRID);if(f.success)renderR(f.result||f.data);}else{toast('Failed: '+d.message);showPage('pq');}}
 function renderR(r){showResultSkeleton();setTimeout(function(){doRenderR(r);},2000);}
 function doRenderR(r){
 document.getElementById('rnt').textContent=(US?US.name:'Your')+"'s AI Profile";
@@ -2095,6 +2127,8 @@ if(r.scores) renderAnimal(r.scores);
 if(r.scores) renderCelebMatch(r.scores);
 // Render color palette
 if(r.scores) renderColorPalette(r.scores);
+// Generate wallpaper
+if(r.scores) setTimeout(function(){generateWallpaper('dark');},300);
 // Generate roast
 setTimeout(function(){generateRoast();},500);
 showPage('pr');setTimeout(function(){updateAvatar(r,badge);},300);}
@@ -2928,6 +2962,104 @@ function sharePalette(){
   var text='🎨 My PersonaIQ Personality Color Palette!\n\nEvery color represents a personality trait.\nDiscover yours 👇\nhttps://digital-personality-generator.onrender.com';
   if(navigator.share)navigator.share({title:'My Personality Palette',text:text});
   else navigator.clipboard.writeText(text).then(function(){toast('Copied! 🔗');});
+}
+
+// ===== PERSONALITY WALLPAPER =====
+function generateWallpaper(mode){
+  var palette=window._palette;
+  if(!palette||!RC){toast('Complete a test first!');return;}
+  var canvas=document.getElementById('wallpaper-canvas');
+  if(!canvas)return;
+  // Phone wallpaper ratio 9:19.5
+  canvas.width=360;canvas.height=780;
+  var ctx=canvas.getContext('2d');
+  var isDark=mode!=='light';
+
+  // Background
+  if(isDark){
+    var bg=ctx.createLinearGradient(0,0,360,780);
+    bg.addColorStop(0,'#050508');bg.addColorStop(0.5,'#0D0B1E');bg.addColorStop(1,'#050508');
+    ctx.fillStyle=bg;ctx.fillRect(0,0,360,780);
+  } else {
+    var bg2=ctx.createLinearGradient(0,0,360,780);
+    bg2.addColorStop(0,'#FFF8F0');bg2.addColorStop(0.5,'#FFF0E0');bg2.addColorStop(1,'#FFF8F0');
+    ctx.fillStyle=bg2;ctx.fillRect(0,0,360,780);
+  }
+
+  // Draw personality color orbs
+  palette.forEach(function(c,i){
+    var x=60+i*50,y=200+Math.sin(i*1.2)*80;
+    var r=ctx.createRadialGradient(x,y,0,x,y,80);
+    r.addColorStop(0,c.hsl.replace('hsl','hsla').replace(')',',0.4)'));
+    r.addColorStop(1,'transparent');
+    ctx.fillStyle=r;ctx.beginPath();ctx.arc(x,y,80,0,Math.PI*2);ctx.fill();
+  });
+
+  // Second row of orbs
+  palette.forEach(function(c,i){
+    var x=80+i*50,y=550+Math.cos(i*1.5)*60;
+    var r2=ctx.createRadialGradient(x,y,0,x,y,60);
+    r2.addColorStop(0,c.hsl.replace('hsl','hsla').replace(')',',0.3)'));
+    r2.addColorStop(1,'transparent');
+    ctx.fillStyle=r2;ctx.beginPath();ctx.arc(x,y,60,0,Math.PI*2);ctx.fill();
+  });
+
+  // Logo
+  ctx.font='bold 14px Arial';ctx.textAlign='center';
+  ctx.fillStyle=isDark?'rgba(255,255,255,0.3)':'rgba(0,0,0,0.3)';
+  ctx.fillText('✦ PersonaIQ',180,60);
+
+  // Personality type
+  var type=RC.personalityType||'Balanced';
+  ctx.font='bold 22px Arial';ctx.textAlign='center';
+  ctx.fillStyle=isDark?'rgba(255,255,255,0.9)':'rgba(28,10,0,0.9)';
+  ctx.fillText(type,180,340);
+
+  // Trait bars
+  var traits=['openness','conscientiousness','extraversion','agreeableness','neuroticism'];
+  var tc={openness:'#8B5CF6',conscientiousness:'#06B6D4',extraversion:'#EC4899',agreeableness:'#10B981',neuroticism:'#F59E0B'};
+  traits.forEach(function(t,i){
+    var score=RC.scores&&RC.scores[t]?(typeof RC.scores[t]==='object'?RC.scores[t].score:RC.scores[t]):50;
+    var y=390+i*38;
+    // Bar bg
+    ctx.fillStyle=isDark?'rgba(255,255,255,0.08)':'rgba(0,0,0,0.08)';
+    ctx.beginPath();ctx.roundRect(40,y,280,12,6);ctx.fill();
+    // Bar fill
+    ctx.fillStyle=tc[t];
+    ctx.beginPath();ctx.roundRect(40,y,Math.round(280*score/100),12,6);ctx.fill();
+    // Label
+    ctx.font='10px Arial';ctx.textAlign='left';
+    ctx.fillStyle=isDark?'rgba(255,255,255,0.5)':'rgba(0,0,0,0.5)';
+    ctx.fillText(TL[t].slice(0,5),40,y-4);
+    ctx.textAlign='right';
+    ctx.fillStyle=tc[t];ctx.font='bold 10px Arial';
+    ctx.fillText(score+'%',320,y-4);
+  });
+
+  // Bottom URL
+  ctx.font='10px Arial';ctx.textAlign='center';
+  ctx.fillStyle=isDark?'rgba(255,255,255,0.2)':'rgba(0,0,0,0.2)';
+  ctx.fillText('digital-personality-generator.onrender.com',180,750);
+
+  window._wallpaperMode=mode;
+  toast('Wallpaper generated! 📱');
+}
+
+function downloadWallpaper(){
+  var canvas=document.getElementById('wallpaper-canvas');
+  if(!canvas||canvas.width===0){generateWallpaper('dark');return;}
+  var a=document.createElement('a');
+  a.download='PersonaIQ-Wallpaper.png';a.href=canvas.toDataURL('image/png');a.click();
+  toast('Wallpaper downloaded! 📱');
+}
+
+// ===== STREAK DISPLAY =====
+function updateStreakDisplay(streak){
+  var el=document.getElementById('streak-val');
+  if(!el)return;
+  el.textContent=streak||0;
+  if(streak>=7)el.textContent=streak+'🔥';
+  else if(streak>=3)el.textContent=streak+'⚡';
 }
 
 // ===== ACHIEVEMENT BADGES =====

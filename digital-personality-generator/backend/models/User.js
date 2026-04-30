@@ -9,6 +9,9 @@ const UserSchema = new mongoose.Schema({
   googleId: { type: String, default: null },
   authProvider: { type: String, enum: ['local', 'google'], default: 'local' },
   totalTests: { type: Number, default: 0 },
+  currentStreak: { type: Number, default: 0 },
+  longestStreak: { type: Number, default: 0 },
+  lastTestDate: { type: Date, default: null },
 }, { timestamps: true });
 
 UserSchema.pre('save', async function(next) {

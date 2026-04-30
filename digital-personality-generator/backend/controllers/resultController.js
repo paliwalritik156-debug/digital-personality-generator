@@ -30,8 +30,28 @@ const submitAnswers = async (req, res) => {
     await Answer.insertMany(answerDocs);
     const { scores, personalityType, dominantTraits, summary, suggestions } = processPersonalityResults(enrichedAnswers);
     const result = await Result.create({ userId, sessionId, scores, personalityType, dominantTraits, summary, suggestions });
-    await User.findByIdAndUpdate(userId, { $inc: { totalTests: 1 } });
-    res.status(201).json({ success: true, message: 'Test completed!', result: { id: result._id, sessionId: result.sessionId, scores: result.scores, personalityType: result.personalityType, dominantTraits: result.dominantTraits, summary: result.summary, suggestions: result.suggestions, completedAt: result.completedAt } });
+
+    // Update streak
+    const user = await User.findById(userId);
+    const today = new Date(); today.setHours(0,0,0,0);
+    const lastTest = user.lastTestDate ? new Date(user.lastTestDate) : null;
+    if (lastTest) { lastTest.setHours(0,0,0,0); }
+    const yesterday = new Date(today); yesterday.setDate(yesterday.getDate()-1);
+    let newStreak = 1;
+    if (lastTest && lastTest.getTime() === yesterday.getTime()) {
+      newStreak = (user.currentStreak || 0) + 1;
+    } else if (lastTest && lastTest.getTime() === today.getTime()) {
+      newStreak = user.currentStreak || 1; // same day, keep streak
+    }
+    const longestStreak = Math.max(newStreak, user.longestStreak || 0);
+    await User.findByIdAndUpdate(userId, {
+      $inc: { totalTests: 1 },
+      currentStreak: newStreak,
+      longestStreak,
+      lastTestDate: new Date(),
+    });
+
+    res.status(201).json({ success: true, message: 'Test completed!', result: { id: result._id, sessionId: result.sessionId, scores: result.scores, personalityType: result.personalityType, dominantTraits: result.dominantTraits, summary: result.summary, suggestions: result.suggestions, completedAt: result.completedAt }, streak: { current: newStreak, longest: longestStreak } });
   } catch (error) {
     console.error('Submit error:', error);
     res.status(500).json({ success: false, message: 'Failed to process answers.' });
