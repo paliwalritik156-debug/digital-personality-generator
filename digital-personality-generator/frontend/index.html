@@ -1,170 +1,1762 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Digital Personality Generator | OCEAN Model</title>
-  <link rel="stylesheet" href="/css/styles.css"/>
-  <script src="/js/vendor/chart.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PersonaIQ - AI Personality Intelligence</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<script src="/js/three.min.js">
+var CHAT_MSGS = [];
+var PCTX = null;
+function openChat(){
+  if(!TK){showPage('pa','login');return;}
+  showPage('page-chat');
+  if(CHAT_MSGS.length===0){addCMsg('ai','Hi! I am your AI Personality Twin. I have analyzed your unique personality using the OCEAN model. What would you like to explore about yourself?');}
+}
+function addCMsg(role,text){
+  var el=document.getElementById('chat-msgs');
+  var d=document.createElement('div');
+  d.className='cmsg '+role;
+  d.innerHTML='<div class="cmsg-av">'+(role==='ai'?'🧠':'👤')+'</div><div class="cmsg-bbl">'+text+'</div>';
+  el.appendChild(d);el.scrollTop=el.scrollHeight;
+  CHAT_MSGS.push({role:role,text:text});
+}
+function showTyping(){
+  var el=document.getElementById('chat-msgs');
+  var d=document.createElement('div');
+  d.className='cmsg ai';d.id='tping';
+  d.innerHTML='<div class="cmsg-av">🧠</div><div class="cmsg-bbl"><div class="tdots"><div class="tdot"></div><div class="tdot"></div><div class="tdot"></div></div></div>';
+  el.appendChild(d);el.scrollTop=el.scrollHeight;
+}
+function hideTyping(){var t=document.getElementById('tping');if(t)t.remove();}
+function getPCtx(){
+  if(!PCTX)return'User has completed a Big Five OCEAN personality assessment.';
+  var scores=TR.map(function(t){return TL[t]+': '+gs(PCTX.scores,t)+'%';}).join(', ');
+  return'Personality scores: '+scores+'. Summary: '+(PCTX.summary||'')+'Type: '+(PCTX.personalityType||'Balanced');
+}
+function getLocalR(msg){
+  var rs=['Based on your personality profile, you have a natural gift for deep thinking and empathy. Use this to build meaningful connections.','Your scores suggest you thrive when given autonomy and time to reflect before acting. Structure and spontaneity can coexist for you.','Your personality reveals someone driven by values and authenticity. This is a rare and powerful combination in todays world.','You tend to process emotions deeply, which makes you highly intuitive. Trust your instincts more often.','Your profile shows strong potential for leadership through quiet influence rather than loud authority.'];
+  return rs[Math.floor(Math.random()*rs.length)];
+}
+async function sendChat(){
+  var inp=document.getElementById('chat-inp');
+  var msg=inp.value.trim();
+  if(!msg)return;
+  inp.value='';
+  addCMsg('user',msg);
+  showTyping();
+  setTimeout(function(){
+    hideTyping();
+    addCMsg('ai',getLocalR(msg));
+  },1200+Math.random()*800);
+}
+function chatSug(el){document.getElementById('chat-inp').value=el.textContent;sendChat();}
+
+
+var AV_RENDERER = null, AV_SCENE = null, AV_CAMERA = null, AV_SPHERE = null, AV_FRAME = null;
+
+function initAvatar(dominantTrait){
+  var canvas = document.getElementById('avatar-canvas');
+  if(!canvas || !window.THREE) return;
+  if(AV_RENDERER){AV_RENDERER.dispose();cancelAnimationFrame(AV_FRAME);}
+
+  var traitColors2 = {
+    openness: {main:0x8B5CF6, glow:0xA78BFA},
+    conscientiousness: {main:0x06B6D4, glow:0x67E8F9},
+    extraversion: {main:0xEC4899, glow:0xF9A8D4},
+    agreeableness: {main:0x10B981, glow:0x6EE7B7},
+    neuroticism: {main:0xF59E0B, glow:0xFCD34D}
+  };
+  var colors = traitColors2[dominantTrait] || traitColors2.openness;
+
+  AV_RENDERER = new THREE.WebGLRenderer({canvas:canvas, alpha:true, antialias:true});
+  AV_RENDERER.setSize(200, 200);
+  AV_RENDERER.setPixelRatio(Math.min(devicePixelRatio, 2));
+
+  AV_SCENE = new THREE.Scene();
+  AV_CAMERA = new THREE.PerspectiveCamera(50, 1, 0.1, 100);
+  AV_CAMERA.position.z = 3;
+
+  // Main sphere
+  var geo = new THREE.SphereGeometry(0.9, 64, 64);
+  var mat = new THREE.MeshPhongMaterial({
+    color: colors.main,
+    emissive: colors.main,
+    emissiveIntensity: 0.3,
+    shininess: 100,
+    transparent: true,
+    opacity: 0.9
+  });
+  AV_SPHERE = new THREE.Mesh(geo, mat);
+  AV_SCENE.add(AV_SPHERE);
+
+  // Inner glow sphere
+  var igeo = new THREE.SphereGeometry(0.85, 32, 32);
+  var imat = new THREE.MeshBasicMaterial({
+    color: colors.glow,
+    transparent: true,
+    opacity: 0.15,
+    side: THREE.BackSide
+  });
+  var inner = new THREE.Mesh(igeo, imat);
+  AV_SCENE.add(inner);
+
+  // Outer glow sphere
+  var ogeo = new THREE.SphereGeometry(1.1, 32, 32);
+  var omat = new THREE.MeshBasicMaterial({
+    color: colors.main,
+    transparent: true,
+    opacity: 0.05,
+    side: THREE.BackSide
+  });
+  var outer = new THREE.Mesh(ogeo, omat);
+  AV_SCENE.add(outer);
+
+  // Particles around sphere
+  var pGeo = new THREE.BufferGeometry();
+  var pCount = 200;
+  var pPos = new Float32Array(pCount * 3);
+  for(var i = 0; i < pCount; i++){
+    var theta = Math.random() * Math.PI * 2;
+    var phi = Math.acos(2 * Math.random() - 1);
+    var r = 1.2 + Math.random() * 0.5;
+    pPos[i*3] = r * Math.sin(phi) * Math.cos(theta);
+    pPos[i*3+1] = r * Math.sin(phi) * Math.sin(theta);
+    pPos[i*3+2] = r * Math.cos(phi);
+  }
+  pGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
+  var pMat = new THREE.PointsMaterial({color: colors.glow, size: 0.02, transparent: true, opacity: 0.8});
+  var particles = new THREE.Points(pGeo, pMat);
+  AV_SCENE.add(particles);
+
+  // Lights
+  var ambLight = new THREE.AmbientLight(0xffffff, 0.4);
+  AV_SCENE.add(ambLight);
+  var pointLight1 = new THREE.PointLight(colors.main, 2, 10);
+  pointLight1.position.set(2, 2, 2);
+  AV_SCENE.add(pointLight1);
+  var pointLight2 = new THREE.PointLight(colors.glow, 1.5, 10);
+  pointLight2.position.set(-2, -1, 1);
+  AV_SCENE.add(pointLight2);
+
+  // Mouse interaction
+  var mx = 0, my = 0;
+  canvas.addEventListener('mousemove', function(e){
+    var rect = canvas.getBoundingClientRect();
+    mx = ((e.clientX - rect.left) / 200 - 0.5) * 2;
+    my = -((e.clientY - rect.top) / 200 - 0.5) * 2;
+  });
+
+  var t = 0;
+  function animate(){
+    AV_FRAME = requestAnimationFrame(animate);
+    t += 0.01;
+    AV_SPHERE.rotation.y += 0.005;
+    AV_SPHERE.rotation.x += 0.002;
+    AV_SPHERE.position.x += (mx * 0.1 - AV_SPHERE.position.x) * 0.05;
+    AV_SPHERE.position.y += (my * 0.1 - AV_SPHERE.position.y) * 0.05;
+    particles.rotation.y -= 0.003;
+    pointLight1.intensity = 2 + Math.sin(t * 2) * 0.5;
+    AV_RENDERER.render(AV_SCENE, AV_CAMERA);
+  }
+  animate();
+}
+
+function updateAvatar(r, badge){
+  var dom = r.dominantTrait || 'openness';
+  var traitEmojis = {openness:'🎨',conscientiousness:'📋',extraversion:'🌟',agreeableness:'💚',neuroticism:'🌊'};
+  var tc = {openness:'#8B5CF6',conscientiousness:'#06B6D4',extraversion:'#EC4899',agreeableness:'#10B981',neuroticism:'#F59E0B'};
+
+  var avName = document.getElementById('av-name');
+  var avType = document.getElementById('av-type');
+  var avOrbs = document.getElementById('av-orbs');
+
+  if(avName) avName.textContent = (US ? US.name : 'Your') + ' Twin';
+  if(avType) avType.textContent = badge;
+  if(avOrbs) avOrbs.innerHTML = TR.map(function(t,i){
+    return '<div class="avatar-orb" style="background:'+tc[t]+';animation-delay:'+(i*0.1)+'s" title="'+TL[t]+': '+gs(r.scores,t)+'%"></div>';
+  }).join('');
+
+  setTimeout(function(){ initAvatar(dom); }, 200);
+}
+
+
+function animateCounter(el, target, duration){
+  var start = 0;
+  var step = target / (duration / 16);
+  var timer = setInterval(function(){
+    start += step;
+    if(start >= target){start = target;clearInterval(timer);}
+    el.textContent = Math.round(start) + '%';
+  }, 16);
+}
+
+function animateTraitBars(){
+  setTimeout(function(){
+    TR.forEach(function(t){
+      var el = document.getElementById('tf-'+t);
+      if(el){
+        var w = el.getAttribute('data-w');
+        el.style.width = w + '%';
+      }
+      var pct = document.querySelector('.tpct[data-trait="'+t+'"]');
+      if(pct){
+        animateCounter(pct, parseInt(pct.getAttribute('data-val')), 1200);
+      }
+    });
+  }, 300);
+}
+
+function animateIntelScores(){
+  setTimeout(function(){
+    document.querySelectorAll('.iv[data-val]').forEach(function(el){
+      var target = parseInt(el.getAttribute('data-val'));
+      var start = 0;
+      var timer = setInterval(function(){
+        start += 0.2;
+        if(start >= target){start = target;clearInterval(timer);}
+        el.textContent = Math.round(start*10)/10 + '/10';
+      }, 30);
+    });
+  }, 500);
+}
+
+
+var TRAIT_THEMES = {
+  openness: {
+    pu:'#8B5CF6', cy:'#A78BFA', gr:'linear-gradient(135deg,#8B5CF6,#A78BFA)',
+    glow:'rgba(139,92,246,0.4)', bg:'rgba(139,92,246,0.08)'
+  },
+  conscientiousness: {
+    pu:'#06B6D4', cy:'#67E8F9', gr:'linear-gradient(135deg,#06B6D4,#0EA5E9)',
+    glow:'rgba(6,182,212,0.4)', bg:'rgba(6,182,212,0.08)'
+  },
+  extraversion: {
+    pu:'#EC4899', cy:'#F9A8D4', gr:'linear-gradient(135deg,#EC4899,#F472B6)',
+    glow:'rgba(236,72,153,0.4)', bg:'rgba(236,72,153,0.08)'
+  },
+  agreeableness: {
+    pu:'#10B981', cy:'#6EE7B7', gr:'linear-gradient(135deg,#10B981,#34D399)',
+    glow:'rgba(16,185,129,0.4)', bg:'rgba(16,185,129,0.08)'
+  },
+  neuroticism: {
+    pu:'#F59E0B', cy:'#FCD34D', gr:'linear-gradient(135deg,#F59E0B,#FBBF24)',
+    glow:'rgba(245,158,11,0.4)', bg:'rgba(245,158,11,0.08)'
+  }
+};
+
+function applyPersonalityTheme(trait){
+  var theme = TRAIT_THEMES[trait] || TRAIT_THEMES.openness;
+  var root = document.documentElement;
+  root.style.setProperty('--pu', theme.pu);
+  root.style.setProperty('--pu2', theme.cy);
+  root.style.setProperty('--cy', theme.cy);
+  root.style.setProperty('--gr', theme.gr);
+  root.style.setProperty('--gp', '0 0 40px ' + theme.glow);
+  root.style.setProperty('--bdr2', theme.glow);
+
+  // Show toast with theme change
+  var names = {
+    openness:'🎨 Creative Purple Theme',
+    conscientiousness:'💎 Intelligence Cyan Theme',
+    extraversion:'🌟 Energy Pink Theme',
+    agreeableness:'🌿 Harmony Green Theme',
+    neuroticism:'⚡ Depth Gold Theme'
+  };
+  setTimeout(function(){
+    toast('Theme: ' + (names[trait]||'Custom Theme') + ' applied!');
+  }, 500);
+}
+
+function resetTheme(){
+  var root = document.documentElement;
+  root.style.setProperty('--pu', '#8B5CF6');
+  root.style.setProperty('--pu2', '#A78BFA');
+  root.style.setProperty('--cy', '#06B6D4');
+  root.style.setProperty('--gr', 'linear-gradient(135deg,#8B5CF6,#06B6D4)');
+  root.style.setProperty('--gp', '0 0 40px rgba(139,92,246,0.3)');
+  root.style.setProperty('--bdr2', 'rgba(139,92,246,0.4)');
+}
+
+</script>
+<script src="/js/chart.min.js">
+var CHAT_MSGS = [];
+var PCTX = null;
+function openChat(){
+  if(!TK){showPage('pa','login');return;}
+  showPage('page-chat');
+  if(CHAT_MSGS.length===0){addCMsg('ai','Hi! I am your AI Personality Twin. I have analyzed your unique personality using the OCEAN model. What would you like to explore about yourself?');}
+}
+function addCMsg(role,text){
+  var el=document.getElementById('chat-msgs');
+  var d=document.createElement('div');
+  d.className='cmsg '+role;
+  d.innerHTML='<div class="cmsg-av">'+(role==='ai'?'🧠':'👤')+'</div><div class="cmsg-bbl">'+text+'</div>';
+  el.appendChild(d);el.scrollTop=el.scrollHeight;
+  CHAT_MSGS.push({role:role,text:text});
+}
+function showTyping(){
+  var el=document.getElementById('chat-msgs');
+  var d=document.createElement('div');
+  d.className='cmsg ai';d.id='tping';
+  d.innerHTML='<div class="cmsg-av">🧠</div><div class="cmsg-bbl"><div class="tdots"><div class="tdot"></div><div class="tdot"></div><div class="tdot"></div></div></div>';
+  el.appendChild(d);el.scrollTop=el.scrollHeight;
+}
+function hideTyping(){var t=document.getElementById('tping');if(t)t.remove();}
+function getPCtx(){
+  if(!PCTX)return'User has completed a Big Five OCEAN personality assessment.';
+  var scores=TR.map(function(t){return TL[t]+': '+gs(PCTX.scores,t)+'%';}).join(', ');
+  return'Personality scores: '+scores+'. Summary: '+(PCTX.summary||'')+'Type: '+(PCTX.personalityType||'Balanced');
+}
+function getLocalR(msg){
+  var rs=['Based on your personality profile, you have a natural gift for deep thinking and empathy. Use this to build meaningful connections.','Your scores suggest you thrive when given autonomy and time to reflect before acting. Structure and spontaneity can coexist for you.','Your personality reveals someone driven by values and authenticity. This is a rare and powerful combination in todays world.','You tend to process emotions deeply, which makes you highly intuitive. Trust your instincts more often.','Your profile shows strong potential for leadership through quiet influence rather than loud authority.'];
+  return rs[Math.floor(Math.random()*rs.length)];
+}
+async function sendChat(){
+  var inp=document.getElementById('chat-inp');
+  var msg=inp.value.trim();
+  if(!msg)return;
+  inp.value='';
+  addCMsg('user',msg);
+  showTyping();
+  setTimeout(function(){
+    hideTyping();
+    addCMsg('ai',getLocalR(msg));
+  },1200+Math.random()*800);
+}
+function chatSug(el){document.getElementById('chat-inp').value=el.textContent;sendChat();}
+
+
+var AV_RENDERER = null, AV_SCENE = null, AV_CAMERA = null, AV_SPHERE = null, AV_FRAME = null;
+
+function initAvatar(dominantTrait){
+  var canvas = document.getElementById('avatar-canvas');
+  if(!canvas || !window.THREE) return;
+  if(AV_RENDERER){AV_RENDERER.dispose();cancelAnimationFrame(AV_FRAME);}
+
+  var traitColors2 = {
+    openness: {main:0x8B5CF6, glow:0xA78BFA},
+    conscientiousness: {main:0x06B6D4, glow:0x67E8F9},
+    extraversion: {main:0xEC4899, glow:0xF9A8D4},
+    agreeableness: {main:0x10B981, glow:0x6EE7B7},
+    neuroticism: {main:0xF59E0B, glow:0xFCD34D}
+  };
+  var colors = traitColors2[dominantTrait] || traitColors2.openness;
+
+  AV_RENDERER = new THREE.WebGLRenderer({canvas:canvas, alpha:true, antialias:true});
+  AV_RENDERER.setSize(200, 200);
+  AV_RENDERER.setPixelRatio(Math.min(devicePixelRatio, 2));
+
+  AV_SCENE = new THREE.Scene();
+  AV_CAMERA = new THREE.PerspectiveCamera(50, 1, 0.1, 100);
+  AV_CAMERA.position.z = 3;
+
+  // Main sphere
+  var geo = new THREE.SphereGeometry(0.9, 64, 64);
+  var mat = new THREE.MeshPhongMaterial({
+    color: colors.main,
+    emissive: colors.main,
+    emissiveIntensity: 0.3,
+    shininess: 100,
+    transparent: true,
+    opacity: 0.9
+  });
+  AV_SPHERE = new THREE.Mesh(geo, mat);
+  AV_SCENE.add(AV_SPHERE);
+
+  // Inner glow sphere
+  var igeo = new THREE.SphereGeometry(0.85, 32, 32);
+  var imat = new THREE.MeshBasicMaterial({
+    color: colors.glow,
+    transparent: true,
+    opacity: 0.15,
+    side: THREE.BackSide
+  });
+  var inner = new THREE.Mesh(igeo, imat);
+  AV_SCENE.add(inner);
+
+  // Outer glow sphere
+  var ogeo = new THREE.SphereGeometry(1.1, 32, 32);
+  var omat = new THREE.MeshBasicMaterial({
+    color: colors.main,
+    transparent: true,
+    opacity: 0.05,
+    side: THREE.BackSide
+  });
+  var outer = new THREE.Mesh(ogeo, omat);
+  AV_SCENE.add(outer);
+
+  // Particles around sphere
+  var pGeo = new THREE.BufferGeometry();
+  var pCount = 200;
+  var pPos = new Float32Array(pCount * 3);
+  for(var i = 0; i < pCount; i++){
+    var theta = Math.random() * Math.PI * 2;
+    var phi = Math.acos(2 * Math.random() - 1);
+    var r = 1.2 + Math.random() * 0.5;
+    pPos[i*3] = r * Math.sin(phi) * Math.cos(theta);
+    pPos[i*3+1] = r * Math.sin(phi) * Math.sin(theta);
+    pPos[i*3+2] = r * Math.cos(phi);
+  }
+  pGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
+  var pMat = new THREE.PointsMaterial({color: colors.glow, size: 0.02, transparent: true, opacity: 0.8});
+  var particles = new THREE.Points(pGeo, pMat);
+  AV_SCENE.add(particles);
+
+  // Lights
+  var ambLight = new THREE.AmbientLight(0xffffff, 0.4);
+  AV_SCENE.add(ambLight);
+  var pointLight1 = new THREE.PointLight(colors.main, 2, 10);
+  pointLight1.position.set(2, 2, 2);
+  AV_SCENE.add(pointLight1);
+  var pointLight2 = new THREE.PointLight(colors.glow, 1.5, 10);
+  pointLight2.position.set(-2, -1, 1);
+  AV_SCENE.add(pointLight2);
+
+  // Mouse interaction
+  var mx = 0, my = 0;
+  canvas.addEventListener('mousemove', function(e){
+    var rect = canvas.getBoundingClientRect();
+    mx = ((e.clientX - rect.left) / 200 - 0.5) * 2;
+    my = -((e.clientY - rect.top) / 200 - 0.5) * 2;
+  });
+
+  var t = 0;
+  function animate(){
+    AV_FRAME = requestAnimationFrame(animate);
+    t += 0.01;
+    AV_SPHERE.rotation.y += 0.005;
+    AV_SPHERE.rotation.x += 0.002;
+    AV_SPHERE.position.x += (mx * 0.1 - AV_SPHERE.position.x) * 0.05;
+    AV_SPHERE.position.y += (my * 0.1 - AV_SPHERE.position.y) * 0.05;
+    particles.rotation.y -= 0.003;
+    pointLight1.intensity = 2 + Math.sin(t * 2) * 0.5;
+    AV_RENDERER.render(AV_SCENE, AV_CAMERA);
+  }
+  animate();
+}
+
+function updateAvatar(r, badge){
+  var dom = r.dominantTrait || 'openness';
+  var traitEmojis = {openness:'🎨',conscientiousness:'📋',extraversion:'🌟',agreeableness:'💚',neuroticism:'🌊'};
+  var tc = {openness:'#8B5CF6',conscientiousness:'#06B6D4',extraversion:'#EC4899',agreeableness:'#10B981',neuroticism:'#F59E0B'};
+
+  var avName = document.getElementById('av-name');
+  var avType = document.getElementById('av-type');
+  var avOrbs = document.getElementById('av-orbs');
+
+  if(avName) avName.textContent = (US ? US.name : 'Your') + ' Twin';
+  if(avType) avType.textContent = badge;
+  if(avOrbs) avOrbs.innerHTML = TR.map(function(t,i){
+    return '<div class="avatar-orb" style="background:'+tc[t]+';animation-delay:'+(i*0.1)+'s" title="'+TL[t]+': '+gs(r.scores,t)+'%"></div>';
+  }).join('');
+
+  setTimeout(function(){ initAvatar(dom); }, 200);
+}
+
+
+function animateCounter(el, target, duration){
+  var start = 0;
+  var step = target / (duration / 16);
+  var timer = setInterval(function(){
+    start += step;
+    if(start >= target){start = target;clearInterval(timer);}
+    el.textContent = Math.round(start) + '%';
+  }, 16);
+}
+
+function animateTraitBars(){
+  setTimeout(function(){
+    TR.forEach(function(t){
+      var el = document.getElementById('tf-'+t);
+      if(el){
+        var w = el.getAttribute('data-w');
+        el.style.width = w + '%';
+      }
+      var pct = document.querySelector('.tpct[data-trait="'+t+'"]');
+      if(pct){
+        animateCounter(pct, parseInt(pct.getAttribute('data-val')), 1200);
+      }
+    });
+  }, 300);
+}
+
+function animateIntelScores(){
+  setTimeout(function(){
+    document.querySelectorAll('.iv[data-val]').forEach(function(el){
+      var target = parseInt(el.getAttribute('data-val'));
+      var start = 0;
+      var timer = setInterval(function(){
+        start += 0.2;
+        if(start >= target){start = target;clearInterval(timer);}
+        el.textContent = Math.round(start*10)/10 + '/10';
+      }, 30);
+    });
+  }, 500);
+}
+
+
+var TRAIT_THEMES = {
+  openness: {
+    pu:'#8B5CF6', cy:'#A78BFA', gr:'linear-gradient(135deg,#8B5CF6,#A78BFA)',
+    glow:'rgba(139,92,246,0.4)', bg:'rgba(139,92,246,0.08)'
+  },
+  conscientiousness: {
+    pu:'#06B6D4', cy:'#67E8F9', gr:'linear-gradient(135deg,#06B6D4,#0EA5E9)',
+    glow:'rgba(6,182,212,0.4)', bg:'rgba(6,182,212,0.08)'
+  },
+  extraversion: {
+    pu:'#EC4899', cy:'#F9A8D4', gr:'linear-gradient(135deg,#EC4899,#F472B6)',
+    glow:'rgba(236,72,153,0.4)', bg:'rgba(236,72,153,0.08)'
+  },
+  agreeableness: {
+    pu:'#10B981', cy:'#6EE7B7', gr:'linear-gradient(135deg,#10B981,#34D399)',
+    glow:'rgba(16,185,129,0.4)', bg:'rgba(16,185,129,0.08)'
+  },
+  neuroticism: {
+    pu:'#F59E0B', cy:'#FCD34D', gr:'linear-gradient(135deg,#F59E0B,#FBBF24)',
+    glow:'rgba(245,158,11,0.4)', bg:'rgba(245,158,11,0.08)'
+  }
+};
+
+function applyPersonalityTheme(trait){
+  var theme = TRAIT_THEMES[trait] || TRAIT_THEMES.openness;
+  var root = document.documentElement;
+  root.style.setProperty('--pu', theme.pu);
+  root.style.setProperty('--pu2', theme.cy);
+  root.style.setProperty('--cy', theme.cy);
+  root.style.setProperty('--gr', theme.gr);
+  root.style.setProperty('--gp', '0 0 40px ' + theme.glow);
+  root.style.setProperty('--bdr2', theme.glow);
+
+  // Show toast with theme change
+  var names = {
+    openness:'🎨 Creative Purple Theme',
+    conscientiousness:'💎 Intelligence Cyan Theme',
+    extraversion:'🌟 Energy Pink Theme',
+    agreeableness:'🌿 Harmony Green Theme',
+    neuroticism:'⚡ Depth Gold Theme'
+  };
+  setTimeout(function(){
+    toast('Theme: ' + (names[trait]||'Custom Theme') + ' applied!');
+  }, 500);
+}
+
+function resetTheme(){
+  var root = document.documentElement;
+  root.style.setProperty('--pu', '#8B5CF6');
+  root.style.setProperty('--pu2', '#A78BFA');
+  root.style.setProperty('--cy', '#06B6D4');
+  root.style.setProperty('--gr', 'linear-gradient(135deg,#8B5CF6,#06B6D4)');
+  root.style.setProperty('--gp', '0 0 40px rgba(139,92,246,0.3)');
+  root.style.setProperty('--bdr2', 'rgba(139,92,246,0.4)');
+}
+
+</script>
+<style>
+:root{--void:#050508;--deep:#08080F;--glass:rgba(255,255,255,0.04);--glass2:rgba(255,255,255,0.07);--bdr:rgba(255,255,255,0.07);--bdr2:rgba(139,92,246,0.4);--tx:#EEEAF8;--tx2:#8B87A8;--tx3:#4A4668;--pu:#8B5CF6;--pu2:#A78BFA;--cy:#06B6D4;--pk:#EC4899;--gn:#10B981;--gd:#F59E0B;--gr:linear-gradient(135deg,#8B5CF6,#06B6D4);--gr2:linear-gradient(135deg,#EC4899,#8B5CF6);--gr3:linear-gradient(135deg,#8B5CF6,#06B6D4,#EC4899);--gp:0 0 40px rgba(139,92,246,0.3);--tr:0.3s cubic-bezier(0.4,0,0.2,1)}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Space Grotesk',sans-serif;background:var(--void);color:var(--tx);min-height:100vh;overflow-x:hidden;cursor:none;-webkit-font-smoothing:antialiased}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 20% 20%,rgba(139,92,246,0.08) 0%,transparent 60%),radial-gradient(ellipse at 80% 80%,rgba(6,182,212,0.06) 0%,transparent 60%),radial-gradient(ellipse at 50% 50%,rgba(236,72,153,0.04) 0%,transparent 70%);pointer-events:none;z-index:0;animation:bgS 12s ease-in-out infinite alternate}
+@keyframes bgS{0%{opacity:0.6}100%{opacity:1;transform:scale(1.05)}}
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:0.5}
+.hidden{display:none!important}
+.page{position:relative;z-index:2}
+#cur{position:fixed;width:10px;height:10px;background:var(--pu);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:transform 0.1s,width 0.3s,height 0.3s;mix-blend-mode:screen}
+#cur-ring{position:fixed;width:36px;height:36px;border:1px solid rgba(139,92,246,0.5);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width 0.4s,height 0.4s}
+.cg #cur{width:40px;height:40px;background:rgba(139,92,246,0.15)}
+.cg #cur-ring{width:60px;height:60px}
+nav{position:fixed;top:0;left:0;right:0;z-index:200;height:68px;display:flex;align-items:center;justify-content:space-between;padding:0 2.5rem;background:rgba(5,5,8,0.75);backdrop-filter:blur(30px) saturate(180%);border-bottom:1px solid var(--bdr)}
+.logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.3rem;background:var(--gr3);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-size:200%;animation:ga 4s ease infinite;cursor:pointer;letter-spacing:-0.02em;display:flex;align-items:center;gap:8px}
+@keyframes ga{0%,100%{background-position:0%}50%{background-position:100%}}
+.logo-i{width:28px;height:28px;background:var(--gr);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:0.9rem;flex-shrink:0}
+.nav-r{display:flex;align-items:center;gap:10px}
+.nb{background:var(--glass);border:1px solid var(--bdr);color:var(--tx);padding:8px 18px;border-radius:30px;font-family:'Space Grotesk',sans-serif;font-size:0.83rem;font-weight:500;cursor:pointer;transition:var(--tr)}
+.nb:hover{border-color:var(--pu);color:var(--pu2);box-shadow:var(--gp)}
+.nb.cta{background:var(--gr);border:none;color:#fff;font-weight:600}
+.nb.cta:hover{box-shadow:var(--gp);transform:translateY(-1px)}
+.nu{color:var(--tx2);font-size:0.83rem}
+#page-home{min-height:100vh;position:relative}
+#hero-canvas{position:absolute;inset:0;width:100%;height:100%;z-index:0}
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:8rem 2rem 4rem;position:relative;z-index:1}
+.h-chip{display:inline-flex;align-items:center;gap:8px;background:rgba(139,92,246,0.1);border:1px solid rgba(139,92,246,0.25);padding:6px 16px;border-radius:30px;font-size:0.72rem;color:var(--pu2);font-weight:600;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:2.5rem;animation:fsd 0.8s ease both}
+.h-chip-dot{width:6px;height:6px;background:var(--cy);border-radius:50%;animation:pu 2s infinite}
+@keyframes pu{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.3;transform:scale(0.6)}}
+.hero h1{font-family:'Syne',sans-serif;font-size:clamp(3.5rem,9vw,7.5rem);font-weight:800;line-height:0.95;letter-spacing:-0.04em;margin-bottom:1.5rem;animation:fsu 0.8s ease 0.1s both}
+.hl1{display:block;color:var(--tx)}
+.hl2{display:block;background:var(--gr3);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-size:300%;animation:ga 5s ease infinite}
+.h-sub{font-size:1.1rem;color:var(--tx2);max-width:500px;line-height:1.75;margin-bottom:3rem;animation:fsu 0.8s ease 0.2s both}
+#tw-el{color:var(--cy)}
+.h-acts{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;animation:fsu 0.8s ease 0.3s both}
+.btn-p{background:var(--gr);border:none;color:#fff;padding:16px 36px;border-radius:50px;font-family:'Space Grotesk',sans-serif;font-size:1rem;font-weight:600;cursor:pointer;transition:var(--tr);position:relative;overflow:hidden;letter-spacing:-0.01em}
+.btn-p::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,0.15),transparent);opacity:0;transition:opacity 0.3s}
+.btn-p:hover{transform:translateY(-3px);box-shadow:0 25px 60px rgba(139,92,246,0.5)}
+.btn-p:hover::after{opacity:1}
+.btn-g{background:transparent;border:1px solid rgba(139,92,246,0.35);color:var(--tx);padding:16px 32px;border-radius:50px;font-family:'Space Grotesk',sans-serif;font-size:1rem;cursor:pointer;transition:var(--tr)}
+.btn-g:hover{border-color:var(--pu);color:var(--pu2);box-shadow:0 0 30px rgba(139,92,246,0.2)}
+.h-pills{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:4rem;animation:fsu 0.8s ease 0.5s both}
+.h-pill{background:var(--glass);border:1px solid var(--bdr);padding:8px 18px;border-radius:30px;font-size:0.78rem;color:var(--tx2);animation:fl 3s ease-in-out infinite}
+.h-pill:nth-child(2){animation-delay:0.5s}.h-pill:nth-child(3){animation-delay:1s}.h-pill:nth-child(4){animation-delay:1.5s}.h-pill:nth-child(5){animation-delay:2s}
+@keyframes fl{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.h-stats{display:flex;gap:4rem;margin-top:4rem;animation:fsu 0.8s ease 0.6s both}
+.stn{font-family:'Syne',sans-serif;font-size:2.2rem;font-weight:800;background:var(--gr);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.stl{font-size:0.72rem;color:var(--tx3);text-transform:uppercase;letter-spacing:0.1em;margin-top:2px}
+@keyframes fsu{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fsd{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
+#pa{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;padding-top:68px}
+.al{position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:4rem;border-right:1px solid var(--bdr);background:radial-gradient(ellipse at center,rgba(139,92,246,0.1) 0%,transparent 70%)}
+.ao{position:absolute;border-radius:50%;filter:blur(80px);opacity:0.2}
+.ao1{width:350px;height:350px;background:var(--pu);top:-80px;right:-80px;animation:of 8s ease-in-out infinite}
+.ao2{width:300px;height:300px;background:var(--cy);bottom:-80px;left:-80px;animation:of 10s ease-in-out infinite reverse}
+@keyframes of{0%,100%{transform:translate(0,0)}50%{transform:translate(-20px,20px)}}
+.ac{position:relative;z-index:1;max-width:340px}
+.ac h2{font-family:'Syne',sans-serif;font-size:2.5rem;font-weight:800;line-height:1.1;margin-bottom:1rem;letter-spacing:-0.03em}
+.ac h2 span{background:var(--gr);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.ac p{color:var(--tx2);line-height:1.7;font-size:0.92rem;margin-bottom:2rem}
+.af{display:flex;align-items:center;gap:12px;margin-bottom:14px;font-size:0.87rem;color:var(--tx2)}
+.afi{width:32px;height:32px;background:var(--glass);border:1px solid var(--bdr);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:0.9rem;flex-shrink:0}
+.ar{display:flex;align-items:center;justify-content:center;padding:3rem}
+.acard{width:100%;max-width:400px;background:var(--glass);border:1px solid var(--bdr);border-radius:28px;padding:2.5rem;backdrop-filter:blur(40px) saturate(150%);box-shadow:0 40px 80px rgba(0,0,0,0.6),inset 0 1px 0 rgba(255,255,255,0.08)}
+.act{font-family:'Syne',sans-serif;font-size:1.7rem;font-weight:700;margin-bottom:0.3rem;letter-spacing:-0.02em}
+.acs{color:var(--tx2);font-size:0.87rem;margin-bottom:2rem}
+.fi{margin-bottom:1.1rem}
+.fi label{display:block;font-size:0.72rem;font-weight:600;color:var(--tx3);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.1em}
+.fi input{width:100%;padding:13px 16px;background:rgba(255,255,255,0.04);border:1px solid var(--bdr);border-radius:14px;color:var(--tx);font-family:'Space Grotesk',sans-serif;font-size:0.93rem;outline:none;transition:var(--tr)}
+.fi input:focus{border-color:var(--pu);box-shadow:0 0 0 3px rgba(139,92,246,0.12),0 0 20px rgba(139,92,246,0.08);background:rgba(139,92,246,0.04)}
+.fi input::placeholder{color:var(--tx3)}
+.bsub{width:100%;padding:14px;background:var(--gr);border:none;border-radius:14px;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:0.95rem;font-weight:600;cursor:pointer;transition:var(--tr);margin-top:0.5rem;letter-spacing:-0.01em}
+.bsub:hover{transform:translateY(-2px);box-shadow:0 20px 50px rgba(139,92,246,0.5)}
+.asw{text-align:center;margin-top:1.2rem;font-size:0.84rem;color:var(--tx2)}
+.asw a{color:var(--pu2);cursor:pointer;font-weight:500}
+.am{padding:10px 14px;border-radius:10px;font-size:0.83rem;margin-bottom:1rem;display:none}
+.am.e{background:rgba(236,72,153,0.1);color:var(--pk);border:1px solid rgba(236,72,153,0.2)}
+.am.s{background:rgba(16,185,129,0.1);color:var(--gn);border:1px solid rgba(16,185,129,0.2)}
+#pd{padding:5.5rem 2.5rem 3rem;max-width:1080px;margin:0 auto}
+.dw{margin-bottom:2.5rem}
+.dw h2{font-family:'Syne',sans-serif;font-size:2.2rem;font-weight:800;letter-spacing:-0.03em}
+.dw h2 span{background:var(--gr);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.dw p{color:var(--tx2);margin-top:0.4rem}
+.sr{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;margin-bottom:2rem}
+.sc{background:var(--glass);border:1px solid var(--bdr);border-radius:20px;padding:1.5rem;transition:var(--tr);position:relative;overflow:hidden}
+.sc::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--gr);opacity:0;transition:opacity 0.3s}
+.sc:hover{border-color:var(--bdr2);transform:translateY(-3px)}.sc:hover::before{opacity:1}
+.sci{font-size:1.5rem;margin-bottom:0.8rem}
+.scv{font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;background:var(--gr);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.scl{font-size:0.74rem;color:var(--tx3);margin-top:0.2rem;text-transform:uppercase;letter-spacing:0.08em}
+.sh{font-size:0.7rem;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:0.14em;margin-bottom:1rem;display:flex;align-items:center;gap:10px}
+.sh::after{content:'';flex:1;height:1px;background:var(--bdr)}
+#pq{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:5.5rem 2rem 3rem}
+.qs{width:100%;max-width:600px}
+.qt{margin-bottom:2.5rem}
+.qt h2{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:700;letter-spacing:-0.02em;margin-bottom:0.3rem}
+.qt p{color:var(--tx2);font-size:0.87rem}
+.prw{display:flex;align-items:center;gap:1rem;margin-top:1.5rem}
+.pr-svg{transform:rotate(-90deg)}
+.pr-bg{fill:none;stroke:var(--bdr);stroke-width:3}
+.pr-fg{fill:none;stroke:url(#pg);stroke-width:3;stroke-linecap:round;stroke-dasharray:163;stroke-dashoffset:163;transition:stroke-dashoffset 0.5s cubic-bezier(0.4,0,0.2,1)}
+.pt{font-size:0.82rem;color:var(--tx2)}
+.pt strong{color:var(--tx);display:block;font-size:0.95rem}
+.tp{display:inline-flex;padding:4px 14px;border-radius:30px;font-size:0.7rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:1rem}
+.qcard{background:var(--glass);border:1px solid var(--bdr);border-radius:24px;padding:2.5rem;backdrop-filter:blur(30px);box-shadow:0 30px 70px rgba(0,0,0,0.4);position:relative;overflow:hidden;animation:qin 0.4s cubic-bezier(0.34,1.56,0.64,1)}
+.qcard::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:var(--gr);opacity:0.5}
+@keyframes qin{from{opacity:0;transform:translateY(24px) scale(0.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+.qtx{font-size:1.2rem;line-height:1.65;margin-bottom:2rem;font-weight:400}
+.rr{display:flex;gap:10px}
+.rb{flex:1;aspect-ratio:1;background:rgba(255,255,255,0.03);border:1px solid var(--bdr);border-radius:14px;color:var(--tx2);font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:700;cursor:pointer;transition:var(--tr);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.rb::before{content:'';position:absolute;inset:0;background:var(--gr);opacity:0;transition:opacity 0.3s}
+.rb span{position:relative;z-index:1}
+.rb:hover{border-color:var(--pu);color:var(--pu2);box-shadow:0 0 20px rgba(139,92,246,0.3);transform:scale(1.06)}
+.rb.sel{border-color:var(--pu);color:#fff;box-shadow:0 0 25px rgba(139,92,246,0.4);transform:scale(1.1)}.rb.sel::before{opacity:1}
+.sl{display:flex;justify-content:space-between;margin-top:10px;font-size:0.68rem;color:var(--tx3)}
+.kh{text-align:center;margin-top:1rem;font-size:0.7rem;color:var(--tx3)}
+.kk{background:var(--glass);border:1px solid var(--bdr);border-radius:5px;padding:1px 7px;font-size:0.65rem;color:var(--tx2);margin:0 2px}
+.qnav{display:flex;gap:10px;margin-top:1.5rem}
+.bbk{background:var(--glass);color:var(--tx);border:1px solid var(--bdr);padding:12px 22px;border-radius:30px;font-family:'Space Grotesk',sans-serif;font-size:0.88rem;cursor:pointer;transition:var(--tr)}
+.bbk:hover{border-color:var(--bdr2)}
+#pl{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2.5rem}
+.lb{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;background:var(--gr3);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-size:200%;animation:ga 2s ease infinite}
+.lv{display:flex;gap:6px;align-items:flex-end;height:48px}
+.lvb{width:4px;background:var(--gr);border-radius:4px;animation:bp 1.2s ease-in-out infinite}
+.lvb:nth-child(2){animation-delay:0.1s}.lvb:nth-child(3){animation-delay:0.2s}.lvb:nth-child(4){animation-delay:0.3s}.lvb:nth-child(5){animation-delay:0.4s}.lvb:nth-child(6){animation-delay:0.5s}
+@keyframes bp{0%,100%{height:8px;opacity:0.3}50%{height:48px;opacity:1}}
+.lm{color:var(--tx2);font-size:0.9rem;letter-spacing:0.05em;animation:tf 2.5s ease-in-out infinite}
+@keyframes tf{0%,100%{opacity:0.4}50%{opacity:1}}
+#pr{max-width:940px;margin:0 auto;padding:5.5rem 2rem 5rem}
+.rh{text-align:center;margin-bottom:4rem}
+.reb{font-size:0.7rem;font-weight:700;color:var(--pu2);text-transform:uppercase;letter-spacing:0.15em;margin-bottom:1.2rem}
+.rh h2{font-family:'Syne',sans-serif;font-size:2.5rem;font-weight:800;letter-spacing:-0.03em;margin-bottom:0.4rem}
+.rdt{color:var(--tx3);font-size:0.83rem;margin-bottom:1.5rem}
+.pb{display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,rgba(139,92,246,0.15),rgba(6,182,212,0.15));border:1px solid rgba(139,92,246,0.35);padding:10px 24px;border-radius:50px;font-family:'Syne',sans-serif;font-weight:700;font-size:0.95rem;color:var(--pu2);letter-spacing:0.05em;text-transform:uppercase;animation:bg 2.5s ease-in-out infinite}
+@keyframes bg{0%,100%{box-shadow:0 0 20px rgba(139,92,246,0.2)}50%{box-shadow:0 0 50px rgba(139,92,246,0.5),0 0 80px rgba(6,182,212,0.2)}}
+.rg{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem}
+.rc{background:var(--glass);border:1px solid var(--bdr);border-radius:22px;padding:1.5rem;backdrop-filter:blur(20px);transition:var(--tr);opacity:0;transform:translateY(20px);animation:cr 0.6s ease forwards}
+.rc:hover{border-color:var(--bdr2);box-shadow:0 20px 60px rgba(139,92,246,0.1)}
+@keyframes cr{to{opacity:1;transform:translateY(0)}}
+.rc:nth-child(1){animation-delay:0.08s}.rc:nth-child(2){animation-delay:0.14s}.rc:nth-child(3){animation-delay:0.20s}.rc:nth-child(4){animation-delay:0.26s}.rc:nth-child(5){animation-delay:0.32s}.rc:nth-child(6){animation-delay:0.38s}.rc:nth-child(7){animation-delay:0.44s}.rc:nth-child(8){animation-delay:0.50s}.rc:nth-child(9){animation-delay:0.56s}.rc:nth-child(10){animation-delay:0.62s}.rc:nth-child(11){animation-delay:0.68s}.rc:nth-child(12){animation-delay:0.74s}.rc:nth-child(13){animation-delay:0.80s}.rc:nth-child(14){animation-delay:0.86s}.rc:nth-child(15){animation-delay:0.92s}.rc:nth-child(16){animation-delay:0.98s}
+.rc.w{grid-column:1/-1}
+.cl{font-size:0.68rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--tx3);margin-bottom:1rem;display:flex;align-items:center;justify-content:space-between}
+.cbtn{background:var(--glass);border:1px solid var(--bdr);color:var(--tx2);padding:3px 12px;border-radius:20px;font-size:0.68rem;cursor:pointer;transition:var(--tr);font-family:'Space Grotesk',sans-serif}
+.cbtn:hover{border-color:var(--pu);color:var(--pu2)}
+.st{font-size:0.97rem;line-height:1.8;color:var(--tx2)}
+.cw{max-width:280px;margin:0 auto}
+.tr{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.tn{font-size:0.78rem;font-weight:600;width:110px;flex-shrink:0;color:var(--tx2)}
+.tt{flex:1;background:rgba(255,255,255,0.05);border-radius:10px;height:6px;overflow:hidden}
+.tf2{height:100%;border-radius:10px;width:0;transition:width 1.4s cubic-bezier(0.4,0,0.2,1)}
+.tp2{font-size:0.76rem;font-weight:600;color:var(--tx2);width:34px;text-align:right}
+.ig{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:1rem}
+.ii{background:rgba(255,255,255,0.03);border-radius:12px;padding:12px;text-align:center;border:1px solid var(--bdr)}
+.iv{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;background:var(--gr);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.il{font-size:0.66rem;color:var(--tx3);margin-top:3px;text-transform:uppercase;letter-spacing:0.06em}
+.li{display:flex;flex-direction:column;gap:8px}
+.lit{display:flex;align-items:flex-start;gap:10px;font-size:0.89rem;line-height:1.5;color:var(--tx2);padding:9px 13px;background:rgba(255,255,255,0.02);border-radius:10px;border:1px solid transparent;transition:var(--tr)}
+.lit:hover{border-color:var(--bdr);background:var(--glass2)}
+.ld{width:6px;height:6px;background:var(--pu);border-radius:50%;flex-shrink:0;margin-top:7px}
+.tg{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.ti{background:rgba(255,255,255,0.03);border-radius:12px;padding:12px;border:1px solid var(--bdr)}
+.tl{font-size:0.66rem;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px}
+.tv{font-size:0.88rem;font-weight:500;color:var(--tx)}
+.smc{background:rgba(255,255,255,0.03);border-radius:14px;padding:14px;margin-bottom:10px;border:1px solid var(--bdr);transition:var(--tr)}
+.smc:hover{border-color:rgba(139,92,246,0.25)}
+.sms{font-size:0.7rem;font-weight:700;color:var(--pu2);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:8px}
+.smr{font-size:0.84rem;line-height:1.6;color:var(--tx2);margin-bottom:3px}
+.smr strong{color:var(--tx)}
+.bg2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.bi{background:rgba(255,255,255,0.03);border-radius:12px;padding:12px;border:1px solid var(--bdr)}
+.bl{font-size:0.66rem;color:var(--tx3);font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px}
+.bv{font-size:0.87rem;color:var(--tx);line-height:1.5}
+.trl{background:linear-gradient(135deg,rgba(139,92,246,0.12),rgba(6,182,212,0.08));border-radius:18px;padding:1.8rem;text-align:center;border:1px solid rgba(139,92,246,0.2)}
+.trlt{font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;margin-bottom:0.4rem;letter-spacing:-0.02em}
+.trlg{font-size:0.7rem;color:var(--cy);font-weight:700;text-transform:uppercase;letter-spacing:0.12em;margin-bottom:1rem}
+.trln{font-size:0.9rem;color:var(--tx2);line-height:1.75;font-style:italic}
+.gb{background:rgba(255,255,255,0.05);border-radius:10px;height:8px;margin:8px 0;overflow:hidden}
+.gf{height:100%;background:linear-gradient(90deg,var(--gn),var(--gd),var(--pk));border-radius:10px;transition:width 1.4s}
+.ci{background:rgba(245,158,11,0.05);border-left:2px solid var(--gd);border-radius:0 11px 11px 0;padding:10px 14px;margin-bottom:8px;font-size:0.87rem;line-height:1.5;color:var(--tx2)}
+.er{display:flex;gap:0.8rem;align-items:flex-start}
+.ei{flex:1;background:rgba(255,255,255,0.03);border-radius:12px;padding:12px;border:1px solid var(--bdr)}
+.el{font-size:0.66rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:5px}
+.et{font-size:0.84rem;line-height:1.6;color:var(--tx2)}
+.ea{color:var(--tx3);font-size:1.5rem;margin-top:22px;flex-shrink:0}
+.ib{background:linear-gradient(135deg,rgba(139,92,246,0.07),rgba(6,182,212,0.05));border:1px solid rgba(139,92,246,0.12);border-radius:14px;padding:1.2rem;text-align:center;font-size:0.95rem;line-height:1.8;color:var(--tx2);font-style:italic}
+.ra{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:3rem;padding-top:2rem;border-top:1px solid var(--bdr)}
+.shcard{background:linear-gradient(135deg,#0D0B1E,#130B2E,#0B1A2E);border:1px solid rgba(139,92,246,0.3);border-radius:24px;padding:2rem;text-align:center;position:relative;overflow:hidden;margin-top:0.5rem}
+.shcard::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:conic-gradient(from 0deg,transparent 0deg,rgba(139,92,246,0.06) 60deg,transparent 120deg);animation:rot 8s linear infinite}
+@keyframes rot{to{transform:rotate(360deg)}}
+.shi{position:relative;z-index:1}
+.shn{font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;background:var(--gr3);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-size:200%;margin-bottom:0.5rem}
+.sht{font-size:0.8rem;color:var(--pu2);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:1.5rem}
+.shtr{display:flex;justify-content:center;gap:0.8rem;flex-wrap:wrap;margin-bottom:1.5rem}
+.shtp{background:rgba(139,92,246,0.1);border:1px solid rgba(139,92,246,0.2);padding:4px 14px;border-radius:20px;font-size:0.75rem;color:var(--pu2);font-weight:600}
+.shbt{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:1rem}
+#ph{max-width:700px;margin:0 auto;padding:5.5rem 2rem 3rem}
+.hhdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:2rem}
+.hhdr h2{font-family:'Syne',sans-serif;font-size:1.9rem;font-weight:800;letter-spacing:-0.03em}
+.hi{background:var(--glass);border:1px solid var(--bdr);border-radius:18px;padding:1.2rem 1.5rem;margin-bottom:0.8rem;cursor:pointer;transition:var(--tr);display:flex;justify-content:space-between;align-items:center}
+.hi:hover{border-color:var(--bdr2);box-shadow:0 10px 40px rgba(139,92,246,0.1);transform:translateX(5px)}
+.hil h4{font-family:'Syne',sans-serif;font-weight:700;margin-bottom:3px;letter-spacing:-0.01em}
+.hil p{font-size:0.78rem;color:var(--tx2)}
+.hips{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px}
+.hip{background:rgba(139,92,246,0.1);border:1px solid rgba(139,92,246,0.2);padding:2px 10px;border-radius:20px;font-size:0.68rem;font-weight:600;color:var(--pu2)}
+.hia{color:var(--tx3);font-size:1.2rem;transition:var(--tr)}
+.hi:hover .hia{color:var(--pu2);transform:translateX(4px)}
+.toast{position:fixed;bottom:2rem;right:2rem;z-index:9999;background:var(--glass2);border:1px solid var(--bdr2);color:var(--tx);padding:12px 20px;border-radius:14px;font-size:0.87rem;font-weight:500;display:none;backdrop-filter:blur(30px);box-shadow:0 20px 60px rgba(0,0,0,0.5),0 0 30px rgba(139,92,246,0.2);animation:tin 0.4s cubic-bezier(0.34,1.56,0.64,1)}
+@keyframes tin{from{transform:translateX(120%) scale(0.8);opacity:0}to{transform:translateX(0) scale(1);opacity:1}}
+
+@media(max-width:768px){
+  body{cursor:auto}
+  #cur,#cur-ring{display:none}
+  nav{padding:0 1rem;height:60px}
+  .logo{font-size:1.1rem}
+  .nb{padding:6px 12px;font-size:0.78rem}
+  .hero{padding:6rem 1.2rem 3rem}
+  .hero h1{font-size:2.6rem;letter-spacing:-0.03em}
+  .h-sub{font-size:0.95rem}
+  .h-stats{gap:1.5rem}
+  .stn{font-size:1.6rem}
+  .h-pills{gap:6px}
+  .h-pill{padding:6px 12px;font-size:0.72rem}
+  .btn-p{padding:13px 28px;font-size:0.92rem}
+  .btn-g{padding:13px 22px;font-size:0.92rem}
+  #pa{grid-template-columns:1fr;padding-top:60px}
+  .al{display:none}
+  .ar{padding:2rem 1.2rem}
+  .acard{padding:1.8rem}
+  .act{font-size:1.4rem}
+  .dash-layout{grid-template-columns:1fr}
+  .sidebar{display:none}
+  #pd{padding:0}
+  .dash-main{padding:1.5rem 1.2rem}
+  .overview-stats{grid-template-columns:1fr 1fr}
+  .quick-actions{grid-template-columns:1fr}
+  #pq{padding:4rem 1.2rem 6rem}
+  .qs{padding:0}
+  .qcard{padding:1.5rem}
+  .q-text{font-size:1rem}
+  .rr{gap:6px}
+  .rb{border-radius:10px;font-size:1rem}
+  #pr{padding:4rem 1.2rem 3rem}
+  .rg{grid-template-columns:1fr}
+  .rc{padding:1.2rem}
+  .tg,.bg2,.brgrid{grid-template-columns:1fr}
+  .er,.evo-row{flex-direction:column}
+  .ea,.evo-arrow{transform:rotate(90deg);margin:0 auto}
+  .ra{flex-direction:column;align-items:stretch}
+  .ra .btn-p,.ra .btn-g{text-align:center;justify-content:center}
+  .rh h2{font-size:1.7rem}
+  .result-title{font-size:1.7rem}
+  #ph{padding:4rem 1.2rem 3rem}
+  .hhdr{flex-direction:column;gap:1rem;align-items:flex-start}
+  .hi{flex-wrap:wrap}
+  #page-chat{padding-top:60px}
+  .chat-wrap{padding:1rem 1.2rem 0}
+  .chat-bar{padding:0.8rem 1.2rem}
+  .chat-sugs{gap:6px}
+  .chat-sug{font-size:0.7rem;padding:4px 10px}
+  .prw{gap:0.8rem}
+  .quiz-top h2{font-size:1.2rem}
+  .pcard{padding:1.5rem}
+  .pc-name{font-size:1.3rem}
+  .share-actions{flex-direction:column}
+  .share-actions .btn-dl,.share-actions .btn-sh{width:100%;text-align:center}
+  .skel-grid{grid-template-columns:1fr}
+  .avatar-canvas-wrap{width:160px;height:160px}
+  #avatar-canvas{width:160px;height:160px}
+  .h-acts{flex-direction:column;align-items:center;gap:10px}
+  .hero-stats{gap:1.5rem}
+}
+@media(max-width:400px){
+  .hero h1{font-size:2.1rem}
+  .overview-stats{grid-template-columns:1fr}
+  .rr{gap:4px}
+}
+
+
+#page-chat{min-height:100vh;display:flex;flex-direction:column;padding-top:68px}
+.chat-wrap{display:flex;flex-direction:column;max-width:780px;width:100%;margin:0 auto;height:calc(100vh - 140px);padding:1.5rem 2rem 0}
+.chat-top{text-align:center;padding:1.5rem 0 1rem;border-bottom:1px solid var(--bdr);margin-bottom:1rem}
+.chat-top h3{font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:700;background:var(--gr);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.chat-top p{color:var(--tx2);font-size:0.8rem;margin-top:0.3rem}
+.chat-sugs{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:0.8rem}
+.chat-sug{background:var(--glass);border:1px solid var(--bdr);padding:5px 12px;border-radius:20px;font-size:0.75rem;color:var(--tx2);cursor:pointer;transition:var(--tr)}
+.chat-sug:hover{border-color:var(--pu);color:var(--pu2)}
+.chat-msgs{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:12px;padding-bottom:1rem}
+.chat-msgs::-webkit-scrollbar{width:3px}
+.chat-msgs::-webkit-scrollbar-thumb{background:var(--bdr);border-radius:3px}
+.cmsg{display:flex;gap:10px;max-width:82%;animation:fsu 0.3s ease both}
+.cmsg.user{align-self:flex-end;flex-direction:row-reverse}
+.cmsg-av{width:30px;height:30px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:0.85rem}
+.cmsg.ai .cmsg-av{background:var(--gr)}
+.cmsg.user .cmsg-av{background:var(--gr2)}
+.cmsg-bbl{padding:11px 15px;border-radius:16px;font-size:0.88rem;line-height:1.6}
+.cmsg.ai .cmsg-bbl{background:var(--glass);border:1px solid var(--bdr);color:var(--tx);border-bottom-left-radius:3px}
+.cmsg.user .cmsg-bbl{background:var(--gr);color:#fff;border-bottom-right-radius:3px}
+.tdots{display:flex;gap:4px;align-items:center;padding:11px 15px}
+.tdot{width:6px;height:6px;background:var(--pu2);border-radius:50%;animation:td 1.2s ease-in-out infinite}
+.tdot:nth-child(2){animation-delay:0.2s}.tdot:nth-child(3){animation-delay:0.4s}
+@keyframes td{0%,100%{opacity:0.3;transform:scale(0.7)}50%{opacity:1;transform:scale(1)}}
+.chat-bar{position:fixed;bottom:0;left:0;right:0;background:rgba(5,5,8,0.92);backdrop-filter:blur(30px);border-top:1px solid var(--bdr);padding:1rem 2rem}
+.chat-bar-in{max-width:780px;margin:0 auto;display:flex;gap:10px;align-items:center}
+.chat-inp{flex:1;background:var(--glass);border:1px solid var(--bdr);border-radius:30px;padding:11px 20px;color:var(--tx);font-family:'Space Grotesk',sans-serif;font-size:0.9rem;outline:none;transition:var(--tr)}
+.chat-inp:focus{border-color:var(--pu);box-shadow:0 0 0 3px rgba(139,92,246,0.1)}
+.chat-inp::placeholder{color:var(--tx3)}
+.chat-send{width:42px;height:42px;background:var(--gr);border:none;border-radius:50%;color:#fff;font-size:1rem;cursor:pointer;transition:var(--tr);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.chat-send:hover{transform:scale(1.1);box-shadow:0 0 20px rgba(139,92,246,0.4)}
+
+.avatar-section{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1rem 0}
+.avatar-canvas-wrap{position:relative;width:200px;height:200px;margin:0 auto}
+#avatar-canvas{width:200px;height:200px;border-radius:50%;cursor:pointer}
+.avatar-ring{position:absolute;inset:-8px;border-radius:50%;border:2px solid transparent;background:linear-gradient(135deg,#8B5CF6,#06B6D4,#EC4899) border-box;-webkit-mask:linear-gradient(#fff 0 0) padding-box,linear-gradient(#fff 0 0);-webkit-mask-composite:destination-out;mask-composite:exclude;animation:ringRot 4s linear infinite}
+@keyframes ringRot{to{transform:rotate(360deg)}}
+.avatar-glow{position:absolute;inset:-20px;border-radius:50%;background:radial-gradient(ellipse at center,rgba(139,92,246,0.3) 0%,transparent 70%);animation:glowPulse 3s ease-in-out infinite}
+@keyframes glowPulse{0%,100%{opacity:0.5;transform:scale(1)}50%{opacity:1;transform:scale(1.1)}}
+.avatar-label{text-align:center;margin-top:1rem}
+.avatar-name{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;background:var(--gr);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.avatar-type{font-size:0.75rem;color:var(--tx3);margin-top:3px;text-transform:uppercase;letter-spacing:0.08em}
+.avatar-trait-orbs{display:flex;gap:8px;justify-content:center;margin-top:10px}
+.avatar-orb{width:10px;height:10px;border-radius:50%;animation:orbPop 0.5s ease both}
+@keyframes orbPop{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
+
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+.skel{background:linear-gradient(90deg,rgba(255,255,255,0.04) 25%,rgba(255,255,255,0.08) 50%,rgba(255,255,255,0.04) 75%);background-size:200% 100%;animation:shimmer 1.5s ease-in-out infinite;border-radius:8px}
+.skel-line{height:14px;margin-bottom:10px}
+.skel-line.sm{height:10px;width:60%}
+.skel-line.lg{height:20px}
+.skel-circle{width:60px;height:60px;border-radius:50%}
+.skel-card{background:var(--glass);border:1px solid var(--bdr);border-radius:22px;padding:1.5rem;margin-bottom:1.2rem}
+.skel-bar{height:6px;border-radius:6px;margin-bottom:14px}
+.skel-bar:nth-child(1){width:100%}
+.skel-bar:nth-child(2){width:80%}
+.skel-bar:nth-child(3){width:90%}
+.skel-bar:nth-child(4){width:70%}
+.skel-bar:nth-child(5){width:85%}
+.skel-title{height:18px;width:40%;margin-bottom:16px;border-radius:6px}
+#page-loader-results{min-height:100vh;padding:5.5rem 2rem 3rem;max-width:940px;margin:0 auto;display:none}
+.skel-hero{text-align:center;margin-bottom:3rem}
+.skel-badge{width:200px;height:36px;border-radius:50px;margin:0 auto 1rem}
+.skel-h{width:300px;height:32px;border-radius:8px;margin:0 auto 0.5rem}
+.skel-sub{width:180px;height:16px;border-radius:6px;margin:0 auto}
+.skel-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem}
+
+#pd{padding:0;max-width:100%;margin:0}
+.dash-layout{display:grid;grid-template-columns:240px 1fr;min-height:calc(100vh - 68px);margin-top:68px}
+.sidebar{background:rgba(5,5,8,0.9);border-right:1px solid var(--bdr);backdrop-filter:blur(30px);padding:2rem 1.2rem;display:flex;flex-direction:column;gap:4px;position:sticky;top:68px;height:calc(100vh - 68px);overflow-y:auto}
+.sidebar-user{padding:1rem;margin-bottom:1rem;border-bottom:1px solid var(--bdr);padding-bottom:1.5rem}
+.sidebar-avatar{width:44px;height:44px;background:var(--gr);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.2rem;margin-bottom:0.8rem}
+.sidebar-name{font-family:'Syne',sans-serif;font-weight:700;font-size:0.95rem}
+.sidebar-email{font-size:0.72rem;color:var(--tx3);margin-top:2px}
+.sidebar-label{font-size:0.65rem;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:0.12em;padding:0.5rem 0.8rem;margin-top:0.5rem}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;cursor:pointer;transition:var(--tr);font-size:0.88rem;color:var(--tx2);border:1px solid transparent}
+.nav-item:hover{background:var(--glass);color:var(--tx);border-color:var(--bdr)}
+.nav-item.active{background:rgba(139,92,246,0.12);color:var(--pu2);border-color:rgba(139,92,246,0.2)}
+.nav-item-icon{font-size:1rem;width:20px;text-align:center}
+.nav-item-badge{margin-left:auto;background:var(--pu);color:#fff;font-size:0.6rem;font-weight:700;padding:2px 7px;border-radius:20px}
+.sidebar-bottom{margin-top:auto;padding-top:1rem;border-top:1px solid var(--bdr)}
+.dash-main{padding:2.5rem;overflow-y:auto}
+.dash-section{display:none}
+.dash-section.active{display:block;animation:fsu 0.3s ease both}
+.dash-section h3{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:700;letter-spacing:-0.02em;margin-bottom:0.4rem}
+.dash-section p{color:var(--tx2);font-size:0.88rem;margin-bottom:2rem}
+.overview-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;margin-bottom:2rem}
+.ov-stat{background:var(--glass);border:1px solid var(--bdr);border-radius:18px;padding:1.3rem;transition:var(--tr);position:relative;overflow:hidden;min-width:0}
+.ov-stat::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--gr);opacity:0;transition:opacity 0.3s}
+.ov-stat:hover{border-color:var(--bdr2);transform:translateY(-2px)}.ov-stat:hover::before{opacity:1}
+.ov-icon{font-size:1.4rem;margin-bottom:0.7rem}
+.ov-val{font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;background:var(--gr);-webkit-background-clip:text;-webkit-text-fill-color:transparent;word-break:break-word;line-height:1.3}
+.ov-lbl{font-size:0.72rem;color:var(--tx3);margin-top:2px;text-transform:uppercase;letter-spacing:0.06em}
+.quick-actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-bottom:2rem}
+.qa-card{background:var(--glass);border:1px solid var(--bdr);border-radius:18px;padding:1.5rem;cursor:pointer;transition:var(--tr);text-align:center}
+.qa-card:hover{border-color:var(--bdr2);transform:translateY(-3px);box-shadow:0 15px 40px rgba(139,92,246,0.15)}
+.qa-icon{font-size:2rem;margin-bottom:0.8rem}
+.qa-title{font-family:'Syne',sans-serif;font-weight:700;font-size:0.95rem;margin-bottom:0.3rem}
+.qa-desc{font-size:0.78rem;color:var(--tx2)}
+.insight-tip{background:linear-gradient(135deg,rgba(139,92,246,0.08),rgba(6,182,212,0.06));border:1px solid rgba(139,92,246,0.15);border-radius:16px;padding:1.5rem;margin-bottom:1.5rem}
+.insight-tip h4{font-family:'Syne',sans-serif;font-weight:700;margin-bottom:0.5rem;font-size:1rem}
+.insight-tip p{color:var(--tx2);font-size:0.87rem;line-height:1.7}
+@media(max-width:768px){.dash-layout{grid-template-columns:1fr}.sidebar{display:none}}
+
+.mob-nav{display:none}
+@media(max-width:768px){
+  .mob-nav{display:flex;flex-direction:column;gap:3px;cursor:pointer;padding:4px}
+  .mob-nav span{width:22px;height:2px;background:var(--tx);border-radius:2px;transition:var(--tr)}
+  .mob-menu{position:fixed;top:60px;left:0;right:0;background:rgba(5,5,8,0.97);backdrop-filter:blur(30px);border-bottom:1px solid var(--bdr);padding:1rem;z-index:150;display:none;flex-direction:column;gap:8px;animation:fsd 0.3s ease}
+  .mob-menu.open{display:flex}
+  .mob-item{padding:12px 16px;border-radius:12px;cursor:pointer;font-size:0.92rem;color:var(--tx2);border:1px solid transparent;transition:var(--tr)}
+  .mob-item:hover{background:var(--glass);border-color:var(--bdr);color:var(--tx)}
+}
+
+.page{opacity:1;transform:translateY(0);transition:opacity 0.3s ease,transform 0.3s ease}
+.page-exit{opacity:0;transform:translateY(10px);pointer-events:none}
+.page-enter{animation:pageIn 0.4s cubic-bezier(0.34,1.56,0.64,1) both}
+@keyframes pageIn{from{opacity:0;transform:translateY(20px) scale(0.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+</style>
 </head>
 <body>
-<div class="bg-stars"></div>
-<div id="toast-container"></div>
-<nav id="navbar">
-  <div class="container">
-    <div class="nav-inner">
-      <div class="nav-logo" id="nav-logo"><span>✦</span> Personality<span>Lab</span></div>
-      <div class="nav-links">
-        <button class="nav-btn" id="nav-dashboard">Dashboard</button>
-        <button class="nav-btn" id="nav-take-test">Take Test</button>
-        <button class="nav-btn" id="nav-history">History</button>
-      </div>
-      <div class="nav-user">
-        <div class="nav-avatar" id="nav-avatar">?</div>
-        <span class="name" id="nav-user-name"></span>
-        <button class="btn btn-sm btn-ghost" id="nav-logout">Logout</button>
-      </div>
-    </div>
+<div id="cur"></div><div id="cur-ring"></div>
+<nav>
+  <div class="logo" onclick="goHome()"><div class="logo-i">🧠</div>PersonaIQ</div>
+  <div class="nav-r" id="nav-area"></div>
+  <div class="mob-nav" onclick="toggleMobMenu()" id="mob-hamburger">
+    <span></span><span></span><span></span>
   </div>
 </nav>
-<div id="page-landing" class="page active">
-  <section class="hero">
-    <div class="container">
-      <div class="hero-badge">🧬 Science-based personality assessment</div>
-      <h1 class="hero-title">Discover Your<br/><span class="gradient-text">Digital Self</span></h1>
-      <p class="hero-subtitle">Unlock deep insights into your personality with the gold-standard Big Five OCEAN model. 25 questions. Instant results.</p>
-      <div class="hero-actions">
-        <button class="btn btn-primary btn-lg" id="btn-get-started">Start Assessment →</button>
-        <button class="btn btn-outline btn-lg" id="btn-landing-login">Sign In</button>
-      </div>
-      <div class="traits-grid">
-        <div class="trait-pill"><div class="trait-dot" style="background:#a855f7"></div>Openness</div>
-        <div class="trait-pill"><div class="trait-dot" style="background:#00d4aa"></div>Conscientiousness</div>
-        <div class="trait-pill"><div class="trait-dot" style="background:#f5c842"></div>Extraversion</div>
-        <div class="trait-pill"><div class="trait-dot" style="background:#ff6b6b"></div>Agreeableness</div>
-        <div class="trait-pill"><div class="trait-dot" style="background:#4fc3f7"></div>Neuroticism</div>
-      </div>
-    </div>
-  </section>
-  <section style="padding:80px 0;border-top:1px solid rgba(255,255,255,0.05);">
-    <div class="container">
-      <div style="text-align:center;margin-bottom:48px;">
-        <h2 style="font-family:var(--font-display);font-size:2rem;font-weight:800;margin-bottom:12px;">What You'll Discover</h2>
-        <p style="color:var(--text-secondary);">A complete personality breakdown backed by decades of psychological research.</p>
-      </div>
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;">
-        <div class="card" style="text-align:center;padding:32px 24px;"><div style="font-size:2.5rem;margin-bottom:16px;">🧠</div><h3 style="font-family:var(--font-display);font-weight:700;margin-bottom:8px;">Trait Scores</h3><p style="color:var(--text-secondary);font-size:.9rem;">Percentage scores across all 5 OCEAN dimensions</p></div>
-        <div class="card" style="text-align:center;padding:32px 24px;"><div style="font-size:2.5rem;margin-bottom:16px;">📊</div><h3 style="font-family:var(--font-display);font-weight:700;margin-bottom:8px;">Radar Chart</h3><p style="color:var(--text-secondary);font-size:.9rem;">Visual representation of your personality profile</p></div>
-        <div class="card" style="text-align:center;padding:32px 24px;"><div style="font-size:2.5rem;margin-bottom:16px;">💡</div><h3 style="font-family:var(--font-display);font-weight:700;margin-bottom:8px;">Insights</h3><p style="color:var(--text-secondary);font-size:.9rem;">Personalized career and life suggestions</p></div>
-        <div class="card" style="text-align:center;padding:32px 24px;"><div style="font-size:2.5rem;margin-bottom:16px;">📄</div><h3 style="font-family:var(--font-display);font-weight:700;margin-bottom:8px;">PDF Report</h3><p style="color:var(--text-secondary);font-size:.9rem;">Download a shareable professional report</p></div>
-      </div>
-    </div>
-  </section>
+<div class="mob-menu" id="mob-menu" style="display:none">
+  <div class="mob-item" onclick="handleStart();closeMobMenu()">🚀 Start Assessment</div>
+  <div class="mob-item" onclick="showPage('pa','login');closeMobMenu()">🔐 Sign In</div>
+  <div class="mob-item" id="mob-hist-btn" onclick="showPage('ph');closeMobMenu()" style="display:none">📊 History</div>
+  <div class="mob-item" id="mob-chat-btn" onclick="openChat();closeMobMenu()" style="display:none">🤖 Chat Twin</div>
+  <div class="mob-item" id="mob-logout-btn" onclick="doLogout();closeMobMenu()" style="display:none">🚪 Logout</div>
 </div>
-<div id="page-auth" class="page">
-  <div class="auth-card">
-    <div class="auth-logo">
-      <div class="icon">✦</div>
-      <h2>PersonalityLab</h2>
-      <p>Big Five OCEAN Assessment</p>
+<div class="toast" id="toast"></div>
+<div id="page-home" class="page">
+  <canvas id="hero-canvas"></canvas>
+  <div class="hero">
+    <div class="h-chip"><div class="h-chip-dot"></div>AI Personality Intelligence System</div>
+    <h1><span class="hl1">Meet Your</span><span class="hl2">AI Personality Twin</span></h1>
+    <p class="h-sub">Beyond surface-level tests. Discover your Digital Twin,<br><span id="tw-el"></span></p>
+    <div class="h-acts">
+      <button class="btn-p" onclick="handleStart()">Start Analysis</button>
+      <button class="btn-g" onclick="showPage('pa','login')">Sign In</button>
     </div>
-    <div class="auth-tabs">
-      <button class="auth-tab active" data-tab="login">Sign In</button>
-      <button class="auth-tab" data-tab="register">Register</button>
+    <div class="h-pills">
+      <div class="h-pill">🧬 Digital Twin</div><div class="h-pill">🎬 Life Trailer</div>
+      <div class="h-pill">🎭 Contradiction Detector</div><div class="h-pill">🔮 Evolution Model</div>
+      <div class="h-pill">🏷 Personality Brand</div>
     </div>
-    <form id="form-login" class="auth-form active" novalidate>
-      <div class="form-group"><label for="login-email">Email</label><input type="email" id="login-email" placeholder="you@example.com" autocomplete="email" required/></div>
-      <div class="form-group"><label for="login-password">Password</label><input type="password" id="login-password" placeholder="Your password" autocomplete="current-password" required/></div>
-      <button type="submit" class="btn btn-primary btn-full" style="margin-top:8px;">Sign In →</button>
-    </form>
-    <form id="form-register" class="auth-form" novalidate>
-      <div class="form-group"><label for="reg-name">Full Name</label><input type="text" id="reg-name" placeholder="Your full name" autocomplete="name" required/></div>
-      <div class="form-group"><label for="reg-email">Email</label><input type="email" id="reg-email" placeholder="you@example.com" autocomplete="email" required/></div>
-      <div class="form-group"><label for="reg-password">Password</label><input type="password" id="reg-password" placeholder="Min 6 characters" autocomplete="new-password" required/></div>
-      <button type="submit" class="btn btn-primary btn-full" style="margin-top:8px;">Create Account →</button>
-    </form>
-    <div class="auth-footer"><button onclick="showPage('landing')" class="btn btn-ghost btn-sm" style="margin-top:12px;">← Back to Home</button></div>
-  </div>
-</div>
-<div id="page-dashboard" class="page">
-  <div class="container">
-    <div class="dashboard-header">
-      <div class="dashboard-welcome"><h1>Welcome back, <span id="dash-user-name">User</span> 👋</h1><p>Ready to explore your personality today?</p></div>
-      <button class="btn btn-primary" onclick="startQuiz()">✦ Take New Assessment</button>
-    </div>
-    <div class="stats-row">
-      <div class="stat-card"><span class="stat-icon">🧪</span><span class="stat-label">Tests Taken</span><span class="stat-value" id="dash-total-tests">0</span></div>
-      <div class="stat-card"><span class="stat-icon">🌟</span><span class="stat-label">Latest Type</span><span class="stat-value" style="font-size:1rem;line-height:1.4" id="dash-last-type">—</span><span style="font-size:.78rem;color:var(--text-muted)" id="dash-last-date"></span></div>
-      <div class="stat-card"><span class="stat-icon">📅</span><span class="stat-label">Member Since</span><span class="stat-value" style="font-size:1.1rem" id="dash-member-since">—</span></div>
-    </div>
-    <div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:36px;">
-      <button id="btn-view-latest" class="btn btn-outline" style="display:none;">View Latest Result →</button>
-      <button class="btn btn-ghost" onclick="showHistory()">📂 View All History</button>
-    </div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;">
-      <div class="card"><h3 style="font-family:var(--font-display);font-weight:700;margin-bottom:12px;font-size:1rem;">🧬 About the OCEAN Model</h3><p style="color:var(--text-secondary);font-size:.9rem;line-height:1.7;">The Big Five personality model is the most widely accepted framework in personality psychology. It measures five core dimensions: Openness, Conscientiousness, Extraversion, Agreeableness, and Neuroticism.</p></div>
-      <div class="card"><h3 style="font-family:var(--font-display);font-weight:700;margin-bottom:12px;font-size:1rem;">⌨️ Keyboard Shortcuts</h3><div style="display:flex;flex-direction:column;gap:8px;font-size:.88rem;color:var(--text-secondary);"><div style="display:flex;justify-content:space-between;"><span>Select answer</span><kbd style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:4px;padding:2px 8px;font-size:.8rem;">1–5</kbd></div><div style="display:flex;justify-content:space-between;"><span>Next question</span><kbd style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:4px;padding:2px 8px;font-size:.8rem;">→</kbd></div><div style="display:flex;justify-content:space-between;"><span>Previous question</span><kbd style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:4px;padding:2px 8px;font-size:.8rem;">←</kbd></div></div></div>
+    <div class="h-stats">
+      <div><div class="stn">25</div><div class="stl">Questions</div></div>
+      <div><div class="stn">12+</div><div class="stl">AI Insights</div></div>
+      <div><div class="stn">OCEAN</div><div class="stl">Model</div></div>
     </div>
   </div>
 </div>
-<div id="page-quiz" class="page">
-  <div class="container" style="max-width:680px;">
-    <div class="quiz-header"><h1>Personality Assessment</h1><p>Rate how much each statement describes you on a scale of 1–5</p></div>
-    <div class="progress-bar-container"><div class="progress-bar-fill" style="width:0%"></div></div>
-    <div class="progress-text">0 of 25 answered</div>
-    <div id="question-container"></div>
-    <div class="quiz-nav">
-      <button class="btn btn-ghost" id="btn-quiz-prev" style="display:none;">← Previous</button>
-      <div style="flex:1"></div>
-      <button class="btn btn-primary" id="btn-quiz-next" disabled>Next →</button>
-      <button class="btn btn-teal" id="btn-quiz-submit" style="display:none;" disabled>Submit Assessment ✦</button>
+<div id="pa" class="page hidden">
+  <div class="al">
+    <div class="ao ao1"></div><div class="ao ao2"></div>
+    <div class="ac">
+      <h2>Know yourself<br><span>at a deeper level</span></h2>
+      <p>PersonaIQ uses the scientifically validated Big Five OCEAN model to reveal hidden personality patterns.</p>
+      <div class="af"><div class="afi">🧬</div>AI Digital Twin Profile</div>
+      <div class="af"><div class="afi">🎬</div>Cinematic Life Trailer</div>
+      <div class="af"><div class="afi">🔮</div>Evolution Roadmap</div>
+      <div class="af"><div class="afi">📄</div>PDF Intelligence Report</div>
+    </div>
+  </div>
+  <div class="ar">
+    <div class="acard">
+      <div class="act" id="at">Welcome back</div>
+      <div class="acs" id="as">Sign in to access your AI intelligence reports</div>
+      <div class="am" id="am"></div>
+      <div id="lf">
+        <div class="fi"><label>Email</label><input type="email" id="le" placeholder="you@example.com"></div>
+        <div class="fi"><label>Password</label><input type="password" id="lp" placeholder="password" onkeydown="if(event.key==='Enter')doLogin()"></div>
+        <button class="bsub" onclick="doLogin()">Sign In</button>
+        <div class="asw">No account? <a onclick="toggleAuth('reg')">Create one free</a></div>
+      </div>
+      <div id="rf" class="hidden">
+        <div class="fi"><label>Full Name</label><input type="text" id="rn" placeholder="Your name"></div>
+        <div class="fi"><label>Email</label><input type="email" id="re" placeholder="you@example.com"></div>
+        <div class="fi"><label>Password</label><input type="password" id="rp" placeholder="Min 6 characters" onkeydown="if(event.key==='Enter')doRegister()"></div>
+        <button class="bsub" onclick="doRegister()">Create Account</button>
+        <div class="asw">Have account? <a onclick="toggleAuth('login')">Sign in</a></div>
+      </div>
     </div>
   </div>
 </div>
-<div id="page-results" class="page">
-  <div class="container">
-    <div class="results-hero">
-      <p style="color:var(--text-muted);font-size:.85rem;margin-bottom:8px;" id="result-completed-at"></p>
-      <div class="personality-type-badge"><h2 id="result-personality-type">Loading…</h2></div>
-      <div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:16px;" id="result-dominant-traits"></div>
+<div id="pd" class="page hidden">
+  <div class="dash-layout">
+    <div class="sidebar">
+      <div class="sidebar-user">
+        <div class="sidebar-avatar">👤</div>
+        <div class="sidebar-name" id="sb-name">—</div>
+        <div class="sidebar-email" id="sb-email">—</div>
+      </div>
+      <div class="sidebar-label">Main Menu</div>
+      <div class="nav-item active" onclick="switchTab('overview',this)">
+        <span class="nav-item-icon">🏠</span>Overview
+      </div>
+      <div class="nav-item" onclick="switchTab('insights',this)">
+        <span class="nav-item-icon">🧠</span>AI Insights
+      </div>
+      <div class="nav-item" onclick="switchTab('history',this)">
+        <span class="nav-item-icon">📊</span>History
+        <span class="nav-item-badge" id="hist-badge">0</span>
+      </div>
+      <div class="nav-item" onclick="switchTab('profile',this)">
+        <span class="nav-item-icon">👤</span>Profile
+      </div>
+      <div class="sidebar-label">Actions</div>
+      <div class="nav-item" onclick="loadQuiz()">
+        <span class="nav-item-icon">🚀</span>New Assessment
+      </div>
+      <div class="nav-item" onclick="openChat()">
+        <span class="nav-item-icon">🤖</span>Chat Twin
+      </div>
+      <div class="sidebar-bottom">
+        <div class="nav-item" onclick="doLogout()">
+          <span class="nav-item-icon">🚪</span>Logout
+        </div>
+      </div>
     </div>
-    <div class="results-grid">
-      <div class="radar-card"><h3>Personality Radar</h3><div class="chart-container"><canvas id="radar-chart"></canvas></div></div>
-      <div class="radar-card"><h3>Trait Breakdown</h3><div class="traits-breakdown" id="result-traits-breakdown"></div></div>
+    <div class="dash-main">
+      <div class="dash-section active" id="tab-overview">
+        <h3>Welcome back, <span id="dn" style="background:var(--gr);-webkit-background-clip:text;-webkit-text-fill-color:transparent">—</span> 👋</h3>
+        <p>Your AI personality intelligence hub</p>
+        <div class="overview-stats">
+          <div class="ov-stat"><div class="ov-icon">🧪</div><div class="ov-val" id="dt">0</div><div class="ov-lbl">Tests Taken</div></div>
+          <div class="ov-stat"><div class="ov-icon">🌟</div><div class="ov-val" id="dd">—</div><div class="ov-lbl">Dominant Trait</div></div>
+          <div class="ov-stat"><div class="ov-icon">📅</div><div class="ov-val" id="dl">—</div><div class="ov-lbl">Last Test</div></div>
+        </div>
+        <div class="sh">Quick Actions</div>
+        <div class="quick-actions">
+          <div class="qa-card" onclick="loadQuiz()">
+            <div class="qa-icon">🚀</div>
+            <div class="qa-title">New Assessment</div>
+            <div class="qa-desc">Take a fresh personality test</div>
+          </div>
+          <div class="qa-card" onclick="openChat()">
+            <div class="qa-icon">🤖</div>
+            <div class="qa-title">Chat with Twin</div>
+            <div class="qa-desc">Talk to your AI personality</div>
+          </div>
+          <div class="qa-card" onclick="switchTab('history',document.querySelector('.nav-item:nth-child(5)'))">
+            <div class="qa-icon">📊</div>
+            <div class="qa-title">View History</div>
+            <div class="qa-desc">See all past results</div>
+          </div>
+        </div>
+        <div class="sh">Recent Results</div>
+        <div id="dhl"></div>
+      </div>
+      <div class="dash-section" id="tab-insights">
+        <h3>AI Insights</h3>
+        <p>Personalized intelligence based on your personality profile</p>
+        <div class="insight-tip">
+          <h4>💡 Daily Insight</h4>
+          <p id="daily-insight">Complete an assessment to unlock personalized AI insights about your personality, career paths, and growth opportunities.</p>
+        </div>
+        <div id="insights-content"><p style="color:var(--tx3);text-align:center;padding:3rem">Complete an assessment to see insights</p></div>
+      </div>
+      <div class="dash-section" id="tab-history">
+        <h3>Assessment History</h3>
+        <p>All your past personality assessments</p>
+        <div id="dash-history-list"></div>
+      </div>
+      <div class="dash-section" id="tab-profile">
+        <h3>Your Profile</h3>
+        <p>Account information and settings</p>
+        <div class="insight-tip">
+          <h4>👤 Account Details</h4>
+          <p id="profile-info">Loading profile...</p>
+        </div>
+        <div style="margin-top:1rem">
+          <button class="btn-p" onclick="loadQuiz()">Take New Assessment</button>
+          &nbsp;&nbsp;
+          <button class="btn-g" onclick="doLogout()">Logout</button>
+        </div>
+      </div>
     </div>
-    <div class="summary-card"><h3>📝 Personality Summary</h3><p id="result-summary"></p></div>
-    <div class="suggestions-card"><h3>💡 Personalized Suggestions</h3><div class="suggestions-list" id="result-suggestions"></div></div>
-    <div class="results-actions">
-      <button class="btn btn-primary" id="btn-download-pdf">📄 Download PDF Report</button>
-      <button class="btn btn-outline" id="btn-email-report">📧 Email Report</button>
-      <button class="btn btn-outline" id="btn-retake-quiz">↺ Retake Assessment</button>
-      <button class="btn btn-ghost" id="btn-view-history">📂 View History</button>
+  </div>
+</div>
+<div id="pq" class="page hidden">
+  <div class="qs">
+    <div class="qt">
+      <h2>Personality Assessment</h2>
+      <p style="color:var(--tx2)">Answer honestly — no right or wrong answers</p>
+      <div class="prw">
+        <svg class="pr-svg" width="54" height="54" viewBox="0 0 54 54">
+          <defs><linearGradient id="pg" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#8B5CF6"/><stop offset="100%" stop-color="#06B6D4"/></linearGradient></defs>
+          <circle class="pr-bg" cx="27" cy="27" r="24"/>
+          <circle class="pr-fg" id="pring" cx="27" cy="27" r="24"/>
+        </svg>
+        <div class="pt"><strong id="ql">Question 1 of 25</strong><span id="qp" style="color:var(--pu2)">0% complete</span></div>
+      </div>
     </div>
+    <div id="qc"></div>
+    <div class="qnav">
+      <button class="bbk" id="bprev" onclick="prevQ()" style="display:none">Back</button>
+      <button class="btn-p" id="bnext" onclick="nextQ()">Continue</button>
+    </div>
+  </div>
+</div>
+<div id="pl" class="page hidden">
+  <div class="lb">PersonaIQ</div>
+  <div class="lv"><div class="lvb"></div><div class="lvb"></div><div class="lvb"></div><div class="lvb"></div><div class="lvb"></div><div class="lvb"></div></div>
+  <div class="lm" id="lm">Initialising AI analysis</div>
+</div>
+<div id="page-loader-results" class="page">
+  <div class="skel-hero">
+    <div class="skel skel-badge"></div>
+    <div class="skel skel-h" style="margin-top:1rem"></div>
+    <div class="skel skel-sub" style="margin-top:0.8rem"></div>
+  </div>
+  <div class="skel-grid">
+    <div class="skel-card" style="grid-column:1/-1">
+      <div class="skel skel-title"></div>
+      <div class="skel skel-line"></div>
+      <div class="skel skel-line"></div>
+      <div class="skel skel-line sm"></div>
+    </div>
+    <div class="skel-card">
+      <div class="skel skel-title"></div>
+      <div style="display:flex;justify-content:center"><div class="skel skel-circle" style="width:200px;height:200px;border-radius:50%"></div></div>
+    </div>
+    <div class="skel-card">
+      <div class="skel skel-title"></div>
+      <div class="skel skel-bar"></div>
+      <div class="skel skel-bar"></div>
+      <div class="skel skel-bar"></div>
+      <div class="skel skel-bar"></div>
+      <div class="skel skel-bar"></div>
+    </div>
+    <div class="skel-card">
+      <div class="skel skel-title"></div>
+      <div class="skel skel-line"></div>
+      <div class="skel skel-line"></div>
+      <div class="skel skel-line sm"></div>
+    </div>
+    <div class="skel-card">
+      <div class="skel skel-title"></div>
+      <div class="skel skel-line"></div>
+      <div class="skel skel-line"></div>
+      <div class="skel skel-line sm"></div>
+    </div>
+  </div>
+</div>
+<div id="pr" class="page hidden">
+  <div class="rh">
+    <div class="reb">AI Intelligence Report</div>
+    <h2 id="rnt">Personality Profile</h2>
+    <div class="rdt" id="rd"></div>
+    <div class="pb" id="rdom">Balanced</div>
+  </div>
+  <div class="rg">
+    <div class="rc w"><div class="cl">📝 Summary <button class="cbtn" onclick="copyEl('rsum')">Copy</button></div><div class="st" id="rsum"></div></div>
+    <div class="rc w">
+      <div class="cl">🧬 Your AI Avatar</div>
+      <div class="avatar-section">
+        <div class="avatar-canvas-wrap">
+          <div class="avatar-glow"></div>
+          <canvas id="avatar-canvas"></canvas>
+          <div class="avatar-ring"></div>
+        </div>
+        <div class="avatar-label">
+          <div class="avatar-name" id="av-name">Your Twin</div>
+          <div class="avatar-type" id="av-type">Personality Type</div>
+          <div class="avatar-trait-orbs" id="av-orbs"></div>
+        </div>
+      </div>
+    </div>
+    <div class="rc"><div class="cl">📊 OCEAN Radar</div><div class="cw"><canvas id="rc2"></canvas></div></div>
+    <div class="rc"><div class="cl">🎯 Trait Breakdown</div><div id="rtb"></div><div class="ig" id="ris"></div></div>
+    <div class="rc"><div class="cl">💪 Strengths</div><div class="li" id="rstr"></div></div>
+    <div class="rc"><div class="cl">Growth Areas</div><div class="li" id="rwk"></div></div>
+    <div class="rc w"><div class="cl">💼 Career Suggestions</div><div class="li" id="rcar"></div></div>
+    <div class="rc w"><div class="cl">🧬 Digital Twin <button class="cbtn" onclick="copyEl('rtw')">Copy</button></div><div class="tg" id="rtw"></div></div>
+    <div class="rc w"><div class="cl">🎬 Simulation Mode</div><div id="rsim"></div></div>
+    <div class="rc"><div class="cl">🧠 Thinking Pattern</div><div id="rthk"></div></div>
+    <div class="rc"><div class="cl">👀 First Impression</div><div class="ib" id="rimp"></div></div>
+    <div class="rc"><div class="cl">🎭 Contradictions</div><div id="rcon"></div></div>
+    <div class="rc"><div class="cl">🔍 Reality Gap</div><div id="rgap"></div></div>
+    <div class="rc w"><div class="cl">🏷 Personality Brand</div><div class="bg2" id="rbrnd"></div></div>
+    <div class="rc w"><div class="cl">🔮 Evolution Model</div><div class="er" id="revo"></div></div>
+    <div class="rc w"><div class="cl">🎥 Life Trailer</div><div class="trl" id="rtrl"></div></div>
+    <div class="rc w">
+      <div class="cl">🚀 Share Your Result</div>
+      <div class="shcard">
+        <div class="shi">
+          <div class="shn" id="shn">PersonaIQ</div>
+          <div class="sht" id="sht">Your Personality Type</div>
+          <div class="shtr" id="shtr"></div>
+          <div class="shbt">
+            <button class="btn-p" onclick="downloadPDF()">📄 Download PDF</button>
+            <button class="btn-g" onclick="shareResult()">🔗 Share</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="rc w">
+      <div class="cl">🎨 Personality Theme</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+        <span style="font-size:0.82rem;color:var(--tx2)">Switch theme based on trait:</span>
+        <button onclick="applyPersonalityTheme('openness')" style="background:linear-gradient(135deg,#8B5CF6,#A78BFA);border:none;color:#fff;padding:6px 14px;border-radius:20px;cursor:pointer;font-size:0.78rem;font-weight:600">🎨 Openness</button>
+        <button onclick="applyPersonalityTheme('conscientiousness')" style="background:linear-gradient(135deg,#06B6D4,#0EA5E9);border:none;color:#fff;padding:6px 14px;border-radius:20px;cursor:pointer;font-size:0.78rem;font-weight:600">💎 Conscient.</button>
+        <button onclick="applyPersonalityTheme('extraversion')" style="background:linear-gradient(135deg,#EC4899,#F472B6);border:none;color:#fff;padding:6px 14px;border-radius:20px;cursor:pointer;font-size:0.78rem;font-weight:600">🌟 Extraversion</button>
+        <button onclick="applyPersonalityTheme('agreeableness')" style="background:linear-gradient(135deg,#10B981,#34D399);border:none;color:#fff;padding:6px 14px;border-radius:20px;cursor:pointer;font-size:0.78rem;font-weight:600">🌿 Agreeable</button>
+        <button onclick="applyPersonalityTheme('neuroticism')" style="background:linear-gradient(135deg,#F59E0B,#FBBF24);border:none;color:#fff;padding:6px 14px;border-radius:20px;cursor:pointer;font-size:0.78rem;font-weight:600">⚡ Neuroticism</button>
+        <button onclick="resetTheme()" style="background:var(--glass);border:1px solid var(--bdr);color:var(--tx2);padding:6px 14px;border-radius:20px;cursor:pointer;font-size:0.78rem">↺ Reset</button>
+      </div>
+    </div>
+  <div class="ra">
+    <button class="btn-p" onclick="downloadPDF()">📄 Download PDF</button>
+    <button class="btn-p" onclick="openEmailModal()" style="background:linear-gradient(135deg,#06B6D4,#0EA5E9);">📧 Email Report</button>
+    <button class="btn-g" onclick="openChat()">🤖 Chat Twin</button><button class="btn-g" onclick="showPage('ph')">📂 History</button>
+    <button class="btn-g" onclick="loadQuiz()">🔄 Retake</button>
   </div>
 </div>
 
 <!-- Email Modal -->
-<div id="email-modal" style="display:none;position:fixed;inset:0;background:rgba(8,11,20,0.85);z-index:9990;align-items:center;justify-content:center;backdrop-filter:blur(4px);">
-  <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-xl);padding:36px;width:100%;max-width:420px;margin:24px;box-shadow:var(--shadow-glow);animation:fadeInUp .3s ease;">
-    <h3 style="font-family:var(--font-display);font-size:1.3rem;font-weight:800;margin-bottom:8px;">📧 Email Your Report</h3>
-    <p style="color:var(--text-secondary);font-size:.9rem;margin-bottom:24px;">We'll send your full PDF report to your email address.</p>
-    <div class="form-group">
-      <label for="email-input">Email Address</label>
-      <input type="email" id="email-input" placeholder="you@example.com" autocomplete="email"/>
+<div id="email-modal" style="display:none;position:fixed;inset:0;background:rgba(5,5,8,0.85);z-index:9990;align-items:center;justify-content:center;backdrop-filter:blur(8px);">
+  <div style="background:#0D0D18;border:1px solid rgba(139,92,246,0.3);border-radius:24px;padding:36px;width:100%;max-width:420px;margin:24px;box-shadow:0 0 60px rgba(139,92,246,0.2);">
+    <h3 style="font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;margin-bottom:8px;letter-spacing:-0.02em;">📧 Email Your Report</h3>
+    <p style="color:var(--tx2);font-size:0.88rem;margin-bottom:24px;line-height:1.6;">We'll send your full PDF personality report to your email address.</p>
+    <div style="margin-bottom:18px;">
+      <label style="display:block;font-size:0.72rem;font-weight:600;color:var(--tx3);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.1em;">Email Address</label>
+      <input type="email" id="email-modal-input" placeholder="you@example.com"
+        style="width:100%;padding:13px 16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:14px;color:var(--tx);font-family:'Space Grotesk',sans-serif;font-size:0.93rem;outline:none;transition:0.3s;"
+        onfocus="this.style.borderColor='var(--pu)';this.style.boxShadow='0 0 0 3px rgba(139,92,246,0.12)'"
+        onblur="this.style.borderColor='rgba(255,255,255,0.07)';this.style.boxShadow='none'"/>
     </div>
-    <div style="display:flex;gap:12px;margin-top:8px;">
-      <button class="btn btn-primary btn-full" id="btn-send-email">Send Report →</button>
-      <button class="btn btn-ghost" id="btn-close-modal" style="flex-shrink:0;">Cancel</button>
+    <div style="display:flex;gap:12px;">
+      <button id="btn-send-email" onclick="sendEmailReport()"
+        style="flex:1;padding:14px;background:linear-gradient(135deg,#06B6D4,#0EA5E9);border:none;border-radius:14px;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:0.95rem;font-weight:600;cursor:pointer;">
+        Send Report →
+      </button>
+      <button onclick="document.getElementById('email-modal').style.display='none'"
+        style="padding:14px 20px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:14px;color:var(--tx2);font-family:'Space Grotesk',sans-serif;cursor:pointer;">
+        Cancel
+      </button>
     </div>
   </div>
 </div>
-<div id="page-history" class="page">
-  <div class="container">
-    <div class="history-header"><h1>Test History</h1><button class="btn btn-primary" onclick="startQuiz()">+ New Assessment</button></div>
-    <div class="history-list" id="history-list"></div>
+<div id="ph" class="page hidden">
+  <div class="hhdr">
+    <div><h2>Your History</h2><p style="color:var(--tx2);margin-top:0.3rem;font-size:0.87rem">All past AI assessments</p></div>
+    <button class="btn-p" onclick="loadQuiz()">New Test</button>
+  </div>
+  <div id="hlist"></div>
+</div>
+<script>
+const CE=document.getElementById('cur'),CR=document.getElementById('cur-ring');
+let cx=0,cy=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{cx=e.clientX;cy=e.clientY;CE.style.left=cx+'px';CE.style.top=cy+'px';});
+function aC(){rx+=(cx-rx)*0.1;ry+=(cy-ry)*0.1;CR.style.left=rx+'px';CR.style.top=ry+'px';requestAnimationFrame(aC);}aC();
+document.querySelectorAll('button,a').forEach(el=>{el.addEventListener('mouseenter',()=>document.body.classList.add('cg'));el.addEventListener('mouseleave',()=>document.body.classList.remove('cg'));});
+function initP(){const c=document.getElementById('hero-canvas');if(!c||!window.THREE)return;const r=new THREE.WebGLRenderer({canvas:c,alpha:true,antialias:true});r.setSize(window.innerWidth,window.innerHeight);r.setPixelRatio(Math.min(devicePixelRatio,2));const s=new THREE.Scene(),cam=new THREE.PerspectiveCamera(70,innerWidth/innerHeight,0.1,1000);cam.position.z=35;const N=1800,pos=new Float32Array(N*3),col=new Float32Array(N*3),pal=[[0.545,0.361,0.965],[0.024,0.714,0.831],[0.925,0.286,0.6],[0.4,0.8,0.4]];for(let i=0;i<N;i++){pos[i*3]=(Math.random()-0.5)*100;pos[i*3+1]=(Math.random()-0.5)*100;pos[i*3+2]=(Math.random()-0.5)*50;const p=pal[Math.floor(Math.random()*4)];col[i*3]=p[0];col[i*3+1]=p[1];col[i*3+2]=p[2];}const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(pos,3));g.setAttribute('color',new THREE.BufferAttribute(col,3));const m=new THREE.PointsMaterial({size:0.12,vertexColors:true,transparent:true,opacity:0.7});const pts=new THREE.Points(g,m);s.add(pts);let mx=0,my=0;document.addEventListener('mousemove',e=>{mx=(e.clientX/innerWidth-0.5)*2;my=(e.clientY/innerHeight-0.5)*2;});function tk(){requestAnimationFrame(tk);pts.rotation.y+=0.0004;pts.rotation.x+=0.0002;cam.position.x+=(mx*4-cam.position.x)*0.02;cam.position.y+=(-my*4-cam.position.y)*0.02;r.render(s,cam);}tk();window.addEventListener('resize',()=>{cam.aspect=innerWidth/innerHeight;cam.updateProjectionMatrix();r.setSize(innerWidth,innerHeight);});}
+initP();
+const TWW=['Life Trailer Generator.','Contradiction Detector.','Evolution Roadmap.','Personality Brand.','Reality Gap Analyzer.'];
+let twI=0,twC=0,twD=false;
+function tw(){const el=document.getElementById('tw-el');if(!el)return;const w=TWW[twI];el.textContent=twD?w.slice(0,--twC):w.slice(0,++twC);if(!twD&&twC===w.length){twD=true;setTimeout(tw,2000);return;}if(twD&&twC===0){twD=false;twI=(twI+1)%TWW.length;}setTimeout(tw,twD?35:75);}tw();
+let TK=localStorage.getItem('piq_token'),US=JSON.parse(localStorage.getItem('piq_user')||'null'),QS=[],ANS={},CQ=0,CRID=null,RC=null;
+const TR=['openness','conscientiousness','extraversion','agreeableness','neuroticism'];
+const TL={openness:'Openness',conscientiousness:'Conscientiousness',extraversion:'Extraversion',agreeableness:'Agreeableness',neuroticism:'Neuroticism'};
+const TC={openness:'#8B5CF6',conscientiousness:'#06B6D4',extraversion:'#EC4899',agreeableness:'#10B981',neuroticism:'#F59E0B'};
+const LM=['Mapping your cognitive landscape','Detecting personality patterns','Building your Digital Twin','Running life simulations','Generating your AI report'];
+function showPage(n,sub){
+  var current=document.querySelector('.page:not(.hidden)');
+  if(current){
+    current.classList.add('page-exit');
+    setTimeout(function(){
+      document.querySelectorAll('.page').forEach(function(p){p.classList.add('hidden');p.classList.remove('page-exit');});
+      var skelRes=document.getElementById('page-loader-results');if(skelRes)skelRes.style.display='none';
+      var target=document.getElementById(n);
+      if(target){target.classList.remove('hidden');target.classList.add('page-enter');setTimeout(function(){target.classList.remove('page-enter');},400);}
+      if(n==='pa')toggleAuth(sub||'login');if(n==='ph')loadHist();if(n==='pd')loadDash();
+      window.scrollTo(0,0);
+    },200);
+  } else {
+    document.querySelectorAll('.page').forEach(function(p){p.classList.add('hidden');});
+    var skelRes=document.getElementById('page-loader-results');if(skelRes)skelRes.style.display='none';
+    var target=document.getElementById(n);
+    if(target){target.classList.remove('hidden');target.classList.add('page-enter');setTimeout(function(){target.classList.remove('page-enter');},400);}
+    if(n==='pa')toggleAuth(sub||'login');if(n==='ph')loadHist();if(n==='pd')loadDash();
+    window.scrollTo(0,0);
+  }
+}
+function showResultSkeleton(){document.querySelectorAll('.page').forEach(p=>p.classList.add('hidden'));var s=document.getElementById('page-loader-results');if(s){s.style.display='block';window.scrollTo(0,0);}}
+function goHome(){TK?showPage('pd'):showPage('page-home');}
+function toast(m,d=3000){const t=document.getElementById('toast');t.textContent=m;t.style.display='block';clearTimeout(t._t);t._t=setTimeout(()=>t.style.display='none',d);}
+function aMsg(m,t='e'){const e=document.getElementById('am');e.textContent=m;e.className='am '+(t==='e'?'e':'s');e.style.display='block';}
+function copyEl(id){navigator.clipboard.writeText(document.getElementById(id).innerText).then(()=>toast('Copied to clipboard!'));}
+async function api(p,m='GET',b=null){const o={method:m,headers:{'Content-Type':'application/json'}};if(TK)o.headers['Authorization']='Bearer '+TK;if(b)o.body=JSON.stringify(b);return(await fetch(p,o)).json();}
+
+
+function toggleMobMenu(){
+  var m=document.getElementById('mob-menu');
+  if(m)m.classList.toggle('open');
+}
+function closeMobMenu(){
+  var m=document.getElementById('mob-menu');
+  if(m)m.classList.remove('open');
+}
+function updateMobMenu(){
+  var hb=document.getElementById('mob-hist-btn');
+  var cb=document.getElementById('mob-chat-btn');
+  var lb=document.getElementById('mob-logout-btn');
+  if(TK&&US){
+    if(hb)hb.style.display='block';
+    if(cb)cb.style.display='block';
+    if(lb)lb.style.display='block';
+  }
+}
+
+function switchTab(tab, el){
+  document.querySelectorAll('.dash-section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  var sec = document.getElementById('tab-'+tab);
+  if(sec) sec.classList.add('active');
+  if(el) el.classList.add('active');
+  if(tab==='history') loadDashHistory();
+  if(tab==='insights') loadInsights();
+  if(tab==='profile') loadProfile();
+}
+function loadDashHistory(){
+  api('/api/history').then(function(d){
+    var l=document.getElementById('dash-history-list');
+    var h=d.results||d.data||[];
+    if(!h.length){l.innerHTML='<p style="color:var(--tx3);text-align:center;padding:3rem">No assessments yet</p>';return;}
+    l.innerHTML=h.map(function(r){return hCard(r);}).join('');
+  });
+}
+function loadInsights(){
+  api('/api/history').then(function(d){
+    var h=d.results||d.data||[];
+    if(!h.length)return;
+    var l=h[0];
+    var insights=[
+      'Your dominant trait suggests you are naturally creative and open to new experiences.',
+      'Based on your scores, collaborative environments suit you best.',
+      'Your personality profile indicates strong emotional intelligence.',
+      'You tend to think deeply before making decisions — a valuable strength.',
+      'Your profile shows resilience and adaptability under pressure.'
+    ];
+    document.getElementById('daily-insight').textContent=insights[Math.floor(Math.random()*insights.length)];
+    var ic=document.getElementById('insights-content');
+    ic.innerHTML='<div class="overview-stats">'+TR.map(function(t){var sc=l.scores&&l.scores[t]?(typeof l.scores[t]==="object"?l.scores[t].score:l.scores[t]):0;return'<div class="ov-stat"><div class="ov-icon" style="color:'+TC[t]+'">●</div><div class="ov-val" style="background:none;-webkit-text-fill-color:'+TC[t]+'">'+sc+'%</div><div class="ov-lbl">'+TL[t]+'</div></div>';}).join('')+'</div>';
+  });
+}
+function loadProfile(){
+  if(!US)return;
+  var el=document.getElementById('profile-info');
+  if(el)el.innerHTML='Name: <strong>'+US.name+'</strong><br>Email: <strong>'+US.email+'</strong>';
+}
+
+function updateNav(){updateMobMenu();const a=document.getElementById('nav-area');if(TK&&US){a.innerHTML='<span class="nu" style="margin-right:8px">Hi, '+US.name.split(' ')[0]+'</span><button class="nb" onclick="showPage(\'ph\')">History</button><button class="nb cta" onclick="doLogout()">Logout</button>';}else{a.innerHTML='<button class="nb" onclick="showPage(\'pa\',\'login\')">Sign In</button><button class="nb cta" onclick="showPage(\'pa\',\'reg\')">Get Started</button>';}}
+function toggleAuth(m){const r=m==='reg';document.getElementById('lf').classList.toggle('hidden',r);document.getElementById('rf').classList.toggle('hidden',!r);document.getElementById('at').textContent=r?'Create account':'Welcome back';document.getElementById('as').textContent=r?'Start your AI personality journey':'Sign in to access your AI reports';document.getElementById('am').style.display='none';}
+async function doLogin(){const e=document.getElementById('le').value.trim(),p=document.getElementById('lp').value;if(!e||!p)return aMsg('Please fill all fields');const d=await api('/api/auth/login','POST',{email:e,password:p});if(d.success){saveS(d);showPage('pd');toast('Welcome back!');}else aMsg(d.message||'Login failed');}
+async function doRegister(){const n=document.getElementById('rn').value.trim(),e=document.getElementById('re').value.trim(),p=document.getElementById('rp').value;if(!n||!e||!p)return aMsg('Please fill all fields');if(p.length<6)return aMsg('Password min 6 chars');const d=await api('/api/auth/register','POST',{name:n,email:e,password:p});if(d.success){saveS(d);showPage('pd');toast('Account created!');}else aMsg(d.message||'Failed');}
+function saveS(d){TK=d.token;US=d.user;localStorage.setItem('piq_token',TK);localStorage.setItem('piq_user',JSON.stringify(US));updateNav();}
+function doLogout(){TK=null;US=null;localStorage.removeItem('piq_token');localStorage.removeItem('piq_user');resetTheme();updateNav();showPage('page-home');toast('Logged out');}
+async function loadDash(){if(!US)return;
+  var dn=document.getElementById('dn');if(dn)dn.textContent=US.name.split(' ')[0];
+  var sbn=document.getElementById('sb-name');if(sbn)sbn.textContent=US.name;
+  var sbe=document.getElementById('sb-email');if(sbe)sbe.textContent=US.email;try{const d=await api('/api/history');if(d.success){const h=d.results||d.data||[];document.getElementById('dt').textContent=h.length;var hb=document.getElementById('hist-badge');if(hb)hb.textContent=h.length;if(h.length>0){const l=h[0];document.getElementById('dd').textContent=l.personalityType||TL[l.dominantTrait]||'—';document.getElementById('dl').textContent=new Date(l.completedAt).toLocaleDateString('en-IN',{month:'short',day:'numeric'});document.getElementById('dhl').innerHTML=h.slice(0,3).map(r=>hCard(r)).join('');}}}catch(e){console.error(e);}}
+function handleStart(){if(!TK){showPage('pa','reg');return;}loadQuiz();}
+async function loadQuiz(){showPage('pl');animL();const d=await api('/api/questions');if(!d.success){toast('Failed to load');showPage('page-home');return;}QS=d.questions||d.data||[];ANS={};CQ=0;renderQ();showPage('pq');}
+let li;
+function animL(){let i=0;clearInterval(li);li=setInterval(()=>{document.getElementById('lm').textContent=LM[i%LM.length];i++;},1800);}
+function gs(scores,t){const s=scores[t];return typeof s==='object'?s.score:(s||0);}
+function renderQ(){const q=QS[CQ],sel=ANS[q._id],pct=Math.round((CQ/QS.length)*100),c=TC[q.trait];window._qid=q._id;const off=163-(pct/100)*163;document.getElementById('pring').style.strokeDashoffset=off;document.getElementById('ql').textContent='Question '+(CQ+1)+' of '+QS.length;document.getElementById('qp').textContent=pct+'% complete';document.getElementById('bprev').style.display=CQ>0?'block':'none';document.getElementById('bnext').textContent=CQ===QS.length-1?'Submit Assessment':'Continue';let btns='';for(let v=1;v<=5;v++){btns+='<button class="rb'+(sel===v?' sel':'')+'" onclick="pickA(window._qid,'+v+')"><span>'+v+'</span></button>';}document.getElementById('qc').innerHTML='<div class="tp" style="background:'+c+'18;color:'+c+'">'+TL[q.trait]+'</div><div class="qcard"><div class="qtx">'+q.text+'</div><div class="rr">'+btns+'</div><div class="sl"><span>Strongly Disagree</span><span>Strongly Agree</span></div><div class="kh">Keys: <kbd class="kk">1</kbd>-<kbd class="kk">5</kbd> or <kbd class="kk">arrows</kbd></div></div>';}
+function pickA(id,v){ANS[id]=v;renderQ();}
+function nextQ(){if(!ANS[QS[CQ]._id])return toast('Please select a rating');if(CQ===QS.length-1){submitQ();return;}CQ++;renderQ();}
+function prevQ(){if(CQ>0){CQ--;renderQ();}}
+document.addEventListener('keydown',e=>{if(document.getElementById('pq').classList.contains('hidden'))return;const q=QS[CQ];if(!q)return;if(['1','2','3','4','5'].includes(e.key))pickA(q._id,parseInt(e.key));if(e.key==='ArrowRight')nextQ();if(e.key==='ArrowLeft')prevQ();});
+async function submitQ(){showPage('pl');animL();const arr=Object.entries(ANS).map(([qId,v])=>({questionId:qId,value:v}));const d=await api('/api/submit','POST',{answers:arr});clearInterval(li);if(d.success){CRID=d.result?d.result.sessionId:d.resultId;const f=await api('/api/result/'+CRID);if(f.success)renderR(f.result||f.data);}else{toast('Failed: '+d.message);showPage('pq');}}
+function renderR(r){showResultSkeleton();setTimeout(function(){doRenderR(r);},2000);}
+function doRenderR(r){
+document.getElementById('rnt').textContent=(US?US.name:'Your')+"'s AI Profile";
+document.getElementById('rd').textContent=new Date(r.completedAt).toLocaleDateString('en-IN',{year:'numeric',month:'long',day:'numeric'});
+const badge=r.personalityType||TL[r.dominantTrait]||'Balanced';
+document.getElementById('rdom').textContent='✦ '+badge;
+document.getElementById('rsum').textContent=r.summary||'';
+document.getElementById('shn').textContent=US?US.name:'PersonaIQ';
+document.getElementById('sht').textContent=badge;
+document.getElementById('shtr').innerHTML=TR.map(t=>'<span class="shtp">'+TL[t].slice(0,3)+': '+gs(r.scores,t)+'%</span>').join('');
+if(RC)RC.destroy();
+RC=new Chart(document.getElementById('rc2'),{type:'radar',data:{labels:TR.map(t=>TL[t]),datasets:[{data:TR.map(t=>gs(r.scores,t)),backgroundColor:'rgba(139,92,246,0.1)',borderColor:'#8B5CF6',pointBackgroundColor:TR.map(t=>TC[t]),pointRadius:5,borderWidth:2}]},options:{scales:{r:{min:0,max:100,ticks:{color:'#4A4668',stepSize:25,font:{size:9}},grid:{color:'rgba(255,255,255,0.05)'},pointLabels:{color:'#8B87A8',font:{size:10}}}},plugins:{legend:{display:false}}}});
+document.getElementById('rtb').innerHTML=TR.map(t=>{const sc=gs(r.scores,t);return'<div class="tr"><span class="tn">'+TL[t]+'</span><div class="tt"><div class="tf2" id="tf-'+t+'" style="background:'+TC[t]+'" data-w="'+sc+'"></div></div><span class="tp2">'+sc+'%</span></div>';}).join('');
+setTimeout(()=>TR.forEach(t=>{const el=document.getElementById('tf-'+t);if(el)el.style.width=el.getAttribute('data-w')+'%';}),100);
+const intel=r.intelligenceScores||{creativity:7,leadership:6,analytical:7};
+document.getElementById('ris').innerHTML='<div class="ii"><div class="iv" data-val="'+intel.creativity+'">0/10</div><div class="il">Creativity</div></div><div class="ii"><div class="iv" data-val="'+intel.leadership+'">0/10</div><div class="il">Leadership</div></div><div class="ii"><div class="iv" data-val="'+intel.analytical+'">0/10</div><div class="il">Analytical</div></div>';
+animateIntelScores();
+const str=(r.insights&&r.insights.strengths)||['Strong self-awareness','Adaptable mindset','Genuine empathy'];
+document.getElementById('rstr').innerHTML=str.map(s=>'<div class="lit"><div class="ld"></div>'+s+'</div>').join('');
+const wk=(r.insights&&r.insights.weaknesses)||['Overthinking decisions','Difficulty with conflict','Tendency to self-doubt'];
+document.getElementById('rwk').innerHTML=wk.map(w=>'<div class="lit"><div class="ld" style="background:var(--pk)"></div>'+w+'</div>').join('');
+const car=(r.insights&&r.insights.careers)||['Product Designer','UX Researcher','Therapist','Entrepreneur','Content Strategist'];
+document.getElementById('rcar').innerHTML=car.map(c=>'<div class="lit"><div class="ld" style="background:var(--cy)"></div>'+c+'</div>').join('');
+const twin=r.digitalTwin||{name:'The Thoughtful Architect',thinkingStyle:'Analytical-Creative hybrid',decisionStyle:'Data-informed intuition',behaviorPattern:'Observes deeply, acts deliberately'};
+document.getElementById('rtw').innerHTML='<div class="ti"><div class="tl">Twin Name</div><div class="tv">'+twin.name+'</div></div><div class="ti"><div class="tl">Thinking Style</div><div class="tv">'+twin.thinkingStyle+'</div></div><div class="ti"><div class="tl">Decision Style</div><div class="tv">'+twin.decisionStyle+'</div></div><div class="ti"><div class="tl">Behavior Pattern</div><div class="tv">'+twin.behaviorPattern+'</div></div>';
+const sims=r.simulations||[{scene:'Job Interview',reaction:'Prepares meticulously',strength:'Credible and thoughtful',risk:'May over-explain'},{scene:'Team Conflict',reaction:'Seeks all perspectives',strength:'Natural mediator',risk:'Avoids confrontation'},{scene:'Under Pressure',reaction:'Retreats to process',strength:'Calm decisions',risk:'Silence misread'}];
+document.getElementById('rsim').innerHTML=sims.map(s=>'<div class="smc"><div class="sms">'+s.scene+'</div><div class="smr"><strong>Reaction:</strong> '+s.reaction+'</div><div class="smr"><strong>Strength:</strong> '+s.strength+'</div><div class="smr"><strong>Risk:</strong> '+s.risk+'</div></div>').join('');
+const tp=r.thinkingPattern||{analyticalVsCreative:65,logicalVsEmotional:55,fastVsDeep:30};
+document.getElementById('rthk').innerHTML=[{l:'Analytical',r:'Creative',v:tp.analyticalVsCreative},{l:'Logical',r:'Emotional',v:tp.logicalVsEmotional},{l:'Fast',r:'Deep',v:tp.fastVsDeep}].map(p=>'<div style="margin-bottom:14px"><div style="display:flex;justify-content:space-between;font-size:0.72rem;color:var(--tx3);margin-bottom:5px"><span>'+p.l+'</span><span>'+p.r+'</span></div><div class="gb"><div class="gf" style="width:'+p.v+'%"></div></div></div>').join('');
+document.getElementById('rimp').textContent=r.firstImpression||'"Thoughtful and genuine. Listens before speaking. Depth shared selectively."';
+const con=r.contradictions||['Craves connection but needs solitude','Values structure yet resists routine','Empathetic but struggles to ask for help'];
+document.getElementById('rcon').innerHTML=con.map(c=>'<div class="ci">'+c+'</div>').join('');
+const gap=r.realityGap||{selfScore:72,detectedScore:58,explanation:'You see yourself as more confident than responses suggest. A healthy growth mindset.'};
+document.getElementById('rgap').innerHTML='<div style="font-size:0.78rem;color:var(--tx3);margin-bottom:8px">Self-Perception vs Reality</div><div style="display:flex;justify-content:space-between;font-size:0.77rem;margin-bottom:5px"><span>Detected: <strong>'+gap.detectedScore+'%</strong></span><span>Self-image: <strong>'+gap.selfScore+'%</strong></span></div><div class="gb"><div class="gf" style="width:'+gap.detectedScore+'%"></div></div><div style="font-size:0.84rem;color:var(--tx2);margin-top:10px;line-height:1.6">'+gap.explanation+'</div>';
+const br=r.personalityBrand||{name:'The Quiet Catalyst',tagline:'Depth over noise. Always.',values:'Integrity, Curiosity, Growth',voice:'Warm, precise, unhurried'};
+document.getElementById('rbrnd').innerHTML='<div class="bi"><div class="bl">Brand Name</div><div class="bv">'+br.name+'</div></div><div class="bi"><div class="bl">Tagline</div><div class="bv">'+br.tagline+'</div></div><div class="bi"><div class="bl">Core Values</div><div class="bv">'+br.values+'</div></div><div class="bi"><div class="bl">Brand Voice</div><div class="bv">'+br.voice+'</div></div>';
+const ev=r.evolution||{present:'A thoughtful observer navigating self-discovery',future:'A confident leader inspiring through authenticity',path:'Build visibility. Share thinking. Embrace discomfort as data.'};
+document.getElementById('revo').innerHTML='<div class="ei"><div class="el" style="color:var(--cy)">Present</div><div class="et">'+ev.present+'</div></div><div class="ea">to</div><div class="ei"><div class="el" style="color:var(--gn)">Future</div><div class="et">'+ev.future+'</div></div><div class="ea">to</div><div class="ei"><div class="el" style="color:var(--pu2)">Path</div><div class="et">'+ev.path+'</div></div>';
+const trl=r.lifeTrailer||{title:'The Architect of Quiet Storms',genre:'Psychological Drama',narrative:'In a world that rewards noise, one person dares to be still. The most powerful revolutions begin within.'};
+document.getElementById('rtrl').innerHTML='<div class="trlt">'+trl.title+'</div><div class="trlg">'+trl.genre+'</div><div class="trln">'+trl.narrative+'</div>';
+PCTX=r;var dom=r.dominantTrait||'openness';applyPersonalityTheme(dom);showPage('pr');setTimeout(function(){updateAvatar(r,badge);},300);}
+function hCard(r){const dom=r.personalityType||TL[r.dominantTrait]||'Balanced';const date=new Date(r.completedAt).toLocaleDateString('en-IN',{year:'numeric',month:'short',day:'numeric'});const pills=TR.map(t=>{const s=r.scores&&r.scores[t];const sc=s?(typeof s==='object'?s.score:s):0;return'<span class="hip">'+TL[t].slice(0,3)+': '+sc+'%</span>';}).join('');return'<div class="hi" onclick="viewR('+JSON.stringify(r.sessionId||r._id)+')"><div class="hil"><h4>'+dom+'</h4><p>'+date+'</p><div class="hips">'+pills+'</div></div><div class="hia">to</div></div>';}
+async function loadHist(){const d=await api('/api/history');const l=document.getElementById('hlist');const h=d.results||d.data||[];if(!d.success||!h.length){l.innerHTML='<p style="color:var(--tx3);text-align:center;padding:4rem">No assessments yet. <a onclick="loadQuiz()" style="color:var(--pu2);cursor:pointer;font-weight:500">Take your first</a></p>';return;}l.innerHTML=h.map(r=>hCard(r)).join('');}
+async function viewR(id){showPage('pl');animL();CRID=id;const f=await api('/api/result/'+id);clearInterval(li);if(f.success)renderR(f.result||f.data);else toast('Could not load');}
+async function downloadPDF(){if(!CRID)return toast('No result to download');toast('Generating PDF');try{const res=await fetch('/api/result/'+CRID+'/pdf',{headers:{'Authorization':'Bearer '+TK}});if(!res.ok){toast('PDF failed');return;}const blob=await res.blob();const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='PersonaIQ-Report.pdf';a.click();URL.revokeObjectURL(url);toast('PDF Downloaded!');}catch(e){toast('Error: '+e.message);}}
+function openEmailModal(){if(!CRID)return toast('No result to email');const modal=document.getElementById('email-modal');const inp=document.getElementById('email-modal-input');if(US&&US.email)inp.value=US.email;modal.style.display='flex';modal.onclick=function(e){if(e.target===modal)modal.style.display='none';};}
+async function sendEmailReport(){const inp=document.getElementById('email-modal-input');const email=inp.value.trim();if(!email)return toast('Enter an email address');const emailRx=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;if(!emailRx.test(email))return toast('Invalid email address');const btn=document.getElementById('btn-send-email');btn.disabled=true;btn.textContent='Sending…';try{const d=await api('/api/result/'+CRID+'/email','POST',{email});if(d.success){document.getElementById('email-modal').style.display='none';toast('Report sent to '+email+' 📧');}else{toast(d.message||'Failed to send');}}catch(e){toast('Error: '+e.message);}finally{btn.disabled=false;btn.textContent='Send Report →';}}
+function shareResult(){if(navigator.share)navigator.share({title:'My PersonaIQ Result',url:window.location.href});else{navigator.clipboard.writeText(window.location.href).then(()=>toast('Link copied!'));}}
+updateNav();
+if(TK&&US)showPage('pd');else showPage('page-home');
+
+var CHAT_MSGS = [];
+var PCTX = null;
+function openChat(){
+  if(!TK){showPage('pa','login');return;}
+  showPage('page-chat');
+  if(CHAT_MSGS.length===0){addCMsg('ai','Hi! I am your AI Personality Twin. I have analyzed your unique personality using the OCEAN model. What would you like to explore about yourself?');}
+}
+function addCMsg(role,text){
+  var el=document.getElementById('chat-msgs');
+  var d=document.createElement('div');
+  d.className='cmsg '+role;
+  d.innerHTML='<div class="cmsg-av">'+(role==='ai'?'🧠':'👤')+'</div><div class="cmsg-bbl">'+text+'</div>';
+  el.appendChild(d);el.scrollTop=el.scrollHeight;
+  CHAT_MSGS.push({role:role,text:text});
+}
+function showTyping(){
+  var el=document.getElementById('chat-msgs');
+  var d=document.createElement('div');
+  d.className='cmsg ai';d.id='tping';
+  d.innerHTML='<div class="cmsg-av">🧠</div><div class="cmsg-bbl"><div class="tdots"><div class="tdot"></div><div class="tdot"></div><div class="tdot"></div></div></div>';
+  el.appendChild(d);el.scrollTop=el.scrollHeight;
+}
+function hideTyping(){var t=document.getElementById('tping');if(t)t.remove();}
+function getPCtx(){
+  if(!PCTX)return'User has completed a Big Five OCEAN personality assessment.';
+  var scores=TR.map(function(t){return TL[t]+': '+gs(PCTX.scores,t)+'%';}).join(', ');
+  return'Personality scores: '+scores+'. Summary: '+(PCTX.summary||'')+'Type: '+(PCTX.personalityType||'Balanced');
+}
+function getLocalR(msg){
+  var rs=['Based on your personality profile, you have a natural gift for deep thinking and empathy. Use this to build meaningful connections.','Your scores suggest you thrive when given autonomy and time to reflect before acting. Structure and spontaneity can coexist for you.','Your personality reveals someone driven by values and authenticity. This is a rare and powerful combination in todays world.','You tend to process emotions deeply, which makes you highly intuitive. Trust your instincts more often.','Your profile shows strong potential for leadership through quiet influence rather than loud authority.'];
+  return rs[Math.floor(Math.random()*rs.length)];
+}
+async function sendChat(){
+  var inp=document.getElementById('chat-inp');
+  var msg=inp.value.trim();
+  if(!msg)return;
+  inp.value='';
+  addCMsg('user',msg);
+  showTyping();
+  setTimeout(function(){
+    hideTyping();
+    addCMsg('ai',getLocalR(msg));
+  },1200+Math.random()*800);
+}
+function chatSug(el){document.getElementById('chat-inp').value=el.textContent;sendChat();}
+
+
+var AV_RENDERER = null, AV_SCENE = null, AV_CAMERA = null, AV_SPHERE = null, AV_FRAME = null;
+
+function initAvatar(dominantTrait){
+  var canvas = document.getElementById('avatar-canvas');
+  if(!canvas || !window.THREE) return;
+  if(AV_RENDERER){AV_RENDERER.dispose();cancelAnimationFrame(AV_FRAME);}
+
+  var traitColors2 = {
+    openness: {main:0x8B5CF6, glow:0xA78BFA},
+    conscientiousness: {main:0x06B6D4, glow:0x67E8F9},
+    extraversion: {main:0xEC4899, glow:0xF9A8D4},
+    agreeableness: {main:0x10B981, glow:0x6EE7B7},
+    neuroticism: {main:0xF59E0B, glow:0xFCD34D}
+  };
+  var colors = traitColors2[dominantTrait] || traitColors2.openness;
+
+  AV_RENDERER = new THREE.WebGLRenderer({canvas:canvas, alpha:true, antialias:true});
+  AV_RENDERER.setSize(200, 200);
+  AV_RENDERER.setPixelRatio(Math.min(devicePixelRatio, 2));
+
+  AV_SCENE = new THREE.Scene();
+  AV_CAMERA = new THREE.PerspectiveCamera(50, 1, 0.1, 100);
+  AV_CAMERA.position.z = 3;
+
+  // Main sphere
+  var geo = new THREE.SphereGeometry(0.9, 64, 64);
+  var mat = new THREE.MeshPhongMaterial({
+    color: colors.main,
+    emissive: colors.main,
+    emissiveIntensity: 0.3,
+    shininess: 100,
+    transparent: true,
+    opacity: 0.9
+  });
+  AV_SPHERE = new THREE.Mesh(geo, mat);
+  AV_SCENE.add(AV_SPHERE);
+
+  // Inner glow sphere
+  var igeo = new THREE.SphereGeometry(0.85, 32, 32);
+  var imat = new THREE.MeshBasicMaterial({
+    color: colors.glow,
+    transparent: true,
+    opacity: 0.15,
+    side: THREE.BackSide
+  });
+  var inner = new THREE.Mesh(igeo, imat);
+  AV_SCENE.add(inner);
+
+  // Outer glow sphere
+  var ogeo = new THREE.SphereGeometry(1.1, 32, 32);
+  var omat = new THREE.MeshBasicMaterial({
+    color: colors.main,
+    transparent: true,
+    opacity: 0.05,
+    side: THREE.BackSide
+  });
+  var outer = new THREE.Mesh(ogeo, omat);
+  AV_SCENE.add(outer);
+
+  // Particles around sphere
+  var pGeo = new THREE.BufferGeometry();
+  var pCount = 200;
+  var pPos = new Float32Array(pCount * 3);
+  for(var i = 0; i < pCount; i++){
+    var theta = Math.random() * Math.PI * 2;
+    var phi = Math.acos(2 * Math.random() - 1);
+    var r = 1.2 + Math.random() * 0.5;
+    pPos[i*3] = r * Math.sin(phi) * Math.cos(theta);
+    pPos[i*3+1] = r * Math.sin(phi) * Math.sin(theta);
+    pPos[i*3+2] = r * Math.cos(phi);
+  }
+  pGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
+  var pMat = new THREE.PointsMaterial({color: colors.glow, size: 0.02, transparent: true, opacity: 0.8});
+  var particles = new THREE.Points(pGeo, pMat);
+  AV_SCENE.add(particles);
+
+  // Lights
+  var ambLight = new THREE.AmbientLight(0xffffff, 0.4);
+  AV_SCENE.add(ambLight);
+  var pointLight1 = new THREE.PointLight(colors.main, 2, 10);
+  pointLight1.position.set(2, 2, 2);
+  AV_SCENE.add(pointLight1);
+  var pointLight2 = new THREE.PointLight(colors.glow, 1.5, 10);
+  pointLight2.position.set(-2, -1, 1);
+  AV_SCENE.add(pointLight2);
+
+  // Mouse interaction
+  var mx = 0, my = 0;
+  canvas.addEventListener('mousemove', function(e){
+    var rect = canvas.getBoundingClientRect();
+    mx = ((e.clientX - rect.left) / 200 - 0.5) * 2;
+    my = -((e.clientY - rect.top) / 200 - 0.5) * 2;
+  });
+
+  var t = 0;
+  function animate(){
+    AV_FRAME = requestAnimationFrame(animate);
+    t += 0.01;
+    AV_SPHERE.rotation.y += 0.005;
+    AV_SPHERE.rotation.x += 0.002;
+    AV_SPHERE.position.x += (mx * 0.1 - AV_SPHERE.position.x) * 0.05;
+    AV_SPHERE.position.y += (my * 0.1 - AV_SPHERE.position.y) * 0.05;
+    particles.rotation.y -= 0.003;
+    pointLight1.intensity = 2 + Math.sin(t * 2) * 0.5;
+    AV_RENDERER.render(AV_SCENE, AV_CAMERA);
+  }
+  animate();
+}
+
+function updateAvatar(r, badge){
+  var dom = r.dominantTrait || 'openness';
+  var traitEmojis = {openness:'🎨',conscientiousness:'📋',extraversion:'🌟',agreeableness:'💚',neuroticism:'🌊'};
+  var tc = {openness:'#8B5CF6',conscientiousness:'#06B6D4',extraversion:'#EC4899',agreeableness:'#10B981',neuroticism:'#F59E0B'};
+
+  var avName = document.getElementById('av-name');
+  var avType = document.getElementById('av-type');
+  var avOrbs = document.getElementById('av-orbs');
+
+  if(avName) avName.textContent = (US ? US.name : 'Your') + ' Twin';
+  if(avType) avType.textContent = badge;
+  if(avOrbs) avOrbs.innerHTML = TR.map(function(t,i){
+    return '<div class="avatar-orb" style="background:'+tc[t]+';animation-delay:'+(i*0.1)+'s" title="'+TL[t]+': '+gs(r.scores,t)+'%"></div>';
+  }).join('');
+
+  setTimeout(function(){ initAvatar(dom); }, 200);
+}
+
+
+function animateCounter(el, target, duration){
+  var start = 0;
+  var step = target / (duration / 16);
+  var timer = setInterval(function(){
+    start += step;
+    if(start >= target){start = target;clearInterval(timer);}
+    el.textContent = Math.round(start) + '%';
+  }, 16);
+}
+
+function animateTraitBars(){
+  setTimeout(function(){
+    TR.forEach(function(t){
+      var el = document.getElementById('tf-'+t);
+      if(el){
+        var w = el.getAttribute('data-w');
+        el.style.width = w + '%';
+      }
+      var pct = document.querySelector('.tpct[data-trait="'+t+'"]');
+      if(pct){
+        animateCounter(pct, parseInt(pct.getAttribute('data-val')), 1200);
+      }
+    });
+  }, 300);
+}
+
+function animateIntelScores(){
+  setTimeout(function(){
+    document.querySelectorAll('.iv[data-val]').forEach(function(el){
+      var target = parseInt(el.getAttribute('data-val'));
+      var start = 0;
+      var timer = setInterval(function(){
+        start += 0.2;
+        if(start >= target){start = target;clearInterval(timer);}
+        el.textContent = Math.round(start*10)/10 + '/10';
+      }, 30);
+    });
+  }, 500);
+}
+
+
+var TRAIT_THEMES = {
+  openness: {
+    pu:'#8B5CF6', cy:'#A78BFA', gr:'linear-gradient(135deg,#8B5CF6,#A78BFA)',
+    glow:'rgba(139,92,246,0.4)', bg:'rgba(139,92,246,0.08)'
+  },
+  conscientiousness: {
+    pu:'#06B6D4', cy:'#67E8F9', gr:'linear-gradient(135deg,#06B6D4,#0EA5E9)',
+    glow:'rgba(6,182,212,0.4)', bg:'rgba(6,182,212,0.08)'
+  },
+  extraversion: {
+    pu:'#EC4899', cy:'#F9A8D4', gr:'linear-gradient(135deg,#EC4899,#F472B6)',
+    glow:'rgba(236,72,153,0.4)', bg:'rgba(236,72,153,0.08)'
+  },
+  agreeableness: {
+    pu:'#10B981', cy:'#6EE7B7', gr:'linear-gradient(135deg,#10B981,#34D399)',
+    glow:'rgba(16,185,129,0.4)', bg:'rgba(16,185,129,0.08)'
+  },
+  neuroticism: {
+    pu:'#F59E0B', cy:'#FCD34D', gr:'linear-gradient(135deg,#F59E0B,#FBBF24)',
+    glow:'rgba(245,158,11,0.4)', bg:'rgba(245,158,11,0.08)'
+  }
+};
+
+function applyPersonalityTheme(trait){
+  var theme = TRAIT_THEMES[trait] || TRAIT_THEMES.openness;
+  var root = document.documentElement;
+  root.style.setProperty('--pu', theme.pu);
+  root.style.setProperty('--pu2', theme.cy);
+  root.style.setProperty('--cy', theme.cy);
+  root.style.setProperty('--gr', theme.gr);
+  root.style.setProperty('--gp', '0 0 40px ' + theme.glow);
+  root.style.setProperty('--bdr2', theme.glow);
+
+  // Show toast with theme change
+  var names = {
+    openness:'🎨 Creative Purple Theme',
+    conscientiousness:'💎 Intelligence Cyan Theme',
+    extraversion:'🌟 Energy Pink Theme',
+    agreeableness:'🌿 Harmony Green Theme',
+    neuroticism:'⚡ Depth Gold Theme'
+  };
+  setTimeout(function(){
+    toast('Theme: ' + (names[trait]||'Custom Theme') + ' applied!');
+  }, 500);
+}
+
+function resetTheme(){
+  var root = document.documentElement;
+  root.style.setProperty('--pu', '#8B5CF6');
+  root.style.setProperty('--pu2', '#A78BFA');
+  root.style.setProperty('--cy', '#06B6D4');
+  root.style.setProperty('--gr', 'linear-gradient(135deg,#8B5CF6,#06B6D4)');
+  root.style.setProperty('--gp', '0 0 40px rgba(139,92,246,0.3)');
+  root.style.setProperty('--bdr2', 'rgba(139,92,246,0.4)');
+}
+
+</script>
+<div id="page-chat" class="page hidden">
+  <div class="chat-wrap">
+    <div class="chat-top">
+      <h3>🤖 Chat with Your AI Personality Twin</h3>
+      <p>Ask anything about your personality, career or growth</p>
+      <div class="chat-sugs">
+        <div class="chat-sug" onclick="chatSug(this)">What are my biggest strengths?</div>
+        <div class="chat-sug" onclick="chatSug(this)">What career suits me?</div>
+        <div class="chat-sug" onclick="chatSug(this)">How do I handle stress?</div>
+        <div class="chat-sug" onclick="chatSug(this)">What are my blind spots?</div>
+      </div>
+    </div>
+    <div class="chat-msgs" id="chat-msgs"></div>
+  </div>
+  <div class="chat-bar">
+    <div class="chat-bar-in">
+      <input class="chat-inp" id="chat-inp" placeholder="Ask your personality twin..." onkeydown="if(event.key==='Enter')sendChat()">
+      <button class="chat-send" onclick="sendChat()">&#10148;</button>
+    </div>
   </div>
 </div>
-<script src="/js/tokenhelper.js"></script>
-<script src="/js/app.js"></script>
 </body>
 </html>

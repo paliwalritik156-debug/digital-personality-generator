@@ -75,29 +75,40 @@ const downloadPDF = async (req, res) => {
     doc.text(`Date: ${new Date(result.completedAt).toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' })}`);
     doc.moveDown(1);
     doc.fillColor('#1a1a2e').fontSize(16).font('Helvetica-Bold').text('Personality Type:');
-    doc.fontSize(14).font('Helvetica').fillColor('#7c5cfc').text(result.personalityType);
+    doc.fontSize(14).font('Helvetica').fillColor('#7c5cfc').text((result.personalityType||'').replace(/[^\w\s]/g,'').trim());
     doc.moveDown(1);
     doc.fillColor('#1a1a2e').fontSize(16).font('Helvetica-Bold').text('Trait Scores');
     doc.moveDown(0.5);
     const traitColors = { openness:'#a855f7', conscientiousness:'#00d4aa', extraversion:'#f5c842', agreeableness:'#ff6b6b', neuroticism:'#4fc3f7' };
     const traitLabels = { openness:'Openness', conscientiousness:'Conscientiousness', extraversion:'Extraversion', agreeableness:'Agreeableness', neuroticism:'Neuroticism' };
     Object.entries(result.scores).forEach(([trait, score]) => {
-      doc.fillColor('#333').fontSize(11).font('Helvetica-Bold').text(`${traitLabels[trait]}: `, { continued: true });
-      doc.fillColor(traitColors[trait] || '#666').font('Helvetica').text(`${score}%`);
-      const barWidth = Math.round((score / 100) * 350);
-      doc.rect(50, doc.y, 350, 10).fill('#e0e0e0');
-      doc.rect(50, doc.y - 10, barWidth, 10).fill(traitColors[trait] || '#666');
-      doc.moveDown(1);
+      const s = typeof score === 'object' ? score.score : score;
+      const rowY = doc.y;
+      doc.fillColor('#333').fontSize(10).font('Helvetica-Bold').text(`${traitLabels[trait]}`, 50, rowY, {width:120});
+      const barX = 175;
+      const barW = 280;
+      const filledW = Math.round((s / 100) * barW);
+      doc.rect(barX, rowY + 2, barW, 10).fill('#e0e0e0');
+      doc.rect(barX, rowY + 2, filledW, 10).fill(traitColors[trait] || '#666');
+      doc.fillColor(traitColors[trait] || '#333').fontSize(10).font('Helvetica').text(`${s}%`, barX + barW + 8, rowY);
+      doc.moveDown(1.5);
     });
     doc.moveDown(1);
-    doc.fillColor('#1a1a2e').fontSize(16).font('Helvetica-Bold').text('Personality Summary');
+    doc.text('', 50, doc.y);doc.fillColor('#1a1a2e').fontSize(16).font('Helvetica-Bold').text('Personality Summary', 50, doc.y, {width:490});
     doc.moveDown(0.5);
-    doc.fillColor('#333').fontSize(11).font('Helvetica').text(result.summary, { lineGap: 6, width: 512 });
+    doc.text('', 50, doc.y);doc.fillColor('#333').fontSize(11).font('Helvetica').text(result.summary, 50, doc.y, { lineGap: 6, width: 490 });
     doc.moveDown(1.5);
-    doc.fillColor('#1a1a2e').fontSize(16).font('Helvetica-Bold').text('Personalized Suggestions');
+    doc.text('', 50, doc.y);doc.fillColor('#1a1a2e').fontSize(16).font('Helvetica-Bold').text('Personalized Suggestions', 50, doc.y, {width:490});
     doc.moveDown(0.5);
-    result.suggestions.forEach((s, i) => {
-      doc.fillColor('#333').fontSize(11).font('Helvetica').text(`${i+1}. ${s}`, { lineGap: 4, width: 512 });
+    const pdfSuggestions = result.suggestions && result.suggestions.length > 0 ? result.suggestions : [
+      'Try incorporating small new experiences weekly to expand your comfort zone.',
+      'Experiment with time-blocking or habit stacking to build productive routines.',
+      'Deep-focus roles like programming, writing, or research suit your nature.',
+      'Set clear social boundaries to protect your energy levels.',
+      'Practice mindfulness or journaling to build emotional resilience.'
+    ];
+    pdfSuggestions.forEach((s, i) => {
+      doc.text('', 50, doc.y);doc.fillColor('#333').fontSize(11).font('Helvetica').text(`${i+1}. ${s}`, { lineGap: 4, width: 490 });
       doc.moveDown(0.5);
     });
     doc.moveDown(2);
