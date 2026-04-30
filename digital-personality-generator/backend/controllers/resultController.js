@@ -134,12 +134,19 @@ const emailPDF = async (req, res) => {
       return res.status(400).json({ success: false, message: 'Invalid email address.' });
     }
 
-    await sendReportEmail(toEmail, user.name, result, user);
-
+    // Respond immediately — send email in background
     res.json({ success: true, message: `Report sent to ${toEmail}` });
+
+    // Send email after response (non-blocking)
+    sendReportEmail(toEmail, user.name, result, user)
+      .then(() => console.log(`✅ Email sent to ${toEmail}`))
+      .catch(err => console.error(`❌ Email failed: ${err.message}`));
+
   } catch (error) {
     console.error('Email PDF error:', error);
-    res.status(500).json({ success: false, message: 'Failed to send email. Please try again.' });
+    if (!res.headersSent) {
+      res.status(500).json({ success: false, message: 'Failed to send email. Please try again.' });
+    }
   }
 };
 
