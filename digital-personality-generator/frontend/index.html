@@ -3,6 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#050508">
+<meta name="description" content="PersonaIQ — AI-powered Big Five OCEAN personality assessment. Discover your digital self.">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="PersonaIQ">
+<link rel="manifest" href="/manifest.json">
 <title>PersonaIQ - AI Personality Intelligence</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
 <script src="/js/vendor/html2canvas.min.js"></script>
@@ -830,6 +836,48 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:68px;display:flex;ali
   .hero h1{font-size:2.1rem}
   .overview-stats{grid-template-columns:1fr}
   .rr{gap:4px}
+}
+
+/* ===== MOBILE FIXES ===== */
+@media(max-width:768px){
+  /* Share card buttons */
+  #personality-share-card .shi > div:last-child{flex-direction:column!important;}
+  #personality-share-card button{width:100%!important;justify-content:center!important;}
+
+  /* Trailer modal */
+  #trailer-content{padding:1rem!important;}
+  #trailer-bar-top,#trailer-bar-bot{height:50px!important;}
+  #trailer-bar-top{transform:translateY(-50px)!important;}
+  #trailer-bar-bot{transform:translateY(50px)!important;}
+  #trailer-actions{flex-direction:column!important;align-items:stretch!important;}
+  #trailer-actions button{width:100%!important;}
+
+  /* Forgot/Email modals */
+  #forgot-modal > div, #email-modal > div{padding:24px!important;margin:16px!important;}
+
+  /* Profile page */
+  #tab-profile > div:nth-child(3){flex-direction:column!important;}
+  #profile-type-badge{margin-left:0!important;width:100%!important;}
+
+  /* Footer */
+  footer .footer-links{flex-direction:column!important;gap:12px!important;}
+
+  /* Voice buttons in quiz */
+  #pq .qt > div:nth-child(3){flex-direction:column!important;gap:6px!important;}
+
+  /* About/Privacy/Terms/Contact pages */
+  #page-about > div, #page-privacy > div, #page-terms > div, #page-contact > div{padding:5rem 1.2rem 3rem!important;}
+  #page-about h1, #page-privacy h1, #page-terms h1, #page-contact h1{font-size:1.8rem!important;}
+
+  /* Card preview */
+  #card-preview{min-height:260px!important;padding:1.5rem!important;}
+  #card-name{font-size:1.3rem!important;}
+
+  /* Results actions */
+  .ra{gap:8px!important;}
+
+  /* Cinematic trailer text */
+  .trailer-name{font-size:2.5rem!important;}
 }
 
 
