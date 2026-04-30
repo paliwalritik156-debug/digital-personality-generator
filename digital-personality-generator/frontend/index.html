@@ -1226,6 +1226,9 @@ body.light-mode .mob-nav span{background:#7C3A00;}
       <div class="nav-item" onclick="switchTab('profile',this)">
         <span class="nav-item-icon">👤</span>Profile
       </div>
+      <div class="nav-item" onclick="switchTab('compatibility',this)">
+        <span class="nav-item-icon">💞</span>Compatibility
+      </div>
       <div class="sidebar-label">Actions</div>
       <div class="nav-item" onclick="loadQuiz()">
         <span class="nav-item-icon">🚀</span>New Assessment
@@ -1343,6 +1346,20 @@ body.light-mode .mob-nav span{background:#7C3A00;}
           <button class="btn-g" onclick="doLogout()">🚪 Logout</button>
         </div>
       </div>
+
+      <!-- Compatibility Tab -->
+      <div class="dash-section" id="tab-compatibility">
+        <h3>💞 Personality Compatibility</h3>
+        <p>See how compatible you are with different personality types</p>
+        <div id="compat-content" style="margin-top:1.5rem;">
+          <div class="insight-tip" style="margin-bottom:1.5rem;">
+            <h4>🔗 Share Your Compatibility Link</h4>
+            <p style="margin-bottom:12px;">Share this link with a friend — they take the test and you both see your compatibility score!</p>
+            <button onclick="copyCompatLink()" style="padding:10px 20px;background:var(--gr);border:none;border-radius:12px;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:0.88rem;font-weight:600;cursor:pointer;">🔗 Copy My Compatibility Link</button>
+          </div>
+          <div id="compat-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;"></div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -1457,6 +1474,16 @@ body.light-mode .mob-nav span{background:#7C3A00;}
     <div class="rc w"><div class="cl">🏷 Personality Brand</div><div class="bg2" id="rbrnd"></div></div>
     <div class="rc w"><div class="cl">🔮 Evolution Model</div><div class="er" id="revo"></div></div>
     <div class="rc w"><div class="cl">🎬 Personality Movie Trailer <button class="cbtn" onclick="playTrailer()" style="margin-left:8px;background:linear-gradient(135deg,#8B5CF6,#EC4899);color:#fff;border:none;">▶ Play Trailer</button></div><div class="trl" id="rtrl"></div></div>
+    <div class="rc w">
+      <div class="cl">🦁 Your Spirit Animal</div>
+      <div id="animal-result" style="text-align:center;padding:1.5rem 1rem;">
+        <div id="animal-emoji" style="font-size:5rem;margin-bottom:12px;animation:fl 3s ease-in-out infinite;">🐾</div>
+        <div id="animal-name" style="font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;margin-bottom:8px;background:var(--gr);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">—</div>
+        <div id="animal-desc" style="font-size:0.88rem;color:var(--tx2);line-height:1.7;max-width:400px;margin:0 auto 16px;"></div>
+        <div id="animal-traits" style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:16px;"></div>
+        <button onclick="shareAnimal()" style="padding:10px 22px;background:var(--gr);border:none;border-radius:12px;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:0.85rem;font-weight:600;cursor:pointer;">🔗 Share My Animal</button>
+      </div>
+    </div>
     <div class="rc w">
       <div class="cl">🚀 Share Your Result</div>
       <div class="shcard" id="personality-share-card">
@@ -1761,6 +1788,7 @@ function switchTab(tab, el){
   if(tab==='history') loadDashHistory();
   if(tab==='insights') loadInsights();
   if(tab==='profile') loadProfile();
+  if(tab==='compatibility') loadCompatibility();
 }
 function loadDashHistory(){
   api('/api/history').then(function(d){
@@ -2010,7 +2038,10 @@ const ev=r.evolution||{present:'A thoughtful observer navigating self-discovery'
 document.getElementById('revo').innerHTML='<div class="ei"><div class="el" style="color:var(--cy)">Present</div><div class="et">'+ev.present+'</div></div><div class="ea">to</div><div class="ei"><div class="el" style="color:var(--gn)">Future</div><div class="et">'+ev.future+'</div></div><div class="ea">to</div><div class="ei"><div class="el" style="color:var(--pu2)">Path</div><div class="et">'+ev.path+'</div></div>';
 const trl=r.lifeTrailer||{title:'The Architect of Quiet Storms',genre:'Psychological Drama',narrative:'In a world that rewards noise, one person dares to be still. The most powerful revolutions begin within.'};
 document.getElementById('rtrl').innerHTML='<div class="trlt">'+trl.title+'</div><div class="trlg">'+trl.genre+'</div><div class="trln">'+trl.narrative+'</div>';
-PCTX=r;var dom=r.dominantTrait||'openness';applyPersonalityTheme(dom);showPage('pr');setTimeout(function(){updateAvatar(r,badge);},300);}
+PCTX=r;var dom=r.dominantTrait||'openness';applyPersonalityTheme(dom);
+// Render spirit animal
+if(r.scores) renderAnimal(r.scores);
+showPage('pr');setTimeout(function(){updateAvatar(r,badge);},300);}
 function hCard(r){const dom=r.personalityType||TL[r.dominantTrait]||'Balanced';const date=new Date(r.completedAt).toLocaleDateString('en-IN',{year:'numeric',month:'short',day:'numeric'});const pills=TR.map(t=>{const s=r.scores&&r.scores[t];const sc=s?(typeof s==='object'?s.score:s):0;return'<span class="hip">'+TL[t].slice(0,3)+': '+sc+'%</span>';}).join('');return'<div class="hi" onclick="viewR('+JSON.stringify(r.sessionId||r._id)+')"><div class="hil"><h4>'+dom+'</h4><p>'+date+'</p><div class="hips">'+pills+'</div></div><div class="hia">to</div></div>';}
 async function loadHist(){
   const d=await api('/api/history');
@@ -2518,6 +2549,111 @@ function shareTrailerTwitter(){
   var type = _trailerResult ? _trailerResult.personalityType : 'my personality';
   var text = '🎬 Just watched my PersonaIQ personality movie trailer!\n\nI am "'+type+'"\n\nDiscover yours 👇';
   window.open('https://twitter.com/intent/tweet?text='+encodeURIComponent(text)+'&url='+encodeURIComponent('https://digital-personality-generator.onrender.com'),'_blank');
+}
+
+// ===== SPIRIT ANIMAL =====
+var ANIMALS = [
+  {name:'The Wolf',emoji:'🐺',desc:'Independent, loyal, and strategic. You lead through quiet strength and protect those you love. You thrive in close-knit groups but need your solitude.',traits:['Independent','Loyal','Strategic'],match:function(s){return s.openness>50&&s.conscientiousness>55&&s.agreeableness<60&&s.extraversion<55;}},
+  {name:'The Eagle',emoji:'🦅',desc:'Visionary and free-spirited. You see the big picture others miss. Your creativity and curiosity take you to heights few dare to reach.',traits:['Visionary','Creative','Bold'],match:function(s){return s.openness>70&&s.extraversion>55&&s.neuroticism<50;}},
+  {name:'The Dolphin',emoji:'🐬',desc:'Playful, empathetic, and deeply social. You bring joy wherever you go and have an extraordinary ability to connect with others.',traits:['Empathetic','Social','Joyful'],match:function(s){return s.extraversion>65&&s.agreeableness>65&&s.neuroticism<55;}},
+  {name:'The Owl',emoji:'🦉',desc:'Wise, analytical, and observant. You process deeply before acting. Your insights are rare and your judgment is trusted by all.',traits:['Wise','Analytical','Patient'],match:function(s){return s.openness>60&&s.conscientiousness>60&&s.extraversion<50;}},
+  {name:'The Lion',emoji:'🦁',desc:'Confident, courageous, and commanding. You were born to lead. Your presence fills the room and your determination is unmatched.',traits:['Confident','Leader','Brave'],match:function(s){return s.extraversion>70&&s.conscientiousness>60&&s.agreeableness<65;}},
+  {name:'The Fox',emoji:'🦊',desc:'Clever, adaptable, and resourceful. You navigate complex situations with ease. Your wit and charm open doors others cannot find.',traits:['Clever','Adaptable','Charming'],match:function(s){return s.openness>60&&s.extraversion>50&&s.conscientiousness<65;}},
+  {name:'The Elephant',emoji:'🐘',desc:'Compassionate, reliable, and deeply empathetic. You never forget and never abandon. Your emotional intelligence is extraordinary.',traits:['Compassionate','Reliable','Empathetic'],match:function(s){return s.agreeableness>70&&s.conscientiousness>60&&s.neuroticism<50;}},
+  {name:'The Panther',emoji:'🐆',desc:'Mysterious, intense, and fiercely independent. You move in silence and strike with precision. Depth and passion define you.',traits:['Mysterious','Intense','Passionate'],match:function(s){return s.openness>55&&s.extraversion<45&&s.neuroticism>50;}},
+  {name:'The Butterfly',emoji:'🦋',desc:'Transformative, open-minded, and beautifully complex. You embrace change and inspire others through your evolution.',traits:['Open','Transformative','Inspiring'],match:function(s){return s.openness>75&&s.agreeableness>60&&s.extraversion>50;}},
+  {name:'The Bear',emoji:'🐻',desc:'Strong, protective, and deeply grounded. You are the rock others lean on. Your calm strength and reliability are legendary.',traits:['Strong','Protective','Grounded'],match:function(s){return s.conscientiousness>70&&s.agreeableness>55&&s.extraversion<60;}},
+];
+
+function getAnimal(scores){
+  var s={
+    openness: typeof scores.openness==='object'?scores.openness.score:scores.openness,
+    conscientiousness: typeof scores.conscientiousness==='object'?scores.conscientiousness.score:scores.conscientiousness,
+    extraversion: typeof scores.extraversion==='object'?scores.extraversion.score:scores.extraversion,
+    agreeableness: typeof scores.agreeableness==='object'?scores.agreeableness.score:scores.agreeableness,
+    neuroticism: typeof scores.neuroticism==='object'?scores.neuroticism.score:scores.neuroticism,
+  };
+  for(var i=0;i<ANIMALS.length;i++){if(ANIMALS[i].match(s))return ANIMALS[i];}
+  // Default based on dominant trait
+  var dom=Object.entries(s).sort(function(a,b){return b[1]-a[1];})[0][0];
+  var defaults={openness:ANIMALS[1],conscientiousness:ANIMALS[9],extraversion:ANIMALS[2],agreeableness:ANIMALS[6],neuroticism:ANIMALS[7]};
+  return defaults[dom]||ANIMALS[0];
+}
+
+function renderAnimal(scores){
+  var a=getAnimal(scores);
+  var el=document.getElementById('animal-emoji');
+  var nm=document.getElementById('animal-name');
+  var desc=document.getElementById('animal-desc');
+  var traits=document.getElementById('animal-traits');
+  if(el)el.textContent=a.emoji;
+  if(nm)nm.textContent=a.name;
+  if(desc)desc.textContent=a.desc;
+  if(traits)traits.innerHTML=a.traits.map(function(t){return'<span style="background:var(--glass);border:1px solid var(--bdr);padding:4px 12px;border-radius:20px;font-size:0.75rem;color:var(--pu2);">'+t+'</span>';}).join('');
+  window._currentAnimal=a;
+}
+
+function shareAnimal(){
+  var a=window._currentAnimal;
+  if(!a)return;
+  var text='🦁 My PersonaIQ Spirit Animal is '+a.name+' '+a.emoji+'\n\n"'+a.desc.slice(0,80)+'..."\n\nDiscover yours 👇\nhttps://digital-personality-generator.onrender.com';
+  if(navigator.share)navigator.share({title:'My Spirit Animal',text:text});
+  else navigator.clipboard.writeText(text).then(function(){toast('Copied to clipboard! 🔗');});
+}
+
+// ===== PERSONALITY COMPATIBILITY =====
+var COMPAT_TYPES = [
+  {type:'The Visionary',traits:{openness:80,conscientiousness:50,extraversion:65,agreeableness:60,neuroticism:40},emoji:'🔭'},
+  {type:'The Guardian',traits:{openness:40,conscientiousness:85,extraversion:45,agreeableness:75,neuroticism:35},emoji:'🛡️'},
+  {type:'The Performer',traits:{openness:65,conscientiousness:55,extraversion:90,agreeableness:70,neuroticism:45},emoji:'🎭'},
+  {type:'The Analyst',traits:{openness:70,conscientiousness:80,extraversion:35,agreeableness:45,neuroticism:40},emoji:'🔬'},
+  {type:'The Empath',traits:{openness:60,conscientiousness:60,extraversion:55,agreeableness:90,neuroticism:55},emoji:'💚'},
+  {type:'The Rebel',traits:{openness:85,conscientiousness:35,extraversion:70,agreeableness:40,neuroticism:50},emoji:'⚡'},
+];
+
+function calcCompat(s1,s2){
+  var traits=['openness','conscientiousness','extraversion','agreeableness','neuroticism'];
+  var total=0;
+  traits.forEach(function(t){
+    var a=typeof s1[t]==='object'?s1[t].score:s1[t];
+    var b=s2[t];
+    total+=100-Math.abs(a-b);
+  });
+  return Math.round(total/5);
+}
+
+function getCompatLabel(score){
+  if(score>=85)return{label:'Soulmate Match 💫',color:'#10B981'};
+  if(score>=75)return{label:'Great Match 🌟',color:'#8B5CF6'};
+  if(score>=65)return{label:'Good Match ✨',color:'#06B6D4'};
+  if(score>=55)return{label:'Moderate Match 🤝',color:'#F59E0B'};
+  return{label:'Challenging Match 🔥',color:'#EC4899'};
+}
+
+function loadCompatibility(){
+  var grid=document.getElementById('compat-grid');
+  if(!grid)return;
+  if(!PCTX||!PCTX.scores){grid.innerHTML='<p style="color:var(--tx3);text-align:center;padding:2rem">Complete an assessment first to see compatibility!</p>';return;}
+  grid.innerHTML=COMPAT_TYPES.map(function(ct){
+    var score=calcCompat(PCTX.scores,ct.traits);
+    var lbl=getCompatLabel(score);
+    var pct=score;
+    return'<div style="background:var(--glass);border:1px solid var(--bdr);border-radius:16px;padding:1.2rem;text-align:center;transition:0.3s;" onmouseover="this.style.borderColor=\''+lbl.color+'\'" onmouseout="this.style.borderColor=\'var(--bdr)\'">'
+      +'<div style="font-size:2rem;margin-bottom:8px;">'+ct.emoji+'</div>'
+      +'<div style="font-family:Syne,sans-serif;font-weight:700;font-size:0.9rem;margin-bottom:4px;">'+ct.type+'</div>'
+      +'<div style="font-size:1.8rem;font-weight:800;color:'+lbl.color+';font-family:Syne,sans-serif;">'+pct+'%</div>'
+      +'<div style="font-size:0.72rem;color:'+lbl.color+';margin-bottom:10px;">'+lbl.label+'</div>'
+      +'<div style="background:rgba(255,255,255,0.08);border-radius:10px;height:6px;overflow:hidden;">'
+      +'<div style="width:'+pct+'%;height:100%;background:'+lbl.color+';border-radius:10px;transition:width 1s ease;"></div>'
+      +'</div>'
+      +'</div>';
+  }).join('');
+}
+
+function copyCompatLink(){
+  var link='https://digital-personality-generator.onrender.com';
+  var text='Take this personality test and see our compatibility! 💞\n'+link;
+  navigator.clipboard.writeText(text).then(function(){toast('Compatibility link copied! 💞');});
 }
 
 // Contact form
