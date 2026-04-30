@@ -3,6 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const mongoose = require('mongoose');
+const passport = require('./backend/middleware/passport');
 
 const app = express();
 
@@ -22,6 +23,7 @@ mongoose.connect(process.env.MONGODB_URI, {
 app.use(cors({ origin: '*', credentials: true }));
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
+app.use(passport.initialize());
 app.use(express.static(path.join(__dirname, 'frontend')));
 
 app.use('/api/auth', require('./backend/routes/auth'));
