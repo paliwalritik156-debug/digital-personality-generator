@@ -263,6 +263,7 @@ const showResults = result => {
   setTimeout(()=>{ $$('.trait-bar-fill').forEach(b=>{ b.style.width=`${b.dataset.score}%`; }); },100);
   buildRadarChart(result.scores);
   $('#btn-download-pdf').onclick = () => downloadPDF(result.sessionId);
+  $('#btn-email-report').onclick = () => openEmailModal(result.sessionId);
   $('#btn-retake-quiz').onclick = startQuiz;
   $('#btn-view-history').onclick = showHistory;
 };
@@ -285,6 +286,44 @@ const downloadPDF = async sessionId => {
     URL.revokeObjectURL(url);
     toast('PDF downloaded! 📄','success');
   } catch(err) { toast('PDF failed.','error'); }
+};
+
+const openEmailModal = (sessionId) => {
+  const modal = $('#email-modal');
+  const user = getUser();
+  // Pre-fill with user's email
+  $('#email-input').value = user ? user.email : '';
+  modal.style.display = 'flex';
+
+  $('#btn-close-modal').onclick = () => { modal.style.display = 'none'; };
+  modal.onclick = (e) => { if (e.target === modal) modal.style.display = 'none'; };
+
+  $('#btn-send-email').onclick = async () => {
+    const email = $('#email-input').value.trim();
+    if (!email) { toast('Enter an email address', 'error'); return; }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) { toast('Invalid email address', 'error'); return; }
+
+    $('#btn-send-email').disabled = true;
+    $('#btn-send-email').textContent = 'Sending…';
+
+    try {
+      const res = await fetch(`${API_BASE}/result/${sessionId}/email`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${getToken()}` },
+        body: JSON.stringify({ email })
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || 'Failed to send');
+      modal.style.display = 'none';
+      toast('Report sent to your email! 📧', 'success');
+    } catch(err) {
+      toast(err.message, 'error');
+    } finally {
+      $('#btn-send-email').disabled = false;
+      $('#btn-send-email').textContent = 'Send Report →';
+    }
+  };
 };
 
 const showHistory = async () => {

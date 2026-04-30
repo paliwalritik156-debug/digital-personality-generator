@@ -136,8 +136,25 @@
     <div class="suggestions-card"><h3>💡 Personalized Suggestions</h3><div class="suggestions-list" id="result-suggestions"></div></div>
     <div class="results-actions">
       <button class="btn btn-primary" id="btn-download-pdf">📄 Download PDF Report</button>
+      <button class="btn btn-outline" id="btn-email-report">📧 Email Report</button>
       <button class="btn btn-outline" id="btn-retake-quiz">↺ Retake Assessment</button>
       <button class="btn btn-ghost" id="btn-view-history">📂 View History</button>
+    </div>
+  </div>
+</div>
+
+<!-- Email Modal -->
+<div id="email-modal" style="display:none;position:fixed;inset:0;background:rgba(8,11,20,0.85);z-index:9990;align-items:center;justify-content:center;backdrop-filter:blur(4px);">
+  <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-xl);padding:36px;width:100%;max-width:420px;margin:24px;box-shadow:var(--shadow-glow);animation:fadeInUp .3s ease;">
+    <h3 style="font-family:var(--font-display);font-size:1.3rem;font-weight:800;margin-bottom:8px;">📧 Email Your Report</h3>
+    <p style="color:var(--text-secondary);font-size:.9rem;margin-bottom:24px;">We'll send your full PDF report to your email address.</p>
+    <div class="form-group">
+      <label for="email-input">Email Address</label>
+      <input type="email" id="email-input" placeholder="you@example.com" autocomplete="email"/>
+    </div>
+    <div style="display:flex;gap:12px;margin-top:8px;">
+      <button class="btn btn-primary btn-full" id="btn-send-email">Send Report →</button>
+      <button class="btn btn-ghost" id="btn-close-modal" style="flex-shrink:0;">Cancel</button>
     </div>
   </div>
 </div>

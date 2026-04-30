@@ -4,6 +4,7 @@ const Result = require('../models/Result');
 const Question = require('../models/Question');
 const User = require('../models/User');
 const { processPersonalityResults } = require('../../utils/scoringEngine');
+const { sendReportEmail } = require('../../utils/emailService');
 
 const generateSessionId = () => Date.now().toString(36) + Math.random().toString(36).substr(2, 9);
 
@@ -108,4 +109,27 @@ const downloadPDF = async (req, res) => {
   }
 };
 
-module.exports = { submitAnswers, getResult, getHistory, downloadPDF };
+const emailPDF = async (req, res) => {
+  try {
+    const result = await Result.findOne({ sessionId: req.params.sessionId, userId: req.user._id });
+    if (!result) return res.status(404).json({ success: false, message: 'Result not found.' });
+
+    const user = req.user;
+    const toEmail = req.body.email || user.email;
+
+    // Basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(toEmail)) {
+      return res.status(400).json({ success: false, message: 'Invalid email address.' });
+    }
+
+    await sendReportEmail(toEmail, user.name, result, user);
+
+    res.json({ success: true, message: `Report sent to ${toEmail}` });
+  } catch (error) {
+    console.error('Email PDF error:', error);
+    res.status(500).json({ success: false, message: 'Failed to send email. Please try again.' });
+  }
+};
+
+module.exports = { submitAnswers, getResult, getHistory, downloadPDF, emailPDF };
