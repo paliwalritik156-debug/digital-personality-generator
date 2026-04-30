@@ -1141,8 +1141,9 @@ body.light-mode .mob-nav span{background:#7C3A00;}
       <div><div class="stn">OCEAN</div><div class="stl">Model</div></div>
     </div>
   </div>
-  <!-- Footer -->
-  <footer style="border-top:1px solid rgba(255,255,255,0.06);padding:40px 2rem;text-align:center;position:relative;z-index:1;">
+</div>
+<!-- Footer - outside page-home, only shown when home is visible -->
+<footer id="main-footer" style="border-top:1px solid rgba(255,255,255,0.06);padding:40px 2rem;text-align:center;position:relative;z-index:1;display:none;">
     <div style="max-width:900px;margin:0 auto;">
       <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;background:linear-gradient(135deg,#8B5CF6,#06B6D4,#EC4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:16px;">✦ PersonaIQ</div>
       <div style="display:flex;gap:24px;justify-content:center;flex-wrap:wrap;margin-bottom:20px;">
@@ -1153,8 +1154,7 @@ body.light-mode .mob-nav span{background:#7C3A00;}
       </div>
       <p style="font-size:0.75rem;color:var(--tx3);">© 2025 PersonaIQ. All rights reserved. Built with ❤️ using the Big Five OCEAN Model.</p>
     </div>
-  </footer>
-</div>
+</footer>
 <div id="pa" class="page hidden">
   <div class="al">
     <div class="ao ao1"></div><div class="ao ao2"></div>
@@ -1462,7 +1462,7 @@ body.light-mode .mob-nav span{background:#7C3A00;}
     <!-- Global Comparison -->
     <div id="global-comparison" style="display:none;margin-top:16px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;"></div>
   </div>
-  <div class="rg">
+  <div class="rg" style="display:block!important;">
     <div class="rc w"><div class="cl">📝 Summary <button class="cbtn" onclick="copyEl('rsum')">Copy</button><button class="cbtn" onclick="listenToReport()" id="btn-listen" style="margin-left:6px;">🔊 Listen</button></div><div class="st" id="rsum"></div></div>
     <div class="rc w">
       <div class="cl">🧬 Your AI Avatar</div>
@@ -1815,6 +1815,9 @@ function showPage(n,sub){
   // Always hide page-home explicitly
   var ph=document.getElementById('page-home');
   if(ph&&n!=='page-home') ph.classList.add('hidden');
+  // Show/hide footer
+  var footer=document.getElementById('main-footer');
+  if(footer) footer.style.display=(n==='page-home')?'block':'none';
   var current=document.querySelector('.page:not(.hidden)');
   if(current){
     current.classList.add('page-exit');
