@@ -70,7 +70,11 @@ const getResult = async (req, res) => {
 
 const getHistory = async (req, res) => {
   try {
-    const results = await Result.find({ userId: req.user._id }).sort({ completedAt: -1 }).select('sessionId scores personalityType dominantTraits completedAt').limit(20);
+    const results = await Result.find({ userId: req.user._id })
+      .sort({ completedAt: -1 })
+      .select('sessionId scores personalityType dominantTraits completedAt')
+      .limit(20)
+      .lean(); // Performance: returns plain JS objects
     res.json({ success: true, count: results.length, results });
   } catch (error) {
     res.status(500).json({ success: false, message: 'Failed to fetch history.' });
