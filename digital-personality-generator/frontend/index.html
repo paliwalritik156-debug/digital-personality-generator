@@ -838,6 +838,23 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:68px;display:flex;ali
   .rr{gap:4px}
 }
 
+/* ===== LIGHT MODE ===== */
+body.light-mode{
+  --void:#f0f0f8;--deep:#e8e8f0;--glass:rgba(0,0,0,0.04);--glass2:rgba(0,0,0,0.07);
+  --bdr:rgba(0,0,0,0.1);--bdr2:rgba(139,92,246,0.4);
+  --tx:#1a1a2e;--tx2:#4a4668;--tx3:#8888aa;
+  background:#f0f0f8;color:#1a1a2e;
+}
+body.light-mode nav{background:rgba(240,240,248,0.85);}
+body.light-mode .logo{filter:none;}
+body.light-mode .sidebar{background:rgba(240,240,248,0.95);}
+body.light-mode .acard{background:rgba(255,255,255,0.9);}
+body.light-mode .fi input{background:rgba(0,0,0,0.04);color:#1a1a2e;}
+body.light-mode .bsub{color:#fff;}
+body.light-mode body::before{opacity:0.3;}
+body.light-mode .rc,.body.light-mode .insight-tip{background:rgba(255,255,255,0.7);}
+body.light-mode #trailer-modal{background:#000;}
+
 /* ===== MOBILE FIXES ===== */
 @media(max-width:768px){
   /* Share card buttons */
@@ -1004,7 +1021,10 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:68px;display:flex;ali
 <div id="cur"></div><div id="cur-ring"></div>
 <nav>
   <div class="logo" onclick="goHome()"><div class="logo-i">🧠</div>PersonaIQ</div>
-  <div class="nav-r" id="nav-area"></div>
+  <div style="display:flex;align-items:center;gap:8px;">
+    <button id="theme-toggle" onclick="toggleDarkLight()" title="Toggle Dark/Light Mode" style="background:var(--glass);border:1px solid var(--bdr);color:var(--tx);width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:0.3s;flex-shrink:0;">🌙</button>
+    <div class="nav-r" id="nav-area"></div>
+  </div>
   <div class="mob-nav" onclick="toggleMobMenu()" id="mob-hamburger">
     <span></span><span></span><span></span>
   </div>
@@ -1181,6 +1201,18 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:68px;display:flex;ali
       <div class="dash-section" id="tab-history">
         <h3>Assessment History</h3>
         <p>All your past personality assessments</p>
+        <!-- Personality Over Time Chart -->
+        <div id="pot-section" style="display:none;background:var(--glass);border:1px solid var(--bdr);border-radius:18px;padding:1.5rem;margin-bottom:1.5rem;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:8px;">
+            <div>
+              <h4 style="font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;">📈 Personality Over Time</h4>
+              <p style="font-size:0.78rem;color:var(--tx3);margin-top:2px;">How your traits have evolved across assessments</p>
+            </div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;" id="pot-legend"></div>
+          </div>
+          <div style="position:relative;height:220px;"><canvas id="pot-chart"></canvas></div>
+          <div id="pot-insight" style="margin-top:12px;font-size:0.82rem;color:var(--tx2);background:rgba(139,92,246,0.08);border:1px solid rgba(139,92,246,0.15);border-radius:10px;padding:10px 14px;display:none;"></div>
+        </div>
         <div id="dash-history-list"></div>
       </div>
       <div class="dash-section" id="tab-profile">
@@ -1654,6 +1686,9 @@ function loadDashHistory(){
     var h=d.results||d.data||[];
     if(!h.length){l.innerHTML='<p style="color:var(--tx3);text-align:center;padding:3rem">No assessments yet</p>';return;}
     l.innerHTML=h.map(function(r){return hCard(r);}).join('');
+    // Build POT chart in history tab
+    if(h.length>=2) setTimeout(function(){buildPOTChart(h);},200);
+    else { var s=document.getElementById('pot-section'); if(s) s.style.display='none'; }
   });
 }
 function loadInsights(){
@@ -1710,6 +1745,26 @@ async function doLogin(){const e=document.getElementById('le').value.trim(),p=do
 async function doRegister(){const n=document.getElementById('rn').value.trim(),e=document.getElementById('re').value.trim(),p=document.getElementById('rp').value;if(!n||!e||!p)return aMsg('Please fill all fields');if(p.length<6)return aMsg('Password min 6 chars');const d=await api('/api/auth/register','POST',{name:n,email:e,password:p});if(d.success){saveS(d);showPage('pd');toast('Account created!');}else aMsg(d.message||'Failed');}
 function saveS(d){TK=d.token;US=d.user;localStorage.setItem('piq_token',TK);localStorage.setItem('piq_user',JSON.stringify(US));updateNav();}
 function doLogout(){TK=null;US=null;localStorage.removeItem('piq_token');localStorage.removeItem('piq_user');resetTheme();updateNav();showPage('page-home');toast('Logged out');}
+
+// ===== DARK/LIGHT MODE =====
+var _isLight = localStorage.getItem('piq_theme') === 'light';
+function applyThemeMode(){
+  var btn = document.getElementById('theme-toggle');
+  if(_isLight){
+    document.body.classList.add('light-mode');
+    if(btn) btn.textContent = '☀️';
+  } else {
+    document.body.classList.remove('light-mode');
+    if(btn) btn.textContent = '🌙';
+  }
+}
+function toggleDarkLight(){
+  _isLight = !_isLight;
+  localStorage.setItem('piq_theme', _isLight ? 'light' : 'dark');
+  applyThemeMode();
+  toast(_isLight ? '☀️ Light mode' : '🌙 Dark mode');
+}
+applyThemeMode();
 
 // Forgot Password
 function showForgotPassword(){
@@ -1853,7 +1908,99 @@ const trl=r.lifeTrailer||{title:'The Architect of Quiet Storms',genre:'Psycholog
 document.getElementById('rtrl').innerHTML='<div class="trlt">'+trl.title+'</div><div class="trlg">'+trl.genre+'</div><div class="trln">'+trl.narrative+'</div>';
 PCTX=r;var dom=r.dominantTrait||'openness';applyPersonalityTheme(dom);showPage('pr');setTimeout(function(){updateAvatar(r,badge);},300);}
 function hCard(r){const dom=r.personalityType||TL[r.dominantTrait]||'Balanced';const date=new Date(r.completedAt).toLocaleDateString('en-IN',{year:'numeric',month:'short',day:'numeric'});const pills=TR.map(t=>{const s=r.scores&&r.scores[t];const sc=s?(typeof s==='object'?s.score:s):0;return'<span class="hip">'+TL[t].slice(0,3)+': '+sc+'%</span>';}).join('');return'<div class="hi" onclick="viewR('+JSON.stringify(r.sessionId||r._id)+')"><div class="hil"><h4>'+dom+'</h4><p>'+date+'</p><div class="hips">'+pills+'</div></div><div class="hia">to</div></div>';}
-async function loadHist(){const d=await api('/api/history');const l=document.getElementById('hlist');const h=d.results||d.data||[];if(!d.success||!h.length){l.innerHTML='<p style="color:var(--tx3);text-align:center;padding:4rem">No assessments yet. <a onclick="loadQuiz()" style="color:var(--pu2);cursor:pointer;font-weight:500">Take your first</a></p>';return;}l.innerHTML=h.map(r=>hCard(r)).join('');}
+async function loadHist(){
+  const d=await api('/api/history');
+  const l=document.getElementById('hlist');
+  const h=d.results||d.data||[];
+  if(!d.success||!h.length){
+    l.innerHTML='<p style="color:var(--tx3);text-align:center;padding:4rem">No assessments yet. <a onclick="loadQuiz()" style="color:var(--pu2);cursor:pointer;font-weight:500">Take your first</a></p>';
+    document.getElementById('pot-section').style.display='none';
+    return;
+  }
+  l.innerHTML=h.map(r=>hCard(r)).join('');
+  // Build Personality Over Time chart if 2+ results
+  if(h.length>=2) buildPOTChart(h);
+  else document.getElementById('pot-section').style.display='none';
+}
+
+var _potChart = null;
+function buildPOTChart(results){
+  var section = document.getElementById('pot-section');
+  var canvas = document.getElementById('pot-chart');
+  if(!section||!canvas)return;
+  section.style.display='block';
+
+  // Reverse so oldest first
+  var data = results.slice().reverse();
+  var labels = data.map(function(r,i){
+    return new Date(r.completedAt).toLocaleDateString('en-IN',{month:'short',day:'numeric'});
+  });
+
+  var tc={openness:'#8B5CF6',conscientiousness:'#06B6D4',extraversion:'#EC4899',agreeableness:'#10B981',neuroticism:'#F59E0B'};
+  var datasets = TR.map(function(t){
+    return {
+      label: TL[t],
+      data: data.map(function(r){
+        var s=r.scores&&r.scores[t];
+        return s?(typeof s==='object'?s.score:s):0;
+      }),
+      borderColor: tc[t],
+      backgroundColor: tc[t]+'22',
+      borderWidth: 2.5,
+      pointBackgroundColor: tc[t],
+      pointRadius: 5,
+      pointHoverRadius: 8,
+      tension: 0.4,
+      fill: false,
+    };
+  });
+
+  // Legend
+  var legend = document.getElementById('pot-legend');
+  if(legend) legend.innerHTML = TR.map(function(t){
+    return '<span style="display:flex;align-items:center;gap:4px;font-size:0.7rem;color:'+tc[t]+';background:'+tc[t]+'15;border:1px solid '+tc[t]+'33;padding:2px 8px;border-radius:20px;">'+TL[t].slice(0,3)+'</span>';
+  }).join('');
+
+  if(_potChart) _potChart.destroy();
+  _potChart = new Chart(canvas, {
+    type: 'line',
+    data: { labels: labels, datasets: datasets },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      scales: {
+        y: { min:0, max:100, ticks:{color:'#4A4668',stepSize:25}, grid:{color:'rgba(255,255,255,0.05)'}, border:{display:false} },
+        x: { ticks:{color:'#4A4668'}, grid:{display:false}, border:{display:false} }
+      },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor:'#0D0D18', borderColor:'rgba(139,92,246,0.3)', borderWidth:1,
+          titleColor:'#fff', bodyColor:'#8B87A8',
+          callbacks: { label: function(c){ return ' '+c.dataset.label+': '+c.raw+'%'; } }
+        }
+      }
+    }
+  });
+
+  // Insight — biggest change
+  var insights = [];
+  TR.forEach(function(t){
+    var first = data[0].scores&&data[0].scores[t];
+    var last = data[data.length-1].scores&&data[data.length-1].scores[t];
+    var f = first?(typeof first==='object'?first.score:first):0;
+    var l = last?(typeof last==='object'?last.score:last):0;
+    var diff = l - f;
+    if(Math.abs(diff)>=5) insights.push({trait:TL[t],diff:diff,color:tc[t]});
+  });
+  var insightEl = document.getElementById('pot-insight');
+  if(insightEl && insights.length>0){
+    insights.sort(function(a,b){return Math.abs(b.diff)-Math.abs(a.diff);});
+    var top = insights[0];
+    insightEl.style.display='block';
+    insightEl.innerHTML = '💡 <strong>Biggest change:</strong> Your <span style="color:'+top.color+'">'+top.trait+'</span> has '+(top.diff>0?'<span style="color:#10B981">increased by +'+top.diff+'%</span>':'<span style="color:#ff6b6b">decreased by '+top.diff+'%</span>')+' since your first assessment.';
+  }
+}
 async function viewR(id){showPage('pl');animL();CRID=id;const f=await api('/api/result/'+id);clearInterval(li);if(f.success)renderR(f.result||f.data);else toast('Could not load');}
 async function downloadPDF(){if(!CRID)return toast('No result to download');toast('Generating PDF');try{const res=await fetch('/api/result/'+CRID+'/pdf',{headers:{'Authorization':'Bearer '+TK}});if(!res.ok){toast('PDF failed');return;}const blob=await res.blob();const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='PersonaIQ-Report.pdf';a.click();URL.revokeObjectURL(url);toast('PDF Downloaded!');}catch(e){toast('Error: '+e.message);}}
 function openEmailModal(){if(!CRID)return toast('No result to email');const modal=document.getElementById('email-modal');const inp=document.getElementById('email-modal-input');if(US&&US.email)inp.value=US.email;modal.style.display='flex';modal.onclick=function(e){if(e.target===modal)modal.style.display='none';};}
