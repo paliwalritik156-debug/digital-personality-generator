@@ -1271,6 +1271,9 @@ body.light-mode .mob-nav span{background:#7C3A00;}
         </div>
         <div class="sh">Recent Results</div>
         <div id="dhl"></div>
+        <!-- Badges Section -->
+        <div class="sh" style="margin-top:1.5rem;">🏅 Your Achievements</div>
+        <div id="badges-grid" style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px;"></div>
       </div>
       <div class="dash-section" id="tab-insights">
         <h3>AI Insights</h3>
@@ -1505,8 +1508,20 @@ body.light-mode .mob-nav span{background:#7C3A00;}
         </div>
       </div>
     </div>
+
+    <!-- Personality Color Palette -->
     <div class="rc w">
-      <div class="cl">🚀 Share Your Result</div>
+      <div class="cl">🎨 Your Personality Color Palette</div>
+      <div style="padding:1rem 0;">
+        <p style="font-size:0.82rem;color:var(--tx2);margin-bottom:16px;">A unique color palette generated from your personality scores</p>
+        <div id="color-palette" style="display:flex;gap:0;border-radius:16px;overflow:hidden;height:80px;margin-bottom:16px;"></div>
+        <div id="color-codes" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;"></div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <button onclick="downloadPalette()" style="padding:10px 22px;background:var(--gr);border:none;border-radius:12px;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:0.85rem;font-weight:600;cursor:pointer;">⬇️ Download Palette</button>
+          <button onclick="sharePalette()" style="padding:10px 22px;background:rgba(255,255,255,0.08);border:1px solid var(--bdr);border-radius:12px;color:var(--tx);font-family:'Space Grotesk',sans-serif;font-size:0.85rem;cursor:pointer;">🔗 Share</button>
+        </div>
+      </div>
+    </div>
       <div class="shcard" id="personality-share-card">
         <div class="shi">
           <!-- Card Preview -->
@@ -1820,6 +1835,8 @@ function loadDashHistory(){
     // Build POT chart in history tab
     if(h.length>=2) setTimeout(function(){buildPOTChart(h);},200);
     else { var s=document.getElementById('pot-section'); if(s) s.style.display='none'; }
+    // Render badges
+    renderBadges(h);
   });
 }
 function loadInsights(){
@@ -2064,6 +2081,8 @@ PCTX=r;var dom=r.dominantTrait||'openness';applyPersonalityTheme(dom);
 if(r.scores) renderAnimal(r.scores);
 // Render celebrity match
 if(r.scores) renderCelebMatch(r.scores);
+// Render color palette
+if(r.scores) renderColorPalette(r.scores);
 // Generate roast
 setTimeout(function(){generateRoast();},500);
 showPage('pr');setTimeout(function(){updateAvatar(r,badge);},300);}
@@ -2815,6 +2834,122 @@ function shareRoast(){
   var text='😂 My PersonaIQ Personality Roast:\n\n"'+r+'"\n\nGet roasted 👇\nhttps://digital-personality-generator.onrender.com';
   if(navigator.share)navigator.share({title:'My Personality Roast',text:text});
   else navigator.clipboard.writeText(text).then(function(){toast('Roast copied! 😂');});
+}
+
+// ===== PERSONALITY COLOR PALETTE =====
+function scoreToHue(score){return Math.round(score*2.4);}
+function generatePaletteColors(scores){
+  var s={
+    openness:typeof scores.openness==='object'?scores.openness.score:scores.openness,
+    conscientiousness:typeof scores.conscientiousness==='object'?scores.conscientiousness.score:scores.conscientiousness,
+    extraversion:typeof scores.extraversion==='object'?scores.extraversion.score:scores.extraversion,
+    agreeableness:typeof scores.agreeableness==='object'?scores.agreeableness.score:scores.agreeableness,
+    neuroticism:typeof scores.neuroticism==='object'?scores.neuroticism.score:scores.neuroticism,
+  };
+  return [
+    {name:'Openness',hsl:'hsl('+scoreToHue(s.openness)+',70%,55%)',label:TL['openness']},
+    {name:'Conscientiousness',hsl:'hsl('+scoreToHue(s.conscientiousness)+',65%,50%)',label:TL['conscientiousness']},
+    {name:'Extraversion',hsl:'hsl('+scoreToHue(s.extraversion)+',75%,60%)',label:TL['extraversion']},
+    {name:'Agreeableness',hsl:'hsl('+scoreToHue(s.agreeableness)+',60%,55%)',label:TL['agreeableness']},
+    {name:'Neuroticism',hsl:'hsl('+scoreToHue(s.neuroticism)+',55%,50%)',label:TL['neuroticism']},
+    // Blend color
+    {name:'Blend',hsl:'hsl('+Math.round((scoreToHue(s.openness)+scoreToHue(s.extraversion))/2)+',68%,52%)',label:'Your Blend'},
+  ];
+}
+
+function hslToHex(hsl){
+  var m=hsl.match(/hsl\((\d+),(\d+)%,(\d+)%\)/);
+  if(!m)return'#888';
+  var h=parseInt(m[1])/360,s=parseInt(m[2])/100,l=parseInt(m[3])/100;
+  var r,g,b;
+  if(s===0){r=g=b=l;}else{
+    var q=l<0.5?l*(1+s):l+s-l*s,p=2*l-q;
+    function hue2rgb(p,q,t){if(t<0)t+=1;if(t>1)t-=1;if(t<1/6)return p+(q-p)*6*t;if(t<1/2)return q;if(t<2/3)return p+(q-p)*(2/3-t)*6;return p;}
+    r=hue2rgb(p,q,h+1/3);g=hue2rgb(p,q,h);b=hue2rgb(p,q,h-1/3);
+  }
+  return'#'+[r,g,b].map(function(x){return Math.round(x*255).toString(16).padStart(2,'0');}).join('');
+}
+
+function renderColorPalette(scores){
+  var palette=generatePaletteColors(scores);
+  window._palette=palette;
+  var bar=document.getElementById('color-palette');
+  var codes=document.getElementById('color-codes');
+  if(!bar||!codes)return;
+  bar.innerHTML=palette.map(function(c){
+    return'<div style="flex:1;background:'+c.hsl+';position:relative;cursor:pointer;transition:flex 0.3s;" title="'+c.label+'" onmouseover="this.style.flex=\'2\'" onmouseout="this.style.flex=\'1\'"></div>';
+  }).join('');
+  codes.innerHTML=palette.map(function(c){
+    var hex=hslToHex(c.hsl);
+    return'<div onclick="navigator.clipboard.writeText(\''+hex+'\').then(function(){toast(\'Copied '+hex+'! 📋\')})" style="background:'+c.hsl+';padding:6px 12px;border-radius:8px;cursor:pointer;font-size:0.72rem;font-weight:700;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,0.5);" title="Click to copy">'+hex+'</div>';
+  }).join('');
+}
+
+function downloadPalette(){
+  var palette=window._palette;
+  if(!palette)return;
+  var canvas=document.createElement('canvas');
+  canvas.width=600;canvas.height=200;
+  var ctx=canvas.getContext('2d');
+  var w=600/palette.length;
+  palette.forEach(function(c,i){
+    ctx.fillStyle=c.hsl;
+    ctx.fillRect(i*w,0,w,160);
+    ctx.fillStyle='rgba(0,0,0,0.6)';
+    ctx.fillRect(i*w,160,w,40);
+    ctx.fillStyle='#fff';
+    ctx.font='bold 11px Arial';
+    ctx.textAlign='center';
+    ctx.fillText(hslToHex(c.hsl),i*w+w/2,178);
+    ctx.font='10px Arial';
+    ctx.fillText(c.label.slice(0,8),i*w+w/2,192);
+  });
+  // Add title
+  ctx.fillStyle='rgba(0,0,0,0.3)';ctx.fillRect(0,0,600,30);
+  ctx.fillStyle='#fff';ctx.font='bold 13px Arial';ctx.textAlign='center';
+  ctx.fillText('PersonaIQ — My Personality Color Palette',300,20);
+  var a=document.createElement('a');a.download='PersonaIQ-Palette.png';a.href=canvas.toDataURL();a.click();
+  toast('Palette downloaded! 🎨');
+}
+
+function sharePalette(){
+  var text='🎨 My PersonaIQ Personality Color Palette!\n\nEvery color represents a personality trait.\nDiscover yours 👇\nhttps://digital-personality-generator.onrender.com';
+  if(navigator.share)navigator.share({title:'My Personality Palette',text:text});
+  else navigator.clipboard.writeText(text).then(function(){toast('Copied! 🔗');});
+}
+
+// ===== ACHIEVEMENT BADGES =====
+var ALL_BADGES = [
+  {id:'first_test',emoji:'🧬',name:'First Steps',desc:'Completed your first assessment',check:function(h){return h.length>=1;}},
+  {id:'five_tests',emoji:'🔬',name:'Researcher',desc:'Completed 5 assessments',check:function(h){return h.length>=5;}},
+  {id:'ten_tests',emoji:'🏆',name:'Personality Expert',desc:'Completed 10 assessments',check:function(h){return h.length>=10;}},
+  {id:'high_open',emoji:'🎨',name:'Creative Soul',desc:'Scored 80%+ in Openness',check:function(h){if(!h.length)return false;var s=h[0].scores;var v=s&&s.openness?(typeof s.openness==='object'?s.openness.score:s.openness):0;return v>=80;}},
+  {id:'high_con',emoji:'📋',name:'Perfectionist',desc:'Scored 80%+ in Conscientiousness',check:function(h){if(!h.length)return false;var s=h[0].scores;var v=s&&s.conscientiousness?(typeof s.conscientiousness==='object'?s.conscientiousness.score:s.conscientiousness):0;return v>=80;}},
+  {id:'high_ext',emoji:'🌟',name:'Social Butterfly',desc:'Scored 80%+ in Extraversion',check:function(h){if(!h.length)return false;var s=h[0].scores;var v=s&&s.extraversion?(typeof s.extraversion==='object'?s.extraversion.score:s.extraversion):0;return v>=80;}},
+  {id:'high_agr',emoji:'💚',name:'Peacemaker',desc:'Scored 80%+ in Agreeableness',check:function(h){if(!h.length)return false;var s=h[0].scores;var v=s&&s.agreeableness?(typeof s.agreeableness==='object'?s.agreeableness.score:s.agreeableness):0;return v>=80;}},
+  {id:'low_neu',emoji:'🧘',name:'Zen Master',desc:'Scored below 30% in Neuroticism',check:function(h){if(!h.length)return false;var s=h[0].scores;var v=s&&s.neuroticism?(typeof s.neuroticism==='object'?s.neuroticism.score:s.neuroticism):100;return v<=30;}},
+  {id:'consistent',emoji:'🎯',name:'Consistent',desc:'Took 3+ tests with similar results',check:function(h){if(h.length<3)return false;var scores=h.slice(0,3).map(function(r){var s=r.scores&&r.scores.openness;return s?(typeof s==='object'?s.score:s):0;});var avg=scores.reduce(function(a,b){return a+b;},0)/scores.length;return scores.every(function(s){return Math.abs(s-avg)<15;});}},
+  {id:'explorer',emoji:'🌍',name:'Explorer',desc:'Tried all personality themes',check:function(h){return h.length>=2;}},
+];
+
+function renderBadges(history){
+  var grid=document.getElementById('badges-grid');
+  if(!grid)return;
+  var earned=ALL_BADGES.filter(function(b){return b.check(history);});
+  var locked=ALL_BADGES.filter(function(b){return !b.check(history);});
+  if(earned.length===0&&locked.length===0){grid.innerHTML='<p style="color:var(--tx3);font-size:0.82rem;">Complete assessments to earn badges!</p>';return;}
+  grid.innerHTML=earned.map(function(b){
+    return'<div title="'+b.desc+'" style="background:linear-gradient(135deg,rgba(139,92,246,0.15),rgba(6,182,212,0.1));border:1px solid rgba(139,92,246,0.3);border-radius:12px;padding:10px 14px;display:flex;align-items:center;gap:8px;cursor:default;">'
+      +'<span style="font-size:1.4rem;">'+b.emoji+'</span>'
+      +'<div><div style="font-size:0.78rem;font-weight:700;color:var(--pu2);">'+b.name+'</div><div style="font-size:0.65rem;color:var(--tx3);">'+b.desc+'</div></div>'
+      +'</div>';
+  }).join('')
+  +locked.slice(0,4).map(function(b){
+    return'<div title="Locked: '+b.desc+'" style="background:var(--glass);border:1px solid var(--bdr);border-radius:12px;padding:10px 14px;display:flex;align-items:center;gap:8px;opacity:0.4;cursor:default;filter:grayscale(1);">'
+      +'<span style="font-size:1.4rem;">'+b.emoji+'</span>'
+      +'<div><div style="font-size:0.78rem;font-weight:700;color:var(--tx2);">'+b.name+'</div><div style="font-size:0.65rem;color:var(--tx3);">🔒 '+b.desc+'</div></div>'
+      +'</div>';
+  }).join('');
 }
 
 // Contact form
