@@ -1343,6 +1343,8 @@ body.light-mode #trailer-modal{background:#000;}
     <h2 id="rnt">Personality Profile</h2>
     <div class="rdt" id="rd"></div>
     <div class="pb" id="rdom">Balanced</div>
+    <!-- Global Comparison -->
+    <div id="global-comparison" style="display:none;margin-top:16px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;"></div>
   </div>
   <div class="rg">
     <div class="rc w"><div class="cl">📝 Summary <button class="cbtn" onclick="copyEl('rsum')">Copy</button><button class="cbtn" onclick="listenToReport()" id="btn-listen" style="margin-left:6px;">🔊 Listen</button></div><div class="st" id="rsum"></div></div>
@@ -1878,6 +1880,28 @@ if(cardDominant)cardDominant.innerHTML=r.dominantTraits?r.dominantTraits.slice(0
 RC=r;
 if(window._radarChart)window._radarChart.destroy();
 window._radarChart=new Chart(document.getElementById('rc2'),{type:'radar',data:{labels:TR.map(t=>TL[t]),datasets:[{data:TR.map(t=>gs(r.scores,t)),backgroundColor:'rgba(139,92,246,0.1)',borderColor:'#8B5CF6',pointBackgroundColor:TR.map(t=>TC[t]),pointRadius:5,borderWidth:2}]},options:{scales:{r:{min:0,max:100,ticks:{color:'#4A4668',stepSize:25,font:{size:9}},grid:{color:'rgba(255,255,255,0.05)'},pointLabels:{color:'#8B87A8',font:{size:10}}}},plugins:{legend:{display:false}}}});
+
+// Load global comparison
+if(r.sessionId){
+  api('/api/result/'+r.sessionId+'/global-stats').then(function(d){
+    if(!d.success||!d.comparisons)return;
+    var tc={openness:'#8B5CF6',conscientiousness:'#06B6D4',extraversion:'#EC4899',agreeableness:'#10B981',neuroticism:'#F59E0B'};
+    var el=document.getElementById('global-comparison');
+    if(!el)return;
+    el.style.display='flex';
+    el.innerHTML=TR.map(function(t){
+      var c=d.comparisons[t];
+      if(!c)return'';
+      var pct=c.percentile;
+      var label=pct>=75?'Top '+(100-pct)+'%':pct<=25?'Bottom '+pct+'%':'Average';
+      return'<div style="background:'+tc[t]+'15;border:1px solid '+tc[t]+'33;border-radius:12px;padding:8px 14px;text-align:center;">'
+        +'<div style="font-size:0.65rem;color:'+tc[t]+';text-transform:uppercase;letter-spacing:0.1em;font-weight:600;">'+TL[t].slice(0,5)+'</div>'
+        +'<div style="font-family:Syne,sans-serif;font-size:1.1rem;font-weight:800;color:'+tc[t]+';">'+pct+'<span style="font-size:0.6rem">th</span></div>'
+        +'<div style="font-size:0.62rem;color:rgba(255,255,255,0.4);">percentile</div>'
+        +'</div>';
+    }).join('');
+  }).catch(function(){});
+}
 document.getElementById('rtb').innerHTML=TR.map(t=>{const sc=gs(r.scores,t);return'<div class="tr"><span class="tn">'+TL[t]+'</span><div class="tt"><div class="tf2" id="tf-'+t+'" style="background:'+TC[t]+'" data-w="'+sc+'"></div></div><span class="tp2">'+sc+'%</span></div>';}).join('');
 setTimeout(()=>TR.forEach(t=>{const el=document.getElementById('tf-'+t);if(el)el.style.width=el.getAttribute('data-w')+'%';}),100);
 const intel=r.intelligenceScores||{creativity:7,leadership:6,analytical:7};

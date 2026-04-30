@@ -1,20 +1,112 @@
-# 🧬 Digital Personality Generator
+# PersonaIQ — AI Personality Intelligence Platform
 
-A full-stack web application for personality assessment based on the **Big Five OCEAN Model**.
+> Discover your digital self with the scientifically validated Big Five OCEAN model.
+
+🔗 **Live Demo:** [digital-personality-generator.onrender.com](https://digital-personality-generator.onrender.com)
 
 ---
 
-## 🏗️ Tech Stack
+## ✨ Features
 
-| Layer      | Technology                         |
-|------------|------------------------------------|
-| Backend    | Node.js + Express.js               |
-| Frontend   | HTML5, CSS3, Vanilla JavaScript    |
-| Database   | MongoDB with Mongoose ODM          |
-| Auth       | JWT (jsonwebtoken) + bcryptjs      |
-| Charts     | Chart.js (Radar Chart)             |
-| PDF        | pdfkit                             |
-| Styling    | Custom CSS (dark cosmic theme)     |
+### 🧬 Core Assessment
+- **25-question Big Five OCEAN assessment** — Openness, Conscientiousness, Extraversion, Agreeableness, Neuroticism
+- Instant AI-generated personality type, summary, and personalized suggestions
+- Radar chart visualization of trait scores
+
+### 🎬 Unique Features
+- **Cinematic Movie Trailer** — Full-screen dramatic reveal with audio effects (boom, impact, whoosh), particle animations, and cinematic bars
+- **AI Digital Twin** — 3D animated avatar representing your personality (Three.js)
+- **Voice Features** — Read questions aloud, answer by voice (1-5), listen to your full report
+- **Shareable Personality Card** — Download as PNG, share on WhatsApp/Twitter
+
+### 📊 Analytics
+- **Personality Over Time** — Line chart showing trait evolution across multiple assessments
+- **Global Comparison** — Percentile ranking vs all users (e.g., "74th percentile in Openness")
+
+### 📧 Reports
+- **PDF Report** — Download detailed personality report
+- **Email Report** — Send PDF to any email via Resend
+
+### 🔐 Auth & Profile
+- Email/Password registration and login
+- **Google OAuth** — One-click Google sign-in
+- **Forgot Password** — OTP-based password reset via email
+- **Change Password** — From profile page
+- Profile page with stats, personality badge, login method
+
+### 🎨 UI/UX
+- **Dark/Light Mode** toggle — Preference saved locally
+- Mobile responsive + PWA (installable as app)
+- Cinematic dark theme with particle background (Three.js)
+- Smooth animations and transitions
+
+### 📄 Pages
+- About, Privacy Policy, Terms of Service, Contact
+
+---
+
+## 🛠 Tech Stack
+
+| Layer | Technology |
+|-------|-----------|
+| Frontend | Vanilla JS, HTML5, CSS3 |
+| Backend | Node.js, Express.js |
+| Database | MongoDB (Mongoose) |
+| Auth | JWT, bcryptjs, Passport.js (Google OAuth) |
+| Email | Resend API |
+| PDF | PDFKit |
+| Charts | Chart.js |
+| 3D | Three.js |
+| Deployment | Render |
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Node.js 18+
+- MongoDB
+- Resend API key
+- Google OAuth credentials
+
+### Installation
+
+```bash
+git clone https://github.com/paliwalritik156-debug/digital-personality-generator
+cd digital-personality-generator
+npm install
+```
+
+### Environment Variables
+
+Create a `.env` file:
+
+```env
+PORT=3000
+MONGODB_URI=your_mongodb_uri
+JWT_SECRET=your_jwt_secret
+JWT_EXPIRE=7d
+
+# Email
+RESEND_API_KEY=re_xxxxxxxxxxxx
+
+# Google OAuth
+GOOGLE_CLIENT_ID=your_google_client_id
+GOOGLE_CLIENT_SECRET=your_google_client_secret
+GOOGLE_CALLBACK_URL=http://localhost:3000/api/auth/google/callback
+```
+
+### Seed Questions
+
+```bash
+npm run seed
+```
+
+### Run
+
+```bash
+npm run dev
+```
 
 ---
 
@@ -22,203 +114,42 @@ A full-stack web application for personality assessment based on the **Big Five 
 
 ```
 digital-personality-generator/
-├── server.js                    ← Express app entry point
-├── .env                         ← Environment variables
-├── package.json
-│
-├── config/
-│   └── database.js              ← MongoDB connection
-│
 ├── backend/
-│   ├── models/
-│   │   ├── User.js              ← User schema + bcrypt hooks
-│   │   ├── Question.js          ← Assessment questions schema
-│   │   ├── Answer.js            ← Per-session answers schema
-│   │   └── Result.js            ← Computed results schema
-│   │
-│   ├── controllers/
-│   │   ├── authController.js    ← Register, login, /me
-│   │   ├── questionController.js← Fetch questions
-│   │   └── resultController.js  ← Submit, results, history, PDF
-│   │
-│   ├── routes/
-│   │   ├── auth.js              ← /api/auth/*
-│   │   ├── questions.js         ← /api/questions
-│   │   └── results.js           ← /api/submit, /api/result/:id, etc.
-│   │
-│   └── middleware/
-│       └── auth.js              ← JWT protect middleware
-│
+│   ├── controllers/     # Auth, Questions, Results
+│   ├── middleware/       # JWT auth, Passport
+│   ├── models/          # User, Question, Answer, Result
+│   └── routes/          # API routes
+├── frontend/
+│   ├── css/styles.css
+│   ├── js/app.js
+│   └── index.html
 ├── utils/
-│   ├── scoringEngine.js         ← OCEAN scoring + personality logic
-│   └── seedQuestions.js         ← Seed 25 questions to DB
-│
-└── frontend/
-    ├── index.html               ← Single-page application
-    ├── css/
-    │   └── styles.css           ← Full dark theme stylesheet
-    └── js/
-        └── app.js               ← All frontend logic
+│   ├── emailService.js  # Resend email + PDF
+│   ├── scoringEngine.js # OCEAN scoring
+│   └── seedQuestions.js
+└── server.js
 ```
 
 ---
 
-## 🚀 Quick Start
+## 🧠 OCEAN Model
 
-### 1. Prerequisites
+The Big Five personality traits are the most scientifically validated framework in personality psychology:
 
-- **Node.js** v16+ ([nodejs.org](https://nodejs.org))
-- **MongoDB** running locally on `mongodb://localhost:27017`
-  - OR use a free cloud instance: [MongoDB Atlas](https://www.mongodb.com/atlas)
-
-### 2. Install Dependencies
-
-```bash
-cd digital-personality-generator
-npm install
-```
-
-### 3. Configure Environment
-
-Edit `.env` file:
-```env
-PORT=3000
-MONGODB_URI=mongodb://localhost:27017/personality_generator
-JWT_SECRET=change_this_to_a_strong_random_secret
-JWT_EXPIRE=7d
-NODE_ENV=development
-```
-
-> For MongoDB Atlas, replace MONGODB_URI with your connection string:
-> `MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/personality_generator`
-
-### 4. Seed the Database
-
-```bash
-npm run seed
-```
-
-This inserts 25 personality questions across all 5 OCEAN traits.
-
-### 5. Start the Server
-
-```bash
-# Production
-npm start
-
-# Development (auto-reload)
-npm run dev
-```
-
-### 6. Open the App
-
-Visit: **[http://localhost:3000](http://localhost:3000)**
+| Trait | Description |
+|-------|-------------|
+| **O**penness | Creativity, curiosity, openness to experience |
+| **C**onscientiousness | Organization, dependability, self-discipline |
+| **E**xtraversion | Sociability, assertiveness, positive emotions |
+| **A**greeableness | Cooperation, trust, empathy |
+| **N**euroticism | Emotional instability, anxiety, moodiness |
 
 ---
 
-## 🌐 API Reference
+## 📝 License
 
-### Authentication
-
-| Method | Endpoint              | Auth | Description           |
-|--------|-----------------------|------|-----------------------|
-| POST   | `/api/auth/register`  | No   | Create account        |
-| POST   | `/api/auth/login`     | No   | Login + get JWT token |
-| GET    | `/api/auth/me`        | Yes  | Get current user      |
-
-#### Register Body
-```json
-{
-  "name": "Jane Doe",
-  "email": "jane@example.com",
-  "password": "secret123"
-}
-```
-
-### Questions
-
-| Method | Endpoint         | Auth | Description          |
-|--------|------------------|------|----------------------|
-| GET    | `/api/questions` | Yes  | Get all 25 questions |
-
-### Results
-
-| Method | Endpoint                      | Auth | Description              |
-|--------|-------------------------------|------|--------------------------|
-| POST   | `/api/submit`                 | Yes  | Submit answers           |
-| GET    | `/api/result/:sessionId`      | Yes  | Get a specific result    |
-| GET    | `/api/history`                | Yes  | Get user's result history|
-| GET    | `/api/result/:sessionId/pdf`  | Yes  | Download PDF report      |
-
-#### Submit Body
-```json
-{
-  "answers": [
-    { "questionId": "...", "value": 4 },
-    { "questionId": "...", "value": 2 }
-  ]
-}
-```
+MIT License — feel free to use and modify.
 
 ---
 
-## 🎯 OCEAN Scoring System
-
-Each question is mapped to one of 5 traits. Some questions are **reversed** (disagreeing = higher trait score).
-
-**Scoring Formula:**
-1. Average all answers per trait (1–5 scale)
-2. Normalize: `score = ((average - 1) / 4) * 100`
-3. Result: 0–100 percentage per trait
-
-**Personality Types** (10 archetypes):
-- 🔮 The Visionary — High Openness + Extraversion
-- 🛡️ The Guardian — High Conscientiousness + Agreeableness
-- 🤝 The Diplomat — High Agreeableness + Extraversion
-- 🏛️ The Architect — High Conscientiousness + Openness
-- 🧭 The Explorer — Very High Openness
-- ⚡ The Commander — High Extraversion + Conscientiousness
-- 💖 The Empath — High Agreeableness + Neuroticism
-- 🔬 The Analyst — High Conscientiousness + Low Extraversion
-- 🌿 The Mediator — High Agreeableness + Low Neuroticism
-- 🎭 The Maverick — High Openness + Low Agreeableness
-
----
-
-## ⌨️ Keyboard Shortcuts (Quiz)
-
-| Key    | Action             |
-|--------|--------------------|
-| `1–5`  | Select answer      |
-| `→`    | Next question      |
-| `←`    | Previous question  |
-| `Enter`| Next / Submit      |
-
----
-
-## 🔒 Security Features
-
-- Passwords hashed with **bcrypt** (salt rounds: 12)
-- **JWT tokens** expire in 7 days
-- All result endpoints verify the user owns the data
-- Input validation via **express-validator**
-- Passwords excluded from all API responses
-
----
-
-## 🐛 Troubleshooting
-
-**"No questions found"**
-→ Run `npm run seed`
-
-**"MongoDB connection failed"**
-→ Ensure MongoDB is running: `mongod --dbpath /data/db`
-
-**PDF download not working**
-→ Ensure the session ID in the URL is valid and belongs to the current user
-
----
-
-## 📜 License
-
-MIT — free to use and modify.
+Built with ❤️ by [Ritik Paliwal](https://github.com/paliwalritik156-debug)

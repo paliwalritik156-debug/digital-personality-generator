@@ -57,6 +57,39 @@ const getHistory = async (req, res) => {
   }
 };
 
+const getGlobalStats = async (req, res) => {
+  try {
+    const userResult = await Result.findOne({ sessionId: req.params.sessionId, userId: req.user._id });
+    if (!userResult) return res.status(404).json({ success: false, message: 'Result not found.' });
+
+    // Get all results for comparison (last 1000)
+    const allResults = await Result.find({}).select('scores').limit(1000);
+    if (allResults.length < 5) return res.json({ success: false, message: 'Not enough data yet.' });
+
+    const traits = ['openness', 'conscientiousness', 'extraversion', 'agreeableness', 'neuroticism'];
+    const comparisons = {};
+
+    traits.forEach(trait => {
+      const userScore = typeof userResult.scores[trait] === 'object'
+        ? userResult.scores[trait].score
+        : userResult.scores[trait];
+
+      const allScores = allResults.map(r => {
+        const s = r.scores && r.scores[trait];
+        return s ? (typeof s === 'object' ? s.score : s) : 0;
+      }).filter(s => s > 0);
+
+      const below = allScores.filter(s => s < userScore).length;
+      const percentile = Math.round((below / allScores.length) * 100);
+      comparisons[trait] = { userScore, percentile, total: allScores.length };
+    });
+
+    res.json({ success: true, comparisons, totalUsers: allResults.length });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Failed to get stats.' });
+  }
+};
+
 const downloadPDF = async (req, res) => {
   try {
     const result = await Result.findOne({ sessionId: req.params.sessionId, userId: req.user._id });
@@ -150,4 +183,4 @@ const emailPDF = async (req, res) => {
   }
 };
 
-module.exports = { submitAnswers, getResult, getHistory, downloadPDF, emailPDF };
+module.exports = { submitAnswers, getResult, getHistory, downloadPDF, emailPDF, getGlobalStats };
