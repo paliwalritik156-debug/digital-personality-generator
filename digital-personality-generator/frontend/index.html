@@ -1245,7 +1245,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:68px;display:flex;ali
     <div class="rc"><div class="cl">🔍 Reality Gap</div><div id="rgap"></div></div>
     <div class="rc w"><div class="cl">🏷 Personality Brand</div><div class="bg2" id="rbrnd"></div></div>
     <div class="rc w"><div class="cl">🔮 Evolution Model</div><div class="er" id="revo"></div></div>
-    <div class="rc w"><div class="cl">🎥 Life Trailer</div><div class="trl" id="rtrl"></div></div>
+    <div class="rc w"><div class="cl">🎬 Personality Movie Trailer <button class="cbtn" onclick="playTrailer()" style="margin-left:8px;background:linear-gradient(135deg,#8B5CF6,#EC4899);color:#fff;border:none;">▶ Play Trailer</button></div><div class="trl" id="rtrl"></div></div>
     <div class="rc w">
       <div class="cl">🚀 Share Your Result</div>
       <div class="shcard" id="personality-share-card">
@@ -1323,6 +1323,19 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:68px;display:flex;ali
     </div>
   </div>
 </div>
+<!-- Cinematic Trailer Modal -->
+<div id="trailer-modal" style="display:none;position:fixed;inset:0;z-index:9995;background:#000;align-items:center;justify-content:center;flex-direction:column;">
+  <div id="trailer-content" style="width:100%;max-width:700px;padding:2rem;text-align:center;position:relative;">
+    <div id="trailer-lines" style="min-height:300px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;"></div>
+    <div id="trailer-actions" style="display:none;margin-top:2rem;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+      <button onclick="shareTrailerWhatsApp()" style="padding:12px 24px;background:#25D366;border:none;border-radius:12px;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:0.9rem;font-weight:600;cursor:pointer;">💬 Share on WhatsApp</button>
+      <button onclick="shareTrailerTwitter()" style="padding:12px 24px;background:#1DA1F2;border:none;border-radius:12px;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:0.9rem;font-weight:600;cursor:pointer;">🐦 Share on Twitter</button>
+      <button onclick="closeTrailer()" style="padding:12px 24px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:12px;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:0.9rem;cursor:pointer;">✕ Close</button>
+    </div>
+  </div>
+  <button onclick="closeTrailer()" style="position:fixed;top:20px;right:20px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:#fff;width:40px;height:40px;border-radius:50%;font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center;">✕</button>
+</div>
+
 <div id="ph" class="page hidden">
   <div class="hhdr">
     <div><h2>Your History</h2><p style="color:var(--tx2);margin-top:0.3rem;font-size:0.87rem">All past AI assessments</p></div>
@@ -1684,6 +1697,95 @@ function copyShareLink(){
   var type=RC?RC.personalityType:'';
   var text='My PersonaIQ personality type: '+type+' | https://digital-personality-generator.onrender.com';
   navigator.clipboard.writeText(text).then(function(){toast('Link copied! 🔗');}).catch(function(){toast('Copy failed');});
+}
+
+// ============ CINEMATIC TRAILER ============
+var _trailerResult = null;
+
+function playTrailer(){
+  if(!RC){toast('Complete a test first!');return;}
+  _trailerResult = RC;
+  var modal = document.getElementById('trailer-modal');
+  var lines = document.getElementById('trailer-lines');
+  var actions = document.getElementById('trailer-actions');
+  modal.style.display = 'flex';
+  lines.innerHTML = '';
+  actions.style.display = 'none';
+
+  var r = _trailerResult;
+  var name = US ? US.name.split(' ')[0] : 'You';
+  var type = r.personalityType || 'The Unknown';
+  var trl = r.lifeTrailer || {};
+  var genre = trl.genre || 'Psychological Drama';
+  var narrative = trl.narrative || 'In a world that rewards noise, one person dares to be still.';
+
+  // Build scores text
+  var tc = {openness:'#8B5CF6',conscientiousness:'#06B6D4',extraversion:'#EC4899',agreeableness:'#10B981',neuroticism:'#F59E0B'};
+  var topTraits = Object.entries(r.scores)
+    .sort(function(a,b){return (typeof b[1]==='object'?b[1].score:b[1])-(typeof a[1]==='object'?a[1].score:a[1]);})
+    .slice(0,3)
+    .map(function(t){return (typeof t[1]==='object'?t[1].score:t[1])+'% '+TL[t[0]];})
+    .join(' · ');
+
+  var script = [
+    {text:'A PersonaIQ Original', style:'font-size:0.75rem;color:rgba(255,255,255,0.3);letter-spacing:0.3em;text-transform:uppercase;', delay:0, duration:1200},
+    {text:'', style:'', delay:1400, duration:300},
+    {text:'In a world full of personalities...', style:'font-size:1.1rem;color:rgba(255,255,255,0.5);font-style:italic;', delay:1800, duration:1500},
+    {text:'', style:'', delay:3500, duration:300},
+    {text:'One stood apart.', style:'font-size:1.4rem;color:#fff;font-weight:600;', delay:4000, duration:1200},
+    {text:'', style:'', delay:5400, duration:300},
+    {text:name.toUpperCase(), style:'font-family:Syne,sans-serif;font-size:3.5rem;font-weight:800;background:linear-gradient(135deg,#8B5CF6,#06B6D4,#EC4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:-0.02em;', delay:5900, duration:2000},
+    {text:topTraits, style:'font-size:0.8rem;color:rgba(255,255,255,0.4);letter-spacing:0.15em;margin-top:-10px;', delay:8100, duration:1500},
+    {text:'', style:'', delay:9800, duration:300},
+    {text:'"'+narrative+'"', style:'font-size:1rem;color:rgba(255,255,255,0.6);font-style:italic;max-width:500px;line-height:1.7;', delay:10300, duration:2500},
+    {text:'', style:'', delay:13000, duration:300},
+    {text:type, style:'font-family:Syne,sans-serif;font-size:2rem;font-weight:800;color:#fff;letter-spacing:-0.02em;', delay:13500, duration:2000},
+    {text:genre.toUpperCase(), style:'font-size:0.7rem;color:var(--cy,#06B6D4);letter-spacing:0.2em;font-weight:700;', delay:15700, duration:1200},
+    {text:'', style:'', delay:17100, duration:300},
+    {text:'Only on PersonaIQ', style:'font-size:0.8rem;color:rgba(255,255,255,0.25);letter-spacing:0.15em;', delay:17600, duration:1000},
+  ];
+
+  var totalTime = 0;
+  script.forEach(function(item){
+    totalTime = Math.max(totalTime, item.delay + item.duration + 500);
+    setTimeout(function(){
+      if(!item.text){return;}
+      var el = document.createElement('div');
+      el.style.cssText = item.style + ';opacity:0;transition:opacity 0.8s ease,transform 0.8s ease;transform:translateY(20px);margin:8px 0;';
+      el.innerHTML = item.text;
+      lines.appendChild(el);
+      setTimeout(function(){el.style.opacity='1';el.style.transform='translateY(0)';},50);
+      // Fade out after duration
+      setTimeout(function(){
+        el.style.opacity='0';
+        el.style.transform='translateY(-10px)';
+        setTimeout(function(){if(el.parentNode)el.parentNode.removeChild(el);},800);
+      }, item.duration);
+    }, item.delay);
+  });
+
+  // Show share buttons at end
+  setTimeout(function(){
+    lines.innerHTML = '<div style="font-family:Syne,sans-serif;font-size:2.5rem;font-weight:800;background:linear-gradient(135deg,#8B5CF6,#06B6D4,#EC4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">'+type+'</div><div style="font-size:0.8rem;color:rgba(255,255,255,0.4);margin-top:8px;letter-spacing:0.1em;">'+genre+'</div><div style="font-size:0.9rem;color:rgba(255,255,255,0.5);margin-top:16px;font-style:italic;max-width:400px;line-height:1.6;">'+narrative+'</div>';
+    actions.style.display = 'flex';
+  }, totalTime);
+}
+
+function closeTrailer(){
+  document.getElementById('trailer-modal').style.display = 'none';
+}
+
+function shareTrailerWhatsApp(){
+  var type = _trailerResult ? _trailerResult.personalityType : 'my personality';
+  var trl = _trailerResult && _trailerResult.lifeTrailer ? _trailerResult.lifeTrailer : {};
+  var text = '🎬 My PersonaIQ Movie Trailer!\n\n"'+type+'"\n\n'+(trl.narrative||'Discover your personality story.')+'\n\nFind yours: https://digital-personality-generator.onrender.com';
+  window.open('https://wa.me/?text='+encodeURIComponent(text),'_blank');
+}
+
+function shareTrailerTwitter(){
+  var type = _trailerResult ? _trailerResult.personalityType : 'my personality';
+  var text = '🎬 Just watched my PersonaIQ personality movie trailer!\n\nI am "'+type+'"\n\nDiscover yours 👇';
+  window.open('https://twitter.com/intent/tweet?text='+encodeURIComponent(text)+'&url='+encodeURIComponent('https://digital-personality-generator.onrender.com'),'_blank');
 }updateNav();
 if(TK&&US)showPage('pd');else showPage('page-home');
 
