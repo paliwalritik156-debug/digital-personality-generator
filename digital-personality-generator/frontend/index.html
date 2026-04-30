@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PersonaIQ - AI Personality Intelligence</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="/js/vendor/html2canvas.min.js"></script>
 <script src="/js/three.min.js">
 var CHAT_MSGS = [];
 var PCTX = null;
@@ -1479,9 +1479,13 @@ document.getElementById('shtr').innerHTML=TR.map(t=>'<span class="shtp">'+TL[t].
 
 // Update new share card
 var tc={openness:'#8B5CF6',conscientiousness:'#06B6D4',extraversion:'#EC4899',agreeableness:'#10B981',neuroticism:'#F59E0B'};
-document.getElementById('card-name').textContent=US?US.name:'Your Result';
-document.getElementById('card-type').textContent=badge;
-document.getElementById('card-traits').innerHTML=TR.map(function(t){
+var cardName=document.getElementById('card-name');
+var cardType=document.getElementById('card-type');
+var cardTraits=document.getElementById('card-traits');
+var cardDominant=document.getElementById('card-dominant');
+if(cardName)cardName.textContent=US?US.name:'Your Result';
+if(cardType)cardType.textContent=badge;
+if(cardTraits)cardTraits.innerHTML=TR.map(function(t){
   var sc=gs(r.scores,t);
   return '<div style="display:flex;align-items:center;gap:10px;">'+
     '<span style="font-size:0.72rem;color:rgba(255,255,255,0.5);width:70px;text-align:right;flex-shrink:0;">'+TL[t].slice(0,5)+'</span>'+
@@ -1491,7 +1495,7 @@ document.getElementById('card-traits').innerHTML=TR.map(function(t){
     '<span style="font-size:0.75rem;font-weight:700;color:'+tc[t]+';width:32px;flex-shrink:0;">'+sc+'%</span>'+
   '</div>';
 }).join('');
-document.getElementById('card-dominant').innerHTML=r.dominantTraits?r.dominantTraits.slice(0,3).map(function(t){
+if(cardDominant)cardDominant.innerHTML=r.dominantTraits?r.dominantTraits.slice(0,3).map(function(t){
   return '<span style="background:'+tc[t]+'22;border:1px solid '+tc[t]+'44;padding:3px 12px;border-radius:20px;font-size:0.7rem;color:'+tc[t]+';font-weight:600;">'+TL[t]+'</span>';
 }).join(''):'';
 RC=r;
