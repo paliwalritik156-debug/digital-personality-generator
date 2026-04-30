@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { body } = require('express-validator');
-const { register, login, getMe } = require('../controllers/authController');
+const { register, login, getMe, forgotPassword, resetPassword, changePassword } = require('../controllers/authController');
 const { protect } = require('../middleware/auth');
 const passport = require('../middleware/passport');
 
@@ -18,6 +18,9 @@ const loginValidation = [
 router.post('/register', registerValidation, register);
 router.post('/login', loginValidation, login);
 router.get('/me', protect, getMe);
+router.post('/forgot-password', forgotPassword);
+router.post('/reset-password', resetPassword);
+router.post('/change-password', protect, changePassword);
 
 // Google OAuth
 router.get('/google',

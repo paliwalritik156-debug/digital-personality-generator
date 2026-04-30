@@ -1012,6 +1012,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:68px;display:flex;ali
         <div class="fi"><label>Email</label><input type="email" id="le" placeholder="you@example.com"></div>
         <div class="fi"><label>Password</label><input type="password" id="lp" placeholder="password" onkeydown="if(event.key==='Enter')doLogin()"></div>
         <button class="bsub" onclick="doLogin()">Sign In</button>
+        <div style="text-align:right;margin-top:-8px;margin-bottom:8px;"><a onclick="showForgotPassword()" style="font-size:0.78rem;color:var(--pu2);cursor:pointer;">Forgot password?</a></div>
         <div style="display:flex;align-items:center;gap:12px;margin:16px 0;">
           <div style="flex:1;height:1px;background:rgba(255,255,255,0.07)"></div>
           <span style="font-size:0.75rem;color:var(--tx3)">OR</span>
@@ -1124,14 +1125,49 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:68px;display:flex;ali
       <div class="dash-section" id="tab-profile">
         <h3>Your Profile</h3>
         <p>Account information and settings</p>
-        <div class="insight-tip">
-          <h4>👤 Account Details</h4>
-          <p id="profile-info">Loading profile...</p>
+
+        <!-- Profile Card -->
+        <div style="background:var(--glass);border:1px solid var(--bdr);border-radius:20px;padding:2rem;margin-top:1.5rem;display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;">
+          <div id="profile-avatar-big" style="width:72px;height:72px;border-radius:50%;background:var(--gr);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;color:#fff;flex-shrink:0;">?</div>
+          <div>
+            <div id="profile-name-big" style="font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;">—</div>
+            <div id="profile-email-big" style="font-size:0.85rem;color:var(--tx3);margin-top:2px;">—</div>
+            <div id="profile-member" style="font-size:0.75rem;color:var(--tx3);margin-top:4px;">—</div>
+          </div>
+          <div id="profile-type-badge" style="margin-left:auto;background:linear-gradient(135deg,rgba(139,92,246,0.15),rgba(6,182,212,0.1));border:1px solid rgba(139,92,246,0.3);border-radius:12px;padding:10px 18px;text-align:center;display:none;">
+            <div style="font-size:0.65rem;color:var(--tx3);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:4px;">Personality Type</div>
+            <div id="profile-type-text" style="font-family:'Syne',sans-serif;font-weight:700;font-size:0.9rem;color:var(--pu2);">—</div>
+          </div>
         </div>
-        <div style="margin-top:1rem">
-          <button class="btn-p" onclick="loadQuiz()">Take New Assessment</button>
-          &nbsp;&nbsp;
-          <button class="btn-g" onclick="doLogout()">Logout</button>
+
+        <!-- Stats -->
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;margin-top:1.2rem;">
+          <div style="background:var(--glass);border:1px solid var(--bdr);border-radius:14px;padding:1rem;text-align:center;">
+            <div id="profile-total-tests" style="font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;background:var(--gr);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">0</div>
+            <div style="font-size:0.72rem;color:var(--tx3);text-transform:uppercase;letter-spacing:0.08em;margin-top:4px;">Tests Taken</div>
+          </div>
+          <div style="background:var(--glass);border:1px solid var(--bdr);border-radius:14px;padding:1rem;text-align:center;">
+            <div id="profile-auth-type" style="font-size:1.1rem;font-weight:700;color:var(--pu2);">—</div>
+            <div style="font-size:0.72rem;color:var(--tx3);text-transform:uppercase;letter-spacing:0.08em;margin-top:4px;">Login Method</div>
+          </div>
+        </div>
+
+        <!-- Change Password -->
+        <div style="background:var(--glass);border:1px solid var(--bdr);border-radius:16px;padding:1.5rem;margin-top:1.2rem;">
+          <h4 style="font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;margin-bottom:1rem;">🔐 Change Password</h4>
+          <div id="change-pw-msg" style="font-size:0.82rem;margin-bottom:10px;min-height:18px;"></div>
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            <input type="password" id="pw-current" placeholder="Current password" style="padding:11px 14px;background:rgba(255,255,255,0.04);border:1px solid var(--bdr);border-radius:12px;color:var(--tx);font-family:'Space Grotesk',sans-serif;font-size:0.88rem;outline:none;"/>
+            <input type="password" id="pw-new" placeholder="New password (min 6 chars)" style="padding:11px 14px;background:rgba(255,255,255,0.04);border:1px solid var(--bdr);border-radius:12px;color:var(--tx);font-family:'Space Grotesk',sans-serif;font-size:0.88rem;outline:none;"/>
+            <input type="password" id="pw-confirm" placeholder="Confirm new password" style="padding:11px 14px;background:rgba(255,255,255,0.04);border:1px solid var(--bdr);border-radius:12px;color:var(--tx);font-family:'Space Grotesk',sans-serif;font-size:0.88rem;outline:none;"/>
+            <button onclick="changePassword()" style="padding:12px;background:var(--gr);border:none;border-radius:12px;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:0.9rem;font-weight:600;cursor:pointer;">Update Password</button>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div style="display:flex;gap:12px;margin-top:1.2rem;flex-wrap:wrap;">
+          <button class="btn-p" onclick="loadQuiz()">🚀 New Assessment</button>
+          <button class="btn-g" onclick="doLogout()">🚪 Logout</button>
         </div>
       </div>
     </div>
@@ -1323,6 +1359,32 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:68px;display:flex;ali
     </div>
   </div>
 </div>
+<!-- Forgot Password Modal -->
+<div id="forgot-modal" style="display:none;position:fixed;inset:0;background:rgba(5,5,8,0.85);z-index:9990;align-items:center;justify-content:center;backdrop-filter:blur(8px);">
+  <div style="background:#0D0D18;border:1px solid rgba(139,92,246,0.3);border-radius:24px;padding:36px;width:100%;max-width:420px;margin:24px;box-shadow:0 0 60px rgba(139,92,246,0.2);">
+    <h3 style="font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;margin-bottom:8px;">🔐 Reset Password</h3>
+    <div id="forgot-step1">
+      <p style="color:var(--tx2);font-size:0.88rem;margin-bottom:20px;line-height:1.6;">Enter your email — we'll send a reset OTP.</p>
+      <div id="forgot-msg" style="font-size:0.82rem;margin-bottom:10px;min-height:18px;"></div>
+      <input type="email" id="forgot-email" placeholder="your@email.com" style="width:100%;padding:13px 16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:14px;color:var(--tx);font-family:'Space Grotesk',sans-serif;font-size:0.93rem;outline:none;margin-bottom:14px;"/>
+      <div style="display:flex;gap:10px;">
+        <button onclick="sendOTP()" style="flex:1;padding:13px;background:var(--gr);border:none;border-radius:14px;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:0.9rem;font-weight:600;cursor:pointer;">Send OTP →</button>
+        <button onclick="document.getElementById('forgot-modal').style.display='none'" style="padding:13px 18px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:14px;color:var(--tx2);font-family:'Space Grotesk',sans-serif;cursor:pointer;">Cancel</button>
+      </div>
+    </div>
+    <div id="forgot-step2" style="display:none;">
+      <p style="color:var(--tx2);font-size:0.88rem;margin-bottom:20px;line-height:1.6;">Enter the 6-digit OTP sent to your email and your new password.</p>
+      <div id="forgot-msg2" style="font-size:0.82rem;margin-bottom:10px;min-height:18px;"></div>
+      <input type="text" id="forgot-otp" placeholder="6-digit OTP" maxlength="6" style="width:100%;padding:13px 16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:14px;color:var(--tx);font-family:'Space Grotesk',sans-serif;font-size:1.2rem;letter-spacing:0.3em;text-align:center;outline:none;margin-bottom:10px;"/>
+      <input type="password" id="forgot-newpw" placeholder="New password (min 6 chars)" style="width:100%;padding:13px 16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:14px;color:var(--tx);font-family:'Space Grotesk',sans-serif;font-size:0.93rem;outline:none;margin-bottom:14px;"/>
+      <div style="display:flex;gap:10px;">
+        <button onclick="verifyOTP()" style="flex:1;padding:13px;background:var(--gr);border:none;border-radius:14px;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:0.9rem;font-weight:600;cursor:pointer;">Reset Password →</button>
+        <button onclick="document.getElementById('forgot-modal').style.display='none'" style="padding:13px 18px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:14px;color:var(--tx2);font-family:'Space Grotesk',sans-serif;cursor:pointer;">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Cinematic Trailer Modal -->
 <div id="trailer-modal" style="display:none;position:fixed;inset:0;z-index:9995;background:#000;align-items:center;justify-content:center;flex-direction:column;overflow:hidden;">
   <!-- Cinematic top/bottom bars -->
@@ -1472,6 +1534,31 @@ function loadProfile(){
   if(!US)return;
   var el=document.getElementById('profile-info');
   if(el)el.innerHTML='Name: <strong>'+US.name+'</strong><br>Email: <strong>'+US.email+'</strong>';
+
+  // New profile page
+  var av=document.getElementById('profile-avatar-big');
+  var nm=document.getElementById('profile-name-big');
+  var em=document.getElementById('profile-email-big');
+  var mb=document.getElementById('profile-member');
+  var tt=document.getElementById('profile-total-tests');
+  var at=document.getElementById('profile-auth-type');
+  if(av)av.textContent=US.name?US.name[0].toUpperCase():'?';
+  if(nm)nm.textContent=US.name||'—';
+  if(em)em.textContent=US.email||'—';
+  if(mb)mb.textContent='Member since '+(US.createdAt?new Date(US.createdAt).toLocaleDateString('en-US',{month:'long',year:'numeric'}):'—');
+  if(tt)tt.textContent=US.totalTests||0;
+  if(at)at.textContent=US.googleId?'Google':'Email';
+
+  // Show personality type if available
+  api('/api/history').then(function(d){
+    if(d.success&&d.results&&d.results.length>0){
+      var badge=document.getElementById('profile-type-badge');
+      var typeEl=document.getElementById('profile-type-text');
+      if(badge)badge.style.display='block';
+      if(typeEl)typeEl.textContent=d.results[0].personalityType||'—';
+      if(tt)tt.textContent=d.results.length;
+    }
+  }).catch(function(){});
 }
 
 function updateNav(){updateMobMenu();const a=document.getElementById('nav-area');if(TK&&US){a.innerHTML='<span class="nu" style="margin-right:8px">Hi, '+US.name.split(' ')[0]+'</span><button class="nb" onclick="showPage(\'ph\')">History</button><button class="nb cta" onclick="doLogout()">Logout</button>';}else{a.innerHTML='<button class="nb" onclick="showPage(\'pa\',\'login\')">Sign In</button><button class="nb cta" onclick="showPage(\'pa\',\'reg\')">Get Started</button>';}}
@@ -1480,6 +1567,68 @@ async function doLogin(){const e=document.getElementById('le').value.trim(),p=do
 async function doRegister(){const n=document.getElementById('rn').value.trim(),e=document.getElementById('re').value.trim(),p=document.getElementById('rp').value;if(!n||!e||!p)return aMsg('Please fill all fields');if(p.length<6)return aMsg('Password min 6 chars');const d=await api('/api/auth/register','POST',{name:n,email:e,password:p});if(d.success){saveS(d);showPage('pd');toast('Account created!');}else aMsg(d.message||'Failed');}
 function saveS(d){TK=d.token;US=d.user;localStorage.setItem('piq_token',TK);localStorage.setItem('piq_user',JSON.stringify(US));updateNav();}
 function doLogout(){TK=null;US=null;localStorage.removeItem('piq_token');localStorage.removeItem('piq_user');resetTheme();updateNav();showPage('page-home');toast('Logged out');}
+
+// Forgot Password
+function showForgotPassword(){
+  document.getElementById('forgot-modal').style.display='flex';
+  document.getElementById('forgot-step1').style.display='block';
+  document.getElementById('forgot-step2').style.display='none';
+  document.getElementById('forgot-email').value='';
+  document.getElementById('forgot-msg').textContent='';
+}
+async function sendOTP(){
+  var email=document.getElementById('forgot-email').value.trim();
+  var msg=document.getElementById('forgot-msg');
+  if(!email){msg.style.color='#ff6b6b';msg.textContent='Enter your email.';return;}
+  msg.style.color='var(--pu2)';msg.textContent='Sending OTP...';
+  var d=await api('/api/auth/forgot-password','POST',{email});
+  if(d.success){
+    msg.style.color='#10B981';msg.textContent='OTP sent! Check your email.';
+    setTimeout(function(){
+      document.getElementById('forgot-step1').style.display='none';
+      document.getElementById('forgot-step2').style.display='block';
+      document.getElementById('forgot-msg2').textContent='';
+    },1000);
+  } else {
+    msg.style.color='#ff6b6b';msg.textContent=d.message||'Failed. Try again.';
+  }
+}
+async function verifyOTP(){
+  var email=document.getElementById('forgot-email').value.trim();
+  var otp=document.getElementById('forgot-otp').value.trim();
+  var newpw=document.getElementById('forgot-newpw').value;
+  var msg=document.getElementById('forgot-msg2');
+  if(!otp||!newpw){msg.style.color='#ff6b6b';msg.textContent='Fill all fields.';return;}
+  msg.style.color='var(--pu2)';msg.textContent='Verifying...';
+  var d=await api('/api/auth/reset-password','POST',{email,otp,newPassword:newpw});
+  if(d.success){
+    msg.style.color='#10B981';msg.textContent='Password reset! Please login.';
+    setTimeout(function(){document.getElementById('forgot-modal').style.display='none';showPage('pa','login');},1500);
+  } else {
+    msg.style.color='#ff6b6b';msg.textContent=d.message||'Failed. Try again.';
+  }
+}
+
+// Change Password (from profile)
+async function changePassword(){
+  var cur=document.getElementById('pw-current').value;
+  var nw=document.getElementById('pw-new').value;
+  var cf=document.getElementById('pw-confirm').value;
+  var msg=document.getElementById('change-pw-msg');
+  if(!cur||!nw||!cf){msg.style.color='#ff6b6b';msg.textContent='Fill all fields.';return;}
+  if(nw!==cf){msg.style.color='#ff6b6b';msg.textContent='Passwords do not match.';return;}
+  if(nw.length<6){msg.style.color='#ff6b6b';msg.textContent='Min 6 characters.';return;}
+  msg.style.color='var(--pu2)';msg.textContent='Updating...';
+  var d=await api('/api/auth/change-password','POST',{currentPassword:cur,newPassword:nw});
+  if(d.success){
+    msg.style.color='#10B981';msg.textContent='✅ Password changed!';
+    document.getElementById('pw-current').value='';
+    document.getElementById('pw-new').value='';
+    document.getElementById('pw-confirm').value='';
+  } else {
+    msg.style.color='#ff6b6b';msg.textContent=d.message||'Failed.';
+  }
+}
 async function loadDash(){if(!US)return;
   var dn=document.getElementById('dn');if(dn)dn.textContent=US.name.split(' ')[0];
   var sbn=document.getElementById('sb-name');if(sbn)sbn.textContent=US.name;
