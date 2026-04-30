@@ -1118,7 +1118,7 @@ body.light-mode .mob-nav span{background:#7C3A00;}
   <div class="mob-item" id="mob-logout-btn" onclick="doLogout();closeMobMenu()" style="display:none">🚪 Logout</div>
 </div>
 <div class="toast" id="toast"></div>
-<div id="page-home" class="page">
+<div id="page-home" class="page hidden">
   <canvas id="hero-canvas"></canvas>
   <div class="hero">
     <div class="h-chip"><div class="h-chip-dot"></div>AI Personality Intelligence System</div>
@@ -1810,7 +1810,7 @@ function showPage(n,sub){
     document.querySelectorAll('.page').forEach(function(p){p.classList.add('hidden');});
     var skelRes=document.getElementById('page-loader-results');if(skelRes)skelRes.style.display='none';
     var target=document.getElementById(n);
-    if(target){target.classList.remove('hidden');target.classList.add('page-enter');setTimeout(function(){target.classList.remove('page-enter');},400);}
+    if(target){target.classList.remove('hidden');}
     if(n==='pa')toggleAuth(sub||'login');if(n==='ph')loadHist();if(n==='pd')loadDash();
     window.scrollTo(0,0);
   }
