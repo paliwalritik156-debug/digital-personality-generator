@@ -570,11 +570,10 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 @keyframes bgS{0%{opacity:0.6}100%{opacity:1;transform:scale(1.05)}}
 body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:0.5}
 .hidden{display:none!important}
-.page{position:relative;z-index:2}
-#pr{display:none}
-#pr.hidden{display:none!important}
-/* Show pr only when explicitly shown by JS */
-#pr:not(.hidden){display:block}
+.page{display:none}
+.page:not(.hidden){display:block}
+#page-loader-results{display:none}
+#page-loader-results.visible{display:block}
 #cur{position:fixed;width:10px;height:10px;background:var(--pu);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:transform 0.1s,width 0.3s,height 0.3s;mix-blend-mode:screen}
 #cur-ring{position:fixed;width:36px;height:36px;border:1px solid rgba(139,92,246,0.5);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width 0.4s,height 0.4s}
 .cg #cur{width:40px;height:40px;background:rgba(139,92,246,0.15)}
@@ -1838,7 +1837,7 @@ function showPage(n,sub){
     window.scrollTo(0,0);
   }
 }
-function showResultSkeleton(){document.querySelectorAll('.page').forEach(p=>p.classList.add('hidden'));var s=document.getElementById('page-loader-results');if(s){s.style.display='block';window.scrollTo(0,0);}}
+function showResultSkeleton(){document.querySelectorAll('.page').forEach(p=>p.classList.add('hidden'));var s=document.getElementById('page-loader-results');if(s){s.classList.remove('hidden');s.style.display='block';window.scrollTo(0,0);}}
 function goHome(){TK?showPage('pd'):showPage('page-home');}
 function toast(m,d=3000){const t=document.getElementById('toast');t.textContent=m;t.style.display='block';clearTimeout(t._t);t._t=setTimeout(()=>t.style.display='none',d);}
 function aMsg(m,t='e'){const e=document.getElementById('am');e.textContent=m;e.className='am '+(t==='e'?'e':'s');e.style.display='block';}
