@@ -940,6 +940,9 @@ body.light-mode #forgot-modal > div,body.light-mode #email-modal > div{backgroun
 body.light-mode #forgot-modal h3,body.light-mode #email-modal h3{color:#1C0A00;}
 body.light-mode #forgot-modal p,body.light-mode #email-modal p{color:#7C3A00;}
 body.light-mode #forgot-email,body.light-mode #forgot-otp,body.light-mode #forgot-newpw,body.light-mode #email-modal-input{background:#FFFAF5;border:1px solid rgba(234,88,12,0.2);color:#1C0A00;}
+#forgot-email,#forgot-otp,#forgot-newpw{caret-color:#EEEAF8;}
+#forgot-email:focus,#forgot-otp:focus,#forgot-newpw:focus{border-color:var(--pu)!important;box-shadow:0 0 0 3px rgba(139,92,246,0.12),0 0 20px rgba(139,92,246,0.08)!important;background:rgba(139,92,246,0.04)!important;}
+#forgot-email::placeholder,#forgot-otp::placeholder,#forgot-newpw::placeholder{color:var(--tx3);}
 body.light-mode #tab-profile input{background:#FFFAF5;border:1px solid rgba(234,88,12,0.2);color:#1C0A00;}
 body.light-mode .toast{background:#fff;border:1px solid rgba(234,88,12,0.15);color:#1C0A00;box-shadow:0 4px 20px rgba(234,88,12,0.1);}
 body.light-mode footer{border-top:1px solid rgba(234,88,12,0.1);}body.light-mode footer p{color:#B86A00;}
@@ -1734,7 +1737,7 @@ body.light-mode .mob-nav span{background:#7C3A00;}
     <div id="forgot-step1">
       <p style="color:var(--tx2);font-size:0.88rem;margin-bottom:20px;line-height:1.6;">Enter your email — we'll send a reset OTP.</p>
       <div id="forgot-msg" style="font-size:0.82rem;margin-bottom:10px;min-height:18px;"></div>
-      <input type="email" id="forgot-email" placeholder="your@email.com" style="width:100%;padding:13px 16px;background:rgba(255,255,255,0.08);border:1px solid rgba(139,92,246,0.3);border-radius:14px;color:#EEEAF8;font-family:'Space Grotesk',sans-serif;font-size:0.93rem;outline:none;margin-bottom:14px;"/>
+      <input type="email" id="forgot-email" placeholder="your@email.com" class="fi-input" style="width:100%;padding:13px 16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:14px;color:#EEEAF8;font-family:'Space Grotesk',sans-serif;font-size:0.93rem;outline:none;margin-bottom:14px;transition:all 0.3s cubic-bezier(0.4,0,0.2,1);"/>
       <div style="display:flex;gap:10px;">
         <button onclick="sendOTP()" style="flex:1;padding:13px;background:var(--gr);border:none;border-radius:14px;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:0.9rem;font-weight:600;cursor:pointer;">Send OTP →</button>
         <button onclick="document.getElementById('forgot-modal').style.display='none'" style="padding:13px 18px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:14px;color:var(--tx2);font-family:'Space Grotesk',sans-serif;cursor:pointer;">Cancel</button>
@@ -1743,8 +1746,8 @@ body.light-mode .mob-nav span{background:#7C3A00;}
     <div id="forgot-step2" style="display:none;">
       <p style="color:var(--tx2);font-size:0.88rem;margin-bottom:20px;line-height:1.6;">Enter the 6-digit OTP sent to your email and your new password.</p>
       <div id="forgot-msg2" style="font-size:0.82rem;margin-bottom:10px;min-height:18px;"></div>
-      <input type="text" id="forgot-otp" placeholder="6-digit OTP" maxlength="6" style="width:100%;padding:13px 16px;background:rgba(255,255,255,0.08);border:1px solid rgba(139,92,246,0.3);border-radius:14px;color:#EEEAF8;font-family:'Space Grotesk',sans-serif;font-size:1.2rem;letter-spacing:0.3em;text-align:center;outline:none;margin-bottom:10px;"/>
-      <input type="password" id="forgot-newpw" placeholder="New password (min 6 chars)" style="width:100%;padding:13px 16px;background:rgba(255,255,255,0.08);border:1px solid rgba(139,92,246,0.3);border-radius:14px;color:#EEEAF8;font-family:'Space Grotesk',sans-serif;font-size:0.93rem;outline:none;margin-bottom:14px;"/>
+      <input type="text" id="forgot-otp" placeholder="6-digit OTP" maxlength="6" style="width:100%;padding:13px 16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:14px;color:#EEEAF8;font-family:'Space Grotesk',sans-serif;font-size:1.2rem;letter-spacing:0.3em;text-align:center;outline:none;margin-bottom:10px;transition:all 0.3s cubic-bezier(0.4,0,0.2,1);"/>
+      <input type="password" id="forgot-newpw" placeholder="New password (min 6 chars)" style="width:100%;padding:13px 16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:14px;color:#EEEAF8;font-family:'Space Grotesk',sans-serif;font-size:0.93rem;outline:none;margin-bottom:14px;transition:all 0.3s cubic-bezier(0.4,0,0.2,1);"/>
       <div style="display:flex;gap:10px;">
         <button onclick="verifyOTP()" style="flex:1;padding:13px;background:var(--gr);border:none;border-radius:14px;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:0.9rem;font-weight:600;cursor:pointer;">Reset Password →</button>
         <button onclick="document.getElementById('forgot-modal').style.display='none'" style="padding:13px 18px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:14px;color:var(--tx2);font-family:'Space Grotesk',sans-serif;cursor:pointer;">Cancel</button>
