@@ -2671,6 +2671,250 @@ function doLogout(){TK=null;US=null;localStorage.removeItem('piq_token');localSt
 
 // ===== DARK/LIGHT MODE =====
 var _isLight = localStorage.getItem('piq_theme') === 'light';
+function applyHomeSectionColors(isLight){
+  var ph = document.getElementById('page-home');
+  if(!ph) return;
+
+  // ── color maps ──────────────────────────────────────────────
+  var D = {  // dark values (original)
+    heading:   '#EEEAF8',
+    body:      '#6B6890',
+    muted:     '#9B97B8',
+    faint:     '#4A4668',
+    heroSub:   '#8B87A8',
+    cardBg:    'rgba(255,255,255,0.03)',
+    cardBdr:   'rgba(255,255,255,0.07)',
+    priceBig:  '#EEEAF8',
+    priceUnit: '#4A4668',
+    ratingNum: '#EEEAF8',
+    ratingLbl: '#6B6890',
+    trustTxt:  '#4A4668',
+    statLbl:   '#4A4668',
+    faqBg:     'rgba(255,255,255,0.03)',
+    faqBdr:    'rgba(255,255,255,0.07)',
+    ftBrand:   'linear-gradient(135deg,#8B5CF6,#06B6D4,#EC4899)',
+    ftDesc:    '#4A4668',
+    ftColHdr:  '#6B6890',
+    ftLink:    '#4A4668',
+    ftCopy:    '#2E2B45',
+    ftStatus:  '#2E2B45',
+    ftDivider: 'linear-gradient(90deg,transparent,rgba(255,255,255,0.06),transparent)',
+    ftTopBdr:  'linear-gradient(90deg,transparent,rgba(139,92,246,0.5),rgba(6,182,212,0.5),rgba(236,72,153,0.5),transparent)',
+    ftSocBg:   'rgba(255,255,255,0.04)',
+    ftSocBdr:  'rgba(255,255,255,0.08)',
+    ftSocClr:  '#EEEAF8',
+    pill1:     '#A78BFA', pill2: '#67E8F9', pill3: '#F9A8D4',
+    pill4:     '#FCD34D', pill5: '#34D399',
+    badgeTxt1: '#A78BFA', badgeTxt2: '#67E8F9', badgeTxt3: '#34D399', badgeTxt4: '#FCD34D',
+    ctaBg:     'rgba(139,92,246,0.08)', ctaBdr: 'rgba(139,92,246,0.2)',
+    ctaH3:     '#EEEAF8', ctaP: '#6B6890',
+    mbgText:   '#4A4668',
+    priceFree: 'rgba(255,255,255,0.05)', priceFreeB: 'rgba(255,255,255,0.1)', priceFreeC: '#EEEAF8',
+    priceTeamB:'rgba(236,72,153,0.08)', priceTeamBdr:'rgba(236,72,153,0.25)', priceTeamC:'#F9A8D4',
+    faqAnsP:   '#6B6890',
+    reviewerLoc:'#4A4668',
+    sectionBadgeTxt1:'#A78BFA', sectionBadgeTxt2:'#67E8F9', sectionBadgeTxt3:'#34D399', sectionBadgeTxt4:'#FCD34D'
+  };
+  var L = {  // light values (warm orange palette)
+    heading:   '#1C0A00',
+    body:      '#7C3A00',
+    muted:     '#5C3A1E',
+    faint:     '#B86A00',
+    heroSub:   '#7C3A00',
+    cardBg:    '#ffffff',
+    cardBdr:   'rgba(234,88,12,0.12)',
+    priceBig:  '#1C0A00',
+    priceUnit: '#B86A00',
+    ratingNum: '#1C0A00',
+    ratingLbl: '#B86A00',
+    trustTxt:  '#B86A00',
+    statLbl:   '#B86A00',
+    faqBg:     '#ffffff',
+    faqBdr:    'rgba(234,88,12,0.12)',
+    ftBrand:   'linear-gradient(135deg,#EA580C,#D97706,#F97316)',
+    ftDesc:    '#7C3A00',
+    ftColHdr:  '#B86A00',
+    ftLink:    '#7C3A00',
+    ftCopy:    '#B86A00',
+    ftStatus:  '#B86A00',
+    ftDivider: 'linear-gradient(90deg,transparent,rgba(234,88,12,0.15),transparent)',
+    ftTopBdr:  'linear-gradient(90deg,transparent,rgba(234,88,12,0.5),rgba(217,119,6,0.5),rgba(249,115,22,0.5),transparent)',
+    ftSocBg:   'rgba(234,88,12,0.06)',
+    ftSocBdr:  'rgba(234,88,12,0.15)',
+    ftSocClr:  '#EA580C',
+    pill1:     '#EA580C', pill2: '#EA580C', pill3: '#EA580C',
+    pill4:     '#B86A00', pill5: '#7C6A00',
+    badgeTxt1: '#EA580C', badgeTxt2: '#D97706', badgeTxt3: '#7C6A00', badgeTxt4: '#B86A00',
+    ctaBg:     'rgba(234,88,12,0.06)', ctaBdr: 'rgba(234,88,12,0.2)',
+    ctaH3:     '#1C0A00', ctaP: '#7C3A00',
+    mbgText:   '#B86A00',
+    priceFree: 'rgba(234,88,12,0.06)', priceFreeB: 'rgba(234,88,12,0.15)', priceFreeC: '#7C3A00',
+    priceTeamB:'rgba(234,88,12,0.06)', priceTeamBdr:'rgba(234,88,12,0.2)', priceTeamC:'#EA580C',
+    faqAnsP:   '#7C3A00',
+    reviewerLoc:'#B86A00',
+    sectionBadgeTxt1:'#EA580C', sectionBadgeTxt2:'#D97706', sectionBadgeTxt3:'#7C6A00', sectionBadgeTxt4:'#B86A00'
+  };
+  var C = isLight ? L : D;
+
+  // ── helper ───────────────────────────────────────────────────
+  function q(sel){ return ph.querySelectorAll(sel); }
+  function s(el, prop, val){ if(el) el.style.setProperty(prop, val, 'important'); }
+
+  // ── HERO inline colors ───────────────────────────────────────
+  // "Discover Your" span
+  q('h1 span[style*="color:#EEEAF8"]').forEach(function(el){ s(el,'color',C.heading); });
+  // hero sub paragraph
+  q('p[style*="color:#8B87A8"]').forEach(function(el){ s(el,'color',C.heroSub); });
+  // Sign In button
+  q('button[style*="color:#EEEAF8"][style*="border-radius:50px"]').forEach(function(el){ s(el,'color',C.heading); s(el,'border-color','rgba(234,88,12,0.25)'); s(el,'background','rgba(234,88,12,0.04)'); });
+  // Stats card labels
+  q('div[style*="color:#4A4668"][style*="letter-spacing:0.1em"]').forEach(function(el){ s(el,'color',C.statLbl); });
+  // Trust badge text
+  q('div[style*="color:#4A4668"][style*="font-size:0.8rem"]').forEach(function(el){ s(el,'color',C.trustTxt); });
+  // Stats card backgrounds
+  q('div[style*="background:rgba(255,255,255,0.04)"][style*="border-radius:20px"]').forEach(function(el){
+    s(el,'background','rgba(234,88,12,0.04)');
+    s(el,'border-color','rgba(234,88,12,0.15)');
+  });
+
+  // ── SECTION H2 headings (color:#EEEAF8) ─────────────────────
+  q('section h2[style*="color:#EEEAF8"]').forEach(function(el){ s(el,'color',C.heading); });
+  // gradient span inside h2 — keep gradient but swap for light
+  q('section h2 span[style*="-webkit-background-clip:text"]').forEach(function(el){
+    if(isLight){
+      s(el,'background','linear-gradient(135deg,#EA580C,#D97706)');
+      s(el,'-webkit-background-clip','text');
+      s(el,'-webkit-text-fill-color','transparent');
+    } else {
+      el.style.removeProperty('background');
+      el.style.removeProperty('-webkit-background-clip');
+      el.style.removeProperty('-webkit-text-fill-color');
+    }
+  });
+  // section badge chip label text
+  q('section span[style*="color:#A78BFA"]').forEach(function(el){ s(el,'color',C.sectionBadgeTxt1); });
+  q('section span[style*="color:#67E8F9"]').forEach(function(el){ s(el,'color',C.sectionBadgeTxt2); });
+  q('section span[style*="color:#34D399"]').forEach(function(el){ s(el,'color',C.sectionBadgeTxt3); });
+  q('section span[style*="color:#FCD34D"]').forEach(function(el){ s(el,'color',C.sectionBadgeTxt4); });
+  // section badge chip backgrounds
+  q('section div[style*="background:rgba(139,92,246,0.08)"][style*="border-radius:50px"]').forEach(function(el){ s(el,'background','rgba(234,88,12,0.08)'); s(el,'border-color','rgba(234,88,12,0.2)'); });
+  q('section div[style*="background:rgba(6,182,212,0.08)"][style*="border-radius:50px"]').forEach(function(el){ s(el,'background','rgba(234,88,12,0.08)'); s(el,'border-color','rgba(234,88,12,0.2)'); });
+  q('section div[style*="background:rgba(16,185,129,0.08)"][style*="border-radius:50px"]').forEach(function(el){ s(el,'background','rgba(234,88,12,0.08)'); s(el,'border-color','rgba(234,88,12,0.2)'); });
+  q('section div[style*="background:rgba(245,158,11,0.08)"][style*="border-radius:50px"]').forEach(function(el){ s(el,'background','rgba(234,88,12,0.08)'); s(el,'border-color','rgba(234,88,12,0.2)'); });
+
+  // ── SECTION body text ────────────────────────────────────────
+  q('section p[style*="color:#6B6890"]').forEach(function(el){ s(el,'color',C.body); });
+  q('section p[style*="color:#9B97B8"]').forEach(function(el){ s(el,'color',C.muted); });
+
+  // ── FEATURE CARDS ────────────────────────────────────────────
+  // card h3
+  q('section h3[style*="color:#EEEAF8"]').forEach(function(el){ s(el,'color',C.heading); });
+  // card body p
+  q('section p[style*="color:#6B6890"][style*="line-height:1.75"]').forEach(function(el){ s(el,'color',C.body); });
+  // feature card wrapper
+  q('section div[style*="border-radius:24px"][style*="padding:2.5rem"]').forEach(function(el){
+    s(el,'background','#fff');
+    s(el,'border-color','rgba(234,88,12,0.15)');
+    s(el,'box-shadow','0 4px 20px rgba(234,88,12,0.07)');
+  });
+  // pill tags inside feature cards
+  q('section span[style*="border-radius:50px"][style*="font-size:0.7rem"]').forEach(function(el){
+    s(el,'background','rgba(234,88,12,0.08)');
+    s(el,'border-color','rgba(234,88,12,0.2)');
+    s(el,'color','#EA580C');
+  });
+
+  // ── TESTIMONIALS ─────────────────────────────────────────────
+  // testimonial card
+  q('section div[style*="background:rgba(255,255,255,0.03)"][style*="border-radius:24px"]').forEach(function(el){
+    s(el,'background',C.cardBg);
+    s(el,'border-color',C.cardBdr);
+  });
+  // quote text
+  q('section p[style*="font-style:italic"]').forEach(function(el){ s(el,'color',C.muted); });
+  // reviewer name
+  q('section div[style*="font-weight:700"][style*="color:#EEEAF8"][style*="font-size:0.9rem"]').forEach(function(el){ s(el,'color',C.heading); });
+  // reviewer location
+  q('section div[style*="color:#4A4668"][style*="font-size:0.75rem"]').forEach(function(el){ s(el,'color',C.reviewerLoc); });
+  // rating number
+  q('section div[style*="color:#EEEAF8"][style*="font-size:1.8rem"]').forEach(function(el){ s(el,'color',C.ratingNum); });
+  // rating label
+  q('section div[style*="color:#6B6890"][style*="font-size:0.85rem"]').forEach(function(el){ s(el,'color',C.ratingLbl); });
+
+  // ── PRICING ──────────────────────────────────────────────────
+  // pricing card wrapper (free & team)
+  q('section div[style*="border-radius:28px"][style*="rgba(255,255,255,0.03)"]').forEach(function(el){
+    s(el,'background','#fff');
+    s(el,'border-color','rgba(234,88,12,0.15)');
+  });
+  // plan label (Free)
+  q('section div[style*="color:#6B6890"][style*="letter-spacing:0.12em"]').forEach(function(el){ s(el,'color',C.faint); });
+  // price big number
+  q('section span[style*="font-size:3.5rem"][style*="color:#EEEAF8"]').forEach(function(el){ s(el,'color',C.priceBig); });
+  // /month label
+  q('section span[style*="color:#4A4668"][style*="font-size:0.9rem"]').forEach(function(el){ s(el,'color',C.priceUnit); });
+  // plan description
+  q('section p[style*="color:#6B6890"][style*="line-height:1.6"]').forEach(function(el){ s(el,'color',C.body); });
+  // feature list items (included)
+  q('section div[style*="color:#9B97B8"][style*="font-size:0.88rem"]').forEach(function(el){ s(el,'color',C.muted); });
+  // feature list items (excluded)
+  q('section div[style*="color:#4A4668"][style*="font-size:0.88rem"]').forEach(function(el){ s(el,'color',C.faint); });
+  // Free plan button
+  q('section button[style*="rgba(255,255,255,0.05)"]').forEach(function(el){
+    s(el,'background',C.priceFree); s(el,'border-color',C.priceFreeB); s(el,'color',C.priceFreeC);
+  });
+  // Team plan button
+  q('section button[style*="rgba(236,72,153,0.08)"]').forEach(function(el){
+    s(el,'background',C.priceTeamB); s(el,'border-color',C.priceTeamBdr); s(el,'color',C.priceTeamC);
+  });
+  // money back text
+  q('section div[style*="color:#4A4668"][style*="font-size:0.85rem"]').forEach(function(el){ s(el,'color',C.mbgText); });
+  // Team plan label (pink)
+  q('section div[style*="color:#F9A8D4"][style*="letter-spacing:0.12em"]').forEach(function(el){ s(el,'color','#EA580C'); });
+
+  // ── FAQ ───────────────────────────────────────────────────────
+  // faq card
+  q('section div[style*="border-radius:18px"]').forEach(function(el){
+    s(el,'background',C.faqBg); s(el,'border-color',C.faqBdr);
+  });
+  // faq question text
+  q('section button[style*="padding:1.4rem 1.8rem"] span:first-child').forEach(function(el){ s(el,'color',C.heading); });
+  // faq + icon
+  q('section span.faq-icon').forEach(function(el){ s(el,'color',isLight?'#EA580C':'#8B5CF6'); });
+  // faq answer
+  q('section div[style*="max-height"] p').forEach(function(el){ s(el,'color',C.faqAnsP); });
+  // faq bottom CTA block
+  q('section div[style*="rgba(139,92,246,0.08)"][style*="border-radius:28px"]').forEach(function(el){
+    s(el,'background',C.ctaBg); s(el,'border-color',C.ctaBdr);
+  });
+  q('section div[style*="rgba(139,92,246,0.08)"][style*="border-radius:28px"] h3').forEach(function(el){ s(el,'color',C.ctaH3); });
+  q('section div[style*="rgba(139,92,246,0.08)"][style*="border-radius:28px"] p').forEach(function(el){ s(el,'color',C.ctaP); });
+
+  // ── FOOTER ───────────────────────────────────────────────────
+  var ft = document.getElementById('main-footer');
+  if(ft){
+    // brand name gradient
+    var ftBrand = ft.querySelector('div[style*="font-size:1.5rem"]');
+    if(ftBrand){ s(ftBrand,'background',C.ftBrand); s(ftBrand,'-webkit-background-clip','text'); s(ftBrand,'-webkit-text-fill-color','transparent'); }
+    // tagline
+    ft.querySelectorAll('p[style*="color:#4A4668"]').forEach(function(el){ s(el,'color',C.ftDesc); });
+    // column headers
+    ft.querySelectorAll('div[style*="color:#6B6890"][style*="letter-spacing:0.15em"]').forEach(function(el){ s(el,'color',C.ftColHdr); });
+    // links
+    ft.querySelectorAll('a[style*="color:#4A4668"]').forEach(function(el){ s(el,'color',C.ftLink); });
+    // copyright & status
+    ft.querySelectorAll('p[style*="color:#2E2B45"]').forEach(function(el){ s(el,'color',C.ftCopy); });
+    ft.querySelectorAll('div[style*="color:#2E2B45"]').forEach(function(el){ s(el,'color',C.ftStatus); });
+    // divider line
+    ft.querySelectorAll('div[style*="height:1px"][style*="rgba(255,255,255,0.06)"]').forEach(function(el){ s(el,'background',C.ftDivider); });
+    // top border
+    var topBdr = ft.querySelector('div[style*="height:1px"]:first-child');
+    if(topBdr){ s(topBdr,'background',C.ftTopBdr); }
+    // social icons
+    ft.querySelectorAll('a[style*="width:36px"]').forEach(function(el){ s(el,'background',C.ftSocBg); s(el,'border-color',C.ftSocBdr); s(el,'color',C.ftSocClr); });
+  }
+}
+
 function applyThemeMode(){
   var btn = document.getElementById('theme-toggle');
   if(_isLight){
@@ -2680,6 +2924,7 @@ function applyThemeMode(){
     document.body.classList.remove('light-mode');
     if(btn) btn.textContent = '🌙';
   }
+  applyHomeSectionColors(_isLight);
 }
 function toggleDarkLight(){
   _isLight = !_isLight;
