@@ -1736,8 +1736,8 @@ body.light-mode .mob-nav span{background:#7C3A00;}
 
 <!-- Forgot Password Modal -->
 <div id="forgot-modal" style="display:none;position:fixed;inset:0;background:rgba(5,5,8,0.85);z-index:9990;align-items:center;justify-content:center;backdrop-filter:blur(8px);">
-  <div style="background:#0D0D18;border:1px solid rgba(139,92,246,0.3);border-radius:24px;padding:36px;width:100%;max-width:420px;margin:24px;box-shadow:0 0 60px rgba(139,92,246,0.2);">
-    <h3 style="font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;margin-bottom:8px;">🔐 Reset Password</h3>
+  <div id="forgot-modal-inner" style="background:#0D0D18;border:1px solid rgba(139,92,246,0.3);border-radius:24px;padding:36px;width:100%;max-width:420px;margin:24px;box-shadow:0 0 60px rgba(139,92,246,0.2);">
+    <h3 id="forgot-modal-title" style="font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;margin-bottom:8px;">🔐 Reset Password</h3>
     <div id="forgot-step1">
       <p style="color:var(--tx2);font-size:0.88rem;margin-bottom:20px;line-height:1.6;">Enter your email — we'll send a reset OTP.</p>
       <div id="forgot-msg" style="font-size:0.82rem;margin-bottom:10px;min-height:18px;"></div>
@@ -1990,6 +1990,25 @@ function showForgotPassword(){
   document.getElementById('forgot-step2').style.display='none';
   document.getElementById('forgot-email').value='';
   document.getElementById('forgot-msg').textContent='';
+  // Apply light/dark styles to modal inner
+  var inner = document.getElementById('forgot-modal-inner');
+  var title = document.getElementById('forgot-modal-title');
+  var emailInp = document.getElementById('forgot-email');
+  var otpInp = document.getElementById('forgot-otp');
+  var newpwInp = document.getElementById('forgot-newpw');
+  if(_isLight){
+    inner.style.background='rgba(255,255,255,0.97)';
+    inner.style.border='1px solid rgba(234,88,12,0.2)';
+    inner.style.boxShadow='0 20px 60px rgba(234,88,12,0.1)';
+    if(title) title.style.color='#1C0A00';
+    [emailInp,otpInp,newpwInp].forEach(function(el){if(el){el.style.background='#fff';el.style.border='1px solid rgba(234,88,12,0.2)';el.style.color='#1C0A00';el.style.caretColor='#1C0A00';}});
+  } else {
+    inner.style.background='#0D0D18';
+    inner.style.border='1px solid rgba(139,92,246,0.3)';
+    inner.style.boxShadow='0 0 60px rgba(139,92,246,0.2)';
+    if(title) title.style.color='#EEEAF8';
+    [emailInp,otpInp,newpwInp].forEach(function(el){if(el){el.style.background='rgba(255,255,255,0.04)';el.style.border='1px solid rgba(255,255,255,0.07)';el.style.color='#EEEAF8';el.style.caretColor='#EEEAF8';}});
+  }
 }
 async function sendOTP(){
   var email=document.getElementById('forgot-email').value.trim();
