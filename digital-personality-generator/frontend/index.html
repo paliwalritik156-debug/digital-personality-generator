@@ -1592,7 +1592,7 @@ body.light-mode .mob-nav span{background:#7C3A00;}
         </div>
       </div>
     </div>
-  <div class="rc w" id="pr-theme-section">
+  <div class="rc w" id="pr-theme-section" style="display:none">
       <div class="cl">🎨 Personality Theme</div>
       <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
         <span style="font-size:0.82rem;color:var(--tx2)">Switch theme based on trait:</span>
@@ -1604,7 +1604,7 @@ body.light-mode .mob-nav span{background:#7C3A00;}
         <button onclick="resetTheme()" style="background:var(--glass);border:1px solid var(--bdr);color:var(--tx2);padding:6px 14px;border-radius:20px;cursor:pointer;font-size:0.78rem">↺ Reset</button>
       </div>
   </div>
-  <div class="ra">
+  <div class="ra" id="pr-action-bar" style="display:none">
     <button class="btn-p" onclick="downloadPDF()">📄 Download PDF</button>
     <button class="btn-p" onclick="openEmailModal()" style="background:linear-gradient(135deg,#06B6D4,#0EA5E9);">📧 Email Report</button>
     <button class="btn-g" onclick="openChat()">🤖 Chat Twin</button><button class="btn-g" onclick="showPage('ph')">📂 History</button>
@@ -1810,6 +1810,11 @@ const TL={openness:'Openness',conscientiousness:'Conscientiousness',extraversion
 const TC={openness:'#8B5CF6',conscientiousness:'#06B6D4',extraversion:'#EC4899',agreeableness:'#10B981',neuroticism:'#F59E0B'};
 const LM=['Mapping your cognitive landscape','Detecting personality patterns','Building your Digital Twin','Running life simulations','Generating your AI report'];
 function showPage(n,sub){
+  // Hide results-only UI whenever we navigate away from the results page
+  if(n!=='pr'){
+    var _ts=document.getElementById('pr-theme-section');if(_ts)_ts.style.display='none';
+    var _ab=document.getElementById('pr-action-bar');if(_ab)_ab.style.display='none';
+  }
   // Always hide page-home explicitly
   var ph=document.getElementById('page-home');
   if(ph&&n!=='page-home') ph.classList.add('hidden');
@@ -2168,6 +2173,9 @@ if(r.scores) renderColorPalette(r.scores);
 if(r.scores) setTimeout(function(){generateWallpaper('dark');},300);
 // Generate roast
 setTimeout(function(){generateRoast();},500);
+// Reveal results-only UI (theme switcher + action bar) now that results exist
+var _ts=document.getElementById('pr-theme-section');if(_ts)_ts.style.display='block';
+var _ab=document.getElementById('pr-action-bar');if(_ab)_ab.style.display='flex';
 showPage('pr');setTimeout(function(){updateAvatar(r,badge);},300);}
 function hCard(r){const dom=r.personalityType||TL[r.dominantTrait]||'Balanced';const date=new Date(r.completedAt).toLocaleDateString('en-IN',{year:'numeric',month:'short',day:'numeric'});const pills=TR.map(t=>{const s=r.scores&&r.scores[t];const sc=s?(typeof s==='object'?s.score:s):0;return'<span class="hip">'+TL[t].slice(0,3)+': '+sc+'%</span>';}).join('');return'<div class="hi" onclick="viewR('+JSON.stringify(r.sessionId||r._id)+')"><div class="hil"><h4>'+dom+'</h4><p>'+date+'</p><div class="hips">'+pills+'</div></div><div class="hia">to</div></div>';}
 async function loadHist(){
