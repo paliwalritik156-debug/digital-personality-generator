@@ -852,6 +852,7 @@ body.light-mode{
   --gr2:linear-gradient(135deg,#F97316,#FBBF24);
   --gr3:linear-gradient(135deg,#EA580C,#F97316,#FBBF24);
   --gp:0 0 40px rgba(234,88,12,0.2);
+  --back-bar-bg:rgba(255,248,240,0.95);
   background:#FFF8F0;color:#1C0A00;cursor:auto;
 }
 body.light-mode::before{background:radial-gradient(ellipse at 20% 20%,rgba(234,88,12,0.08) 0%,transparent 60%),radial-gradient(ellipse at 80% 80%,rgba(251,191,36,0.06) 0%,transparent 60%);}
@@ -1372,7 +1373,7 @@ body.light-mode .mob-nav span{background:#7C3A00;}
   </div>
 </div>
 <div id="pq" class="page hidden">
-  <div style="position:sticky;top:68px;z-index:50;padding:10px 2rem;background:rgba(5,5,8,0.8);backdrop-filter:blur(10px);border-bottom:1px solid var(--bdr);">
+  <div style="position:sticky;top:68px;z-index:50;padding:10px 2rem;background:var(--back-bar-bg, rgba(5,5,8,0.8));backdrop-filter:blur(10px);border-bottom:1px solid var(--bdr);">
     <button onclick="if(confirm('Quit assessment? Progress will be lost.'))showPage(\'pd\')" style="background:var(--glass);border:1px solid var(--bdr);color:var(--tx2);padding:7px 16px;border-radius:20px;font-family:'Space Grotesk',sans-serif;font-size:0.82rem;cursor:pointer;display:inline-flex;align-items:center;gap:6px;">← Back</button>
   </div>
   <div class="qs">
@@ -1450,7 +1451,7 @@ body.light-mode .mob-nav span{background:#7C3A00;}
   </div>
 </div>
 <div id="pr" class="page hidden">
-  <div style="position:sticky;top:68px;z-index:50;padding:10px 2rem;background:rgba(5,5,8,0.8);backdrop-filter:blur(10px);border-bottom:1px solid var(--bdr);display:flex;align-items:center;gap:12px;">
+  <div style="position:sticky;top:68px;z-index:50;padding:10px 2rem;background:var(--back-bar-bg, rgba(5,5,8,0.8));backdrop-filter:blur(10px);border-bottom:1px solid var(--bdr);display:flex;align-items:center;gap:12px;">
     <button onclick="showPage('pd')" style="background:var(--glass);border:1px solid var(--bdr);color:var(--tx2);padding:7px 16px;border-radius:20px;font-family:'Space Grotesk',sans-serif;font-size:0.82rem;cursor:pointer;display:flex;align-items:center;gap:6px;">← Dashboard</button>
     <button onclick="loadQuiz()" style="background:var(--glass);border:1px solid var(--bdr);color:var(--tx2);padding:7px 16px;border-radius:20px;font-family:'Space Grotesk',sans-serif;font-size:0.82rem;cursor:pointer;display:flex;align-items:center;gap:6px;">🔄 Retake</button>
     <button onclick="showPage('ph')" style="background:var(--glass);border:1px solid var(--bdr);color:var(--tx2);padding:7px 16px;border-radius:20px;font-family:'Space Grotesk',sans-serif;font-size:0.82rem;cursor:pointer;display:flex;align-items:center;gap:6px;">📊 History</button>
@@ -3485,7 +3486,7 @@ function resetTheme(){
 
 </script>
 <div id="page-chat" class="page hidden">
-  <div style="position:sticky;top:68px;z-index:50;padding:10px 2rem;background:rgba(5,5,8,0.8);backdrop-filter:blur(10px);border-bottom:1px solid var(--bdr);">
+  <div style="position:sticky;top:68px;z-index:50;padding:10px 2rem;background:var(--back-bar-bg, rgba(5,5,8,0.8));backdrop-filter:blur(10px);border-bottom:1px solid var(--bdr);">
     <button onclick="showPage('pd')" style="background:var(--glass);border:1px solid var(--bdr);color:var(--tx2);padding:7px 16px;border-radius:20px;font-family:'Space Grotesk',sans-serif;font-size:0.82rem;cursor:pointer;display:inline-flex;align-items:center;gap:6px;">← Dashboard</button>
   </div>
   <div class="chat-wrap">
