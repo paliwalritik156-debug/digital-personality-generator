@@ -2901,12 +2901,18 @@ function applyHomeSectionColors(isLight){
   // card h3
   q('section h3[style*="color:#EEEAF8"]').forEach(function(el){ s(el,'color',C.heading); });
   // card body p
-  q('section p[style*="color:#6B6890"][style*="line-height:1.75"]').forEach(function(el){ s(el,'color',C.body); });
-  // feature card wrapper
+  q('section p[style*="color:#C4C0D8"][style*="line-height:1.75"]').forEach(function(el){ s(el,'color',C.body); });
+  // feature card wrapper - restore original gradient in dark, white in light
   q('section div[style*="border-radius:24px"][style*="padding:2.5rem"]').forEach(function(el){
-    s(el,'background','#fff');
-    s(el,'border-color','rgba(234,88,12,0.15)');
-    s(el,'box-shadow','0 4px 20px rgba(234,88,12,0.07)');
+    if(isLight){
+      s(el,'background','#fff');
+      s(el,'border-color','rgba(234,88,12,0.15)');
+      s(el,'box-shadow','0 4px 20px rgba(234,88,12,0.07)');
+    } else {
+      el.style.removeProperty('background');
+      el.style.removeProperty('border-color');
+      el.style.removeProperty('box-shadow');
+    }
   });
   // pill tags inside feature cards
   q('section span[style*="border-radius:50px"][style*="font-size:0.7rem"]').forEach(function(el){
@@ -2918,8 +2924,13 @@ function applyHomeSectionColors(isLight){
   // ── TESTIMONIALS ─────────────────────────────────────────────
   // testimonial card
   q('section div[style*="background:rgba(255,255,255,0.03)"][style*="border-radius:24px"]').forEach(function(el){
-    s(el,'background',C.cardBg);
-    s(el,'border-color',C.cardBdr);
+    if(isLight){
+      s(el,'background',C.cardBg);
+      s(el,'border-color',C.cardBdr);
+    } else {
+      el.style.removeProperty('background');
+      el.style.removeProperty('border-color');
+    }
   });
   // quote text
   q('section p[style*="font-style:italic"]').forEach(function(el){ s(el,'color',C.muted); });
@@ -2935,8 +2946,13 @@ function applyHomeSectionColors(isLight){
   // ── PRICING ──────────────────────────────────────────────────
   // pricing card wrapper (free & team)
   q('section div[style*="border-radius:28px"][style*="rgba(255,255,255,0.03)"]').forEach(function(el){
-    s(el,'background','#fff');
-    s(el,'border-color','rgba(234,88,12,0.15)');
+    if(isLight){
+      s(el,'background','#fff');
+      s(el,'border-color','rgba(234,88,12,0.15)');
+    } else {
+      el.style.removeProperty('background');
+      el.style.removeProperty('border-color');
+    }
   });
   // plan label (Free)
   q('section div[style*="color:#6B6890"][style*="letter-spacing:0.12em"]').forEach(function(el){ s(el,'color',C.faint); });
@@ -2966,7 +2982,12 @@ function applyHomeSectionColors(isLight){
   // ── FAQ ───────────────────────────────────────────────────────
   // faq card
   q('section div[style*="border-radius:18px"]').forEach(function(el){
-    s(el,'background',C.faqBg); s(el,'border-color',C.faqBdr);
+    if(isLight){
+      s(el,'background',C.faqBg); s(el,'border-color',C.faqBdr);
+    } else {
+      el.style.removeProperty('background');
+      el.style.removeProperty('border-color');
+    }
   });
   // faq question text
   q('section button[style*="padding:1.4rem 1.8rem"] span:first-child').forEach(function(el){ s(el,'color',C.heading); });
@@ -2976,7 +2997,12 @@ function applyHomeSectionColors(isLight){
   q('section div[style*="max-height"] p').forEach(function(el){ s(el,'color',C.faqAnsP); });
   // faq bottom CTA block
   q('section div[style*="rgba(139,92,246,0.08)"][style*="border-radius:28px"]').forEach(function(el){
-    s(el,'background',C.ctaBg); s(el,'border-color',C.ctaBdr);
+    if(isLight){
+      s(el,'background',C.ctaBg); s(el,'border-color',C.ctaBdr);
+    } else {
+      el.style.removeProperty('background');
+      el.style.removeProperty('border-color');
+    }
   });
   q('section div[style*="rgba(139,92,246,0.08)"][style*="border-radius:28px"] h3').forEach(function(el){ s(el,'color',C.ctaH3); });
   q('section div[style*="rgba(139,92,246,0.08)"][style*="border-radius:28px"] p').forEach(function(el){ s(el,'color',C.ctaP); });
