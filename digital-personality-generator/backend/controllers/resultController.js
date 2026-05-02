@@ -141,14 +141,19 @@ const downloadPDF = async (req, res) => {
     Object.entries(result.scores).forEach(([trait, score]) => {
       const s = typeof score === 'object' ? score.score : score;
       const rowY = doc.y;
-      doc.fillColor('#333').fontSize(10).font('Helvetica-Bold').text(`${traitLabels[trait]}`, 50, rowY, {width:120});
-      const barX = 175;
-      const barW = 280;
-      const filledW = Math.round((s / 100) * barW);
-      doc.rect(barX, rowY + 2, barW, 10).fill('#e0e0e0');
-      doc.rect(barX, rowY + 2, filledW, 10).fill(traitColors[trait] || '#666');
-      doc.fillColor(traitColors[trait] || '#333').fontSize(10).font('Helvetica').text(`${s}%`, barX + barW + 8, rowY);
-      doc.moveDown(1.5);
+      // Label
+      doc.fillColor('#333').fontSize(10).font('Helvetica-Bold')
+        .text(`${traitLabels[trait]}`, 50, rowY, { width: 120 });
+      // Bar background
+      doc.rect(175, rowY + 2, 280, 10).fill('#e0e0e0');
+      // Bar fill
+      const filledW = Math.round((s / 100) * 280);
+      if (filledW > 0) doc.rect(175, rowY + 2, filledW, 10).fill(traitColors[trait] || '#666');
+      // Score %
+      doc.fillColor(traitColors[trait] || '#333').fontSize(10).font('Helvetica')
+        .text(`${s}%`, 462, rowY, { width: 40, align: 'right' });
+      // Move to next row with fixed spacing
+      doc.text('', 50, rowY + 24);
     });
     doc.moveDown(1);
     doc.text('', 50, doc.y);doc.fillColor('#1a1a2e').fontSize(16).font('Helvetica-Bold').text('Personality Summary', 50, doc.y, {width:490});

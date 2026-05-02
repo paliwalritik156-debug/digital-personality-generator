@@ -53,12 +53,28 @@ const generatePDFBuffer = (result, user) => {
 
     Object.entries(result.scores).forEach(([trait, score]) => {
       const s = typeof score === 'object' ? score.score : score;
-      doc.fillColor('#333').fontSize(11).font('Helvetica-Bold').text(`${traitLabels[trait]}: `, { continued: true });
-      doc.fillColor(traitColors[trait] || '#666').font('Helvetica').text(`${s}%`);
-      const barWidth = Math.round((s / 100) * 350);
-      doc.rect(50, doc.y, 350, 10).fill('#e0e0e0');
-      doc.rect(50, doc.y - 10, barWidth, 10).fill(traitColors[trait] || '#666');
-      doc.moveDown(1);
+      const barWidth = Math.round((s / 100) * 300);
+      const startY = doc.y;
+
+      // Label on left
+      doc.fillColor('#333').fontSize(10).font('Helvetica-Bold')
+        .text(traitLabels[trait], 50, startY, { width: 130 });
+
+      // Score % on right
+      doc.fillColor(traitColors[trait] || '#666').fontSize(10).font('Helvetica-Bold')
+        .text(`${s}%`, 460, startY, { width: 50, align: 'right' });
+
+      // Background bar
+      const barY = startY + 16;
+      doc.rect(50, barY, 300, 10).fill('#e8e8e8');
+
+      // Filled bar
+      if (barWidth > 0) {
+        doc.rect(50, barY, barWidth, 10).fill(traitColors[trait] || '#666');
+      }
+
+      // Move down enough for next row
+      doc.moveDown(2);
     });
 
     doc.moveDown(1);
