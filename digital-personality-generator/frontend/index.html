@@ -655,8 +655,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:68px;display:flex;ali
 .sci{font-size:1.5rem;margin-bottom:0.8rem}
 .scv{font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;background:var(--gr);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .scl{font-size:0.74rem;color:var(--tx3);margin-top:0.2rem;text-transform:uppercase;letter-spacing:0.08em}
-.sh{font-size:0.7rem;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:0.14em;margin-bottom:1rem;display:flex;align-items:center;gap:10px}
-.sh::after{content:'';flex:1;height:1px;background:var(--bdr)}
+.sh{font-size:0.68rem;font-weight:700;color:rgba(139,92,246,0.6);text-transform:uppercase;letter-spacing:0.14em;margin-bottom:1rem;display:flex;align-items:center;gap:10px}
+.sh::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,rgba(139,92,246,0.2),transparent)}
 #pq{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:5.5rem 2rem 3rem}
 .qs{width:100%;max-width:600px}
 .qt{margin-bottom:2.5rem}
@@ -694,21 +694,31 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:68px;display:flex;ali
 .lm{color:var(--tx2);font-size:0.9rem;letter-spacing:0.05em;animation:tf 2.5s ease-in-out infinite}
 @keyframes tf{0%,100%{opacity:0.4}50%{opacity:1}}
 #pr{max-width:940px;margin:0 auto;padding:5.5rem 2rem 5rem}
-.rh{text-align:center;margin-bottom:4rem}
-.reb{font-size:0.7rem;font-weight:700;color:var(--pu2);text-transform:uppercase;letter-spacing:0.15em;margin-bottom:1.2rem}
-.rh h2{font-family:'Syne',sans-serif;font-size:2.5rem;font-weight:800;letter-spacing:-0.03em;margin-bottom:0.4rem}
-.rdt{color:var(--tx3);font-size:0.83rem;margin-bottom:1.5rem}
-.pb{display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,rgba(139,92,246,0.15),rgba(6,182,212,0.15));border:1px solid rgba(139,92,246,0.35);padding:10px 24px;border-radius:50px;font-family:'Syne',sans-serif;font-weight:700;font-size:0.95rem;color:var(--pu2);letter-spacing:0.05em;text-transform:uppercase;animation:bg 2.5s ease-in-out infinite}
+.rh{text-align:center;margin-bottom:4rem;padding:4rem 2rem 3rem;position:relative;overflow:hidden}.rh::before{content:"";position:absolute;top:-100px;left:50%;transform:translateX(-50%);width:600px;height:400px;background:radial-gradient(ellipse,rgba(139,92,246,0.12) 0%,transparent 70%);pointer-events:none}
+.reb{display:inline-flex;align-items:center;gap:8px;font-size:0.7rem;font-weight:700;color:var(--pu2);text-transform:uppercase;letter-spacing:0.15em;margin-bottom:1.2rem;background:rgba(139,92,246,0.1);border:1px solid rgba(139,92,246,0.25);padding:6px 16px;border-radius:50px}
+.rh h2{font-family:'Syne',sans-serif;font-size:clamp(2rem,5vw,3.5rem);font-weight:800;letter-spacing:-0.04em;margin-bottom:0.4rem;background:linear-gradient(135deg,#EEEAF8 0%,#A78BFA 50%,#67E8F9 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.rdt{color:var(--tx3);font-size:0.83rem;margin-bottom:1.5rem;letter-spacing:0.05em}
+.pb{display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,rgba(139,92,246,0.15),rgba(6,182,212,0.1));border:1px solid rgba(139,92,246,0.4);padding:12px 28px;border-radius:50px;font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;color:var(--pu2);letter-spacing:0.08em;text-transform:uppercase;animation:bg 2.5s ease-in-out infinite;box-shadow:0 0 30px rgba(139,92,246,0.2)}
 @keyframes bg{0%,100%{box-shadow:0 0 20px rgba(139,92,246,0.2)}50%{box-shadow:0 0 50px rgba(139,92,246,0.5),0 0 80px rgba(6,182,212,0.2)}}
-.rg{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem}
-.rc{background:var(--glass);border:1px solid var(--bdr);border-radius:22px;padding:1.5rem;backdrop-filter:blur(20px);transition:var(--tr);opacity:0;transform:translateY(20px);animation:cr 0.6s ease forwards}
-.rc:hover{border-color:var(--bdr2);box-shadow:0 20px 60px rgba(139,92,246,0.1)}
+.rg{display:grid;grid-template-columns:1fr 1fr;gap:1.4rem;padding:0 2rem 3rem;max-width:1200px;margin:0 auto}
+.rc{background:linear-gradient(135deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02));border:1px solid rgba(255,255,255,0.07);border-radius:24px;padding:1.8rem;backdrop-filter:blur(20px);transition:all 0.3s cubic-bezier(0.4,0,0.2,1);opacity:0;transform:translateY(20px);animation:cr 0.6s ease forwards;position:relative;overflow:hidden}
+.rc:hover{border-color:rgba(139,92,246,0.35);box-shadow:0 20px 60px rgba(139,92,246,0.12);transform:translateY(-3px)}
 @keyframes cr{to{opacity:1;transform:translateY(0)}}
 .rc:nth-child(1){animation-delay:0.08s}.rc:nth-child(2){animation-delay:0.14s}.rc:nth-child(3){animation-delay:0.20s}.rc:nth-child(4){animation-delay:0.26s}.rc:nth-child(5){animation-delay:0.32s}.rc:nth-child(6){animation-delay:0.38s}.rc:nth-child(7){animation-delay:0.44s}.rc:nth-child(8){animation-delay:0.50s}.rc:nth-child(9){animation-delay:0.56s}.rc:nth-child(10){animation-delay:0.62s}.rc:nth-child(11){animation-delay:0.68s}.rc:nth-child(12){animation-delay:0.74s}.rc:nth-child(13){animation-delay:0.80s}.rc:nth-child(14){animation-delay:0.86s}.rc:nth-child(15){animation-delay:0.92s}.rc:nth-child(16){animation-delay:0.98s}
+.rc::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(139,92,246,0.4),rgba(6,182,212,0.3),transparent);opacity:0;transition:opacity 0.3s}
+.rc:hover::before{opacity:1}
+.overview-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;margin-bottom:2rem}
+.quick-actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-bottom:2rem}
+.qa-icon{font-size:2rem;margin-bottom:0.8rem}
+.qa-title{font-family:'Syne',sans-serif;font-weight:700;font-size:0.95rem;margin-bottom:0.3rem}
+.qa-desc{font-size:0.78rem;color:var(--tx2)}
+.ov-icon{font-size:1.4rem;margin-bottom:0.7rem}
+.ov-val{font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;background:var(--gr);-webkit-background-clip:text;-webkit-text-fill-color:transparent;word-break:break-word;line-height:1.3}
+.ov-lbl{font-size:0.72rem;color:var(--tx3);margin-top:2px;text-transform:uppercase;letter-spacing:0.06em}
 .rc.w{grid-column:1/-1}
-.cl{font-size:0.68rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--tx3);margin-bottom:1rem;display:flex;align-items:center;justify-content:space-between}
-.cbtn{background:var(--glass);border:1px solid var(--bdr);color:var(--tx2);padding:3px 12px;border-radius:20px;font-size:0.68rem;cursor:pointer;transition:var(--tr);font-family:'Space Grotesk',sans-serif}
-.cbtn:hover{border-color:var(--pu);color:var(--pu2)}
+.cl{font-size:0.68rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--pu2);margin-bottom:1.2rem;display:flex;align-items:center;justify-content:space-between;padding-bottom:0.8rem;border-bottom:1px solid rgba(139,92,246,0.1)}
+.cbtn{background:rgba(139,92,246,0.08);border:1px solid rgba(139,92,246,0.2);color:var(--pu2);padding:4px 12px;border-radius:20px;font-size:0.68rem;cursor:pointer;transition:all 0.2s;font-family:'Space Grotesk',sans-serif}
+.cbtn:hover{border-color:var(--pu);background:rgba(139,92,246,0.15);color:var(--pu2)}
 .st{font-size:0.97rem;line-height:1.8;color:var(--tx2)}
 .cw{max-width:280px;margin:0 auto}
 .tr{display:flex;align-items:center;gap:10px;margin-bottom:12px}
@@ -737,7 +747,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:68px;display:flex;ali
 .bi{background:rgba(255,255,255,0.03);border-radius:12px;padding:12px;border:1px solid var(--bdr)}
 .bl{font-size:0.66rem;color:var(--tx3);font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px}
 .bv{font-size:0.87rem;color:var(--tx);line-height:1.5}
-.trl{background:linear-gradient(135deg,rgba(139,92,246,0.12),rgba(6,182,212,0.08));border-radius:18px;padding:1.8rem;text-align:center;border:1px solid rgba(139,92,246,0.2)}
+.trl{background:linear-gradient(135deg,rgba(139,92,246,0.1),rgba(6,182,212,0.06));border-radius:20px;padding:2rem;text-align:center;border:1px solid rgba(139,92,246,0.25);position:relative;overflow:hidden}
 .trlt{font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;margin-bottom:0.4rem;letter-spacing:-0.02em}
 .trlg{font-size:0.7rem;color:var(--cy);font-weight:700;text-transform:uppercase;letter-spacing:0.12em;margin-bottom:1rem}
 .trln{font-size:0.9rem;color:var(--tx2);line-height:1.75;font-style:italic}
@@ -750,7 +760,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:68px;display:flex;ali
 .et{font-size:0.84rem;line-height:1.6;color:var(--tx2)}
 .ea{color:var(--tx3);font-size:1.5rem;margin-top:22px;flex-shrink:0}
 .ib{background:linear-gradient(135deg,rgba(139,92,246,0.07),rgba(6,182,212,0.05));border:1px solid rgba(139,92,246,0.12);border-radius:14px;padding:1.2rem;text-align:center;font-size:0.95rem;line-height:1.8;color:var(--tx2);font-style:italic}
-.ra{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:3rem;padding-top:2rem;border-top:1px solid var(--bdr)}
+.ra{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:3rem;padding:2rem;border-top:1px solid rgba(139,92,246,0.1);background:linear-gradient(180deg,transparent,rgba(139,92,246,0.03));border-radius:0 0 24px 24px}
 .shcard{background:linear-gradient(135deg,#0D0B1E,#130B2E,#0B1A2E);border:1px solid rgba(139,92,246,0.3);border-radius:24px;padding:2rem;text-align:center;position:relative;overflow:hidden;margin-top:0.5rem}
 .shcard::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:conic-gradient(from 0deg,transparent 0deg,rgba(139,92,246,0.06) 60deg,transparent 120deg);animation:rot 8s linear infinite}
 @keyframes rot{to{transform:rotate(360deg)}}
@@ -1211,38 +1221,38 @@ body.light-mode .mob-nav span{background:#7C3A00;}
 .skel-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem}
 
 #pd{padding:0;max-width:100%;margin:0}
-.dash-layout{display:grid;grid-template-columns:240px 1fr;min-height:calc(100vh - 68px);margin-top:68px}
-.sidebar{background:rgba(5,5,8,0.9);border-right:1px solid var(--bdr);backdrop-filter:blur(30px);padding:2rem 1.2rem;display:flex;flex-direction:column;gap:4px;position:sticky;top:68px;height:calc(100vh - 68px);overflow-y:auto}
-.sidebar-user{padding:1rem;margin-bottom:1rem;border-bottom:1px solid var(--bdr);padding-bottom:1.5rem}
-.sidebar-avatar{width:44px;height:44px;background:var(--gr);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.2rem;margin-bottom:0.8rem}
-.sidebar-name{font-family:'Syne',sans-serif;font-weight:700;font-size:0.95rem}
-.sidebar-email{font-size:0.72rem;color:var(--tx3);margin-top:2px}
-.sidebar-label{font-size:0.65rem;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:0.12em;padding:0.5rem 0.8rem;margin-top:0.5rem}
-.nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;cursor:pointer;transition:var(--tr);font-size:0.88rem;color:var(--tx2);border:1px solid transparent}
-.nav-item:hover{background:var(--glass);color:var(--tx);border-color:var(--bdr)}
-.nav-item.active{background:rgba(139,92,246,0.12);color:var(--pu2);border-color:rgba(139,92,246,0.2)}
-.nav-item-icon{font-size:1rem;width:20px;text-align:center}
-.nav-item-badge{margin-left:auto;background:var(--pu);color:#fff;font-size:0.6rem;font-weight:700;padding:2px 7px;border-radius:20px}
-.sidebar-bottom{margin-top:auto;padding-top:1rem;border-top:1px solid var(--bdr)}
-.dash-main{padding:2.5rem;overflow-y:auto}
+.dash-layout{display:grid;grid-template-columns:260px 1fr;min-height:calc(100vh - 68px);margin-top:68px;background:var(--void)}
+.sidebar{background:linear-gradient(180deg,rgba(8,8,15,0.98),rgba(5,5,8,0.95));border-right:1px solid rgba(139,92,246,0.12);backdrop-filter:blur(40px);padding:1.8rem 1rem;display:flex;flex-direction:column;gap:3px;position:sticky;top:68px;height:calc(100vh - 68px);overflow-y:auto;box-shadow:4px 0 30px rgba(0,0,0,0.3)}
+.sidebar-user{padding:1rem;margin-bottom:1rem;border-bottom:1px solid rgba(139,92,246,0.1);padding-bottom:1.5rem;background:linear-gradient(135deg,rgba(139,92,246,0.06),rgba(6,182,212,0.03));border-radius:16px;margin-bottom:1.2rem}
+.sidebar-avatar{width:48px;height:48px;background:linear-gradient(135deg,#8B5CF6,#06B6D4);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.3rem;margin-bottom:0.8rem;box-shadow:0 0 20px rgba(139,92,246,0.4);border:2px solid rgba(139,92,246,0.3)}
+.sidebar-name{font-family:'Syne',sans-serif;font-weight:700;font-size:0.95rem;background:linear-gradient(135deg,#EEEAF8,#A78BFA);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.sidebar-email{font-size:0.72rem;color:var(--tx3);margin-top:2px;opacity:0.7}
+.sidebar-label{font-size:0.62rem;font-weight:700;color:rgba(139,92,246,0.5);text-transform:uppercase;letter-spacing:0.15em;padding:0.8rem 0.8rem 0.4rem;margin-top:0.5rem}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:14px;cursor:pointer;transition:all 0.25s cubic-bezier(0.4,0,0.2,1);font-size:0.87rem;color:var(--tx2);border:1px solid transparent;position:relative;overflow:hidden}
+.nav-item:hover{background:rgba(139,92,246,0.08);color:var(--tx);border-color:rgba(139,92,246,0.2);transform:translateX(3px)}
+.nav-item.active{background:linear-gradient(135deg,rgba(139,92,246,0.18),rgba(6,182,212,0.08));color:var(--pu2);border-color:rgba(139,92,246,0.35);box-shadow:0 4px 20px rgba(139,92,246,0.15),inset 0 1px 0 rgba(255,255,255,0.05)}
+.nav-item-icon{font-size:1rem;width:22px;text-align:center;flex-shrink:0}
+.nav-item-badge{margin-left:auto;background:linear-gradient(135deg,#8B5CF6,#06B6D4);color:#fff;font-size:0.6rem;font-weight:700;padding:2px 8px;border-radius:20px;box-shadow:0 2px 8px rgba(139,92,246,0.4)}
+.sidebar-bottom{margin-top:auto;padding-top:1rem;border-top:1px solid rgba(139,92,246,0.1)}
+.dash-main{padding:2.5rem;overflow-y:auto;background:radial-gradient(ellipse at 80% 0%,rgba(139,92,246,0.04) 0%,transparent 60%)}
 .dash-section{display:none}
 .dash-section.active{display:block;animation:fsu 0.3s ease both}
-.dash-section h3{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:700;letter-spacing:-0.02em;margin-bottom:0.4rem}
+.dash-section h3{font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;letter-spacing:-0.03em;margin-bottom:0.4rem;background:linear-gradient(135deg,var(--tx),var(--pu2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .dash-section p{color:var(--tx2);font-size:0.88rem;margin-bottom:2rem}
 .overview-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;margin-bottom:2rem}
-.ov-stat{background:var(--glass);border:1px solid var(--bdr);border-radius:18px;padding:1.3rem;transition:var(--tr);position:relative;overflow:hidden;min-width:0}
-.ov-stat::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--gr);opacity:0;transition:opacity 0.3s}
-.ov-stat:hover{border-color:var(--bdr2);transform:translateY(-2px)}.ov-stat:hover::before{opacity:1}
+.ov-stat{background:linear-gradient(135deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02));border:1px solid rgba(255,255,255,0.07);border-radius:20px;padding:1.5rem;transition:all 0.3s cubic-bezier(0.4,0,0.2,1);position:relative;overflow:hidden;min-width:0;backdrop-filter:blur(20px)}
+.ov-stat::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#8B5CF6,#06B6D4,#EC4899);opacity:0;transition:opacity 0.3s}
+.ov-stat:hover{border-color:rgba(139,92,246,0.4);transform:translateY(-4px);box-shadow:0 16px 40px rgba(139,92,246,0.12)}.ov-stat:hover::before{opacity:1}
 .ov-icon{font-size:1.4rem;margin-bottom:0.7rem}
 .ov-val{font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;background:var(--gr);-webkit-background-clip:text;-webkit-text-fill-color:transparent;word-break:break-word;line-height:1.3}
 .ov-lbl{font-size:0.72rem;color:var(--tx3);margin-top:2px;text-transform:uppercase;letter-spacing:0.06em}
 .quick-actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-bottom:2rem}
-.qa-card{background:var(--glass);border:1px solid var(--bdr);border-radius:18px;padding:1.5rem;cursor:pointer;transition:var(--tr);text-align:center}
-.qa-card:hover{border-color:var(--bdr2);transform:translateY(-3px);box-shadow:0 15px 40px rgba(139,92,246,0.15)}
+.qa-card{background:linear-gradient(135deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02));border:1px solid rgba(255,255,255,0.07);border-radius:20px;padding:1.8rem 1.5rem;cursor:pointer;transition:all 0.3s cubic-bezier(0.4,0,0.2,1);text-align:center;position:relative;overflow:hidden}
+.qa-card:hover{border-color:rgba(139,92,246,0.4);transform:translateY(-6px);box-shadow:0 20px 50px rgba(139,92,246,0.2)}
 .qa-icon{font-size:2rem;margin-bottom:0.8rem}
 .qa-title{font-family:'Syne',sans-serif;font-weight:700;font-size:0.95rem;margin-bottom:0.3rem}
 .qa-desc{font-size:0.78rem;color:var(--tx2)}
-.insight-tip{background:linear-gradient(135deg,rgba(139,92,246,0.08),rgba(6,182,212,0.06));border:1px solid rgba(139,92,246,0.15);border-radius:16px;padding:1.5rem;margin-bottom:1.5rem}
+.insight-tip{background:linear-gradient(135deg,rgba(139,92,246,0.08),rgba(6,182,212,0.04));border:1px solid rgba(139,92,246,0.2);border-radius:20px;padding:1.8rem;margin-bottom:1.5rem;position:relative;overflow:hidden}
 .insight-tip h4{font-family:'Syne',sans-serif;font-weight:700;margin-bottom:0.5rem;font-size:1rem}
 .insight-tip p{color:var(--tx2);font-size:0.87rem;line-height:1.7}
 @media(max-width:768px){.dash-layout{grid-template-columns:1fr}.sidebar{display:none}}
@@ -1932,21 +1942,33 @@ body.light-mode .mob-nav span{background:#7C3A00;}
 </div>
 <div id="pd" class="page hidden">
   <div class="dash-layout">
+    <!-- ── SIDEBAR ── -->
     <div class="sidebar">
+      <!-- User card -->
       <div class="sidebar-user">
-        <div class="sidebar-avatar">👤</div>
-        <div class="sidebar-name" id="sb-name">—</div>
-        <div class="sidebar-email" id="sb-email">—</div>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div class="sidebar-avatar">👤</div>
+          <div>
+            <div class="sidebar-name" id="sb-name">—</div>
+            <div class="sidebar-email" id="sb-email">—</div>
+          </div>
+        </div>
+        <!-- Online indicator -->
+        <div style="display:flex;align-items:center;gap:6px;margin-top:10px;font-size:0.72rem;color:rgba(16,185,129,0.8);">
+          <span style="width:6px;height:6px;border-radius:50%;background:#10B981;display:inline-block;animation:pulse 2s ease infinite;"></span>
+          Active session
+        </div>
       </div>
-      <div class="sidebar-label">Main Menu</div>
+
+      <div class="sidebar-label">Navigation</div>
       <div class="nav-item active" onclick="switchTab('overview',this)">
-        <span class="nav-item-icon">🏠</span>Overview
+        <span class="nav-item-icon">⬡</span>Overview
       </div>
       <div class="nav-item" onclick="switchTab('insights',this)">
         <span class="nav-item-icon">🧠</span>AI Insights
       </div>
       <div class="nav-item" onclick="switchTab('history',this)">
-        <span class="nav-item-icon">📊</span>History
+        <span class="nav-item-icon">📈</span>History
         <span class="nav-item-badge" id="hist-badge">0</span>
       </div>
       <div class="nav-item" onclick="switchTab('profile',this)">
@@ -1955,51 +1977,111 @@ body.light-mode .mob-nav span{background:#7C3A00;}
       <div class="nav-item" onclick="switchTab('compatibility',this)">
         <span class="nav-item-icon">💞</span>Compatibility
       </div>
+
       <div class="sidebar-label">Actions</div>
-      <div class="nav-item" onclick="loadQuiz()">
-        <span class="nav-item-icon">🚀</span>New Assessment
+      <div class="nav-item" onclick="loadQuiz()" style="background:linear-gradient(135deg,rgba(139,92,246,0.12),rgba(6,182,212,0.06));border-color:rgba(139,92,246,0.25);">
+        <span class="nav-item-icon">⚡</span>
+        <span style="background:linear-gradient(135deg,#A78BFA,#67E8F9);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:600;">New Assessment</span>
       </div>
       <div class="nav-item" onclick="openChat()">
         <span class="nav-item-icon">🤖</span>Chat Twin
       </div>
+
       <div class="sidebar-bottom">
-        <div class="nav-item" onclick="doLogout()">
+        <div class="nav-item" onclick="doLogout()" style="color:rgba(236,72,153,0.7);" onmouseover="this.style.background='rgba(236,72,153,0.08)';this.style.borderColor='rgba(236,72,153,0.2)'" onmouseout="this.style.background='';this.style.borderColor='transparent'">
           <span class="nav-item-icon">🚪</span>Logout
         </div>
       </div>
     </div>
+
+    <!-- ── MAIN CONTENT ── -->
     <div class="dash-main">
+
+      <!-- ── OVERVIEW TAB ── -->
       <div class="dash-section active" id="tab-overview">
-        <h3>Welcome back, <span id="dn" style="background:var(--gr);-webkit-background-clip:text;-webkit-text-fill-color:transparent">—</span> 👋</h3>
-        <p>Your AI personality intelligence hub</p>
-        <div class="overview-stats">
-          <div class="ov-stat"><div class="ov-icon">🧪</div><div class="ov-val" id="dt">0</div><div class="ov-lbl">Tests Taken</div></div>
-          <div class="ov-stat"><div class="ov-icon">🔥</div><div class="ov-val" id="streak-val" style="background:linear-gradient(135deg,#F97316,#FBBF24);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">0</div><div class="ov-lbl">Day Streak</div></div>
-          <div class="ov-stat"><div class="ov-icon">🌟</div><div class="ov-val" id="dd">—</div><div class="ov-lbl">Dominant Trait</div></div>
-          <div class="ov-stat"><div class="ov-icon">📅</div><div class="ov-val" id="dl">—</div><div class="ov-lbl">Last Test</div></div>
+        <!-- Welcome header -->
+        <div style="margin-bottom:2.5rem;padding-bottom:2rem;border-bottom:1px solid rgba(139,92,246,0.1);">
+          <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(139,92,246,0.08);border:1px solid rgba(139,92,246,0.2);border-radius:50px;padding:5px 14px;margin-bottom:1rem;">
+            <span style="width:6px;height:6px;border-radius:50%;background:#10B981;display:inline-block;animation:pulse 2s ease infinite;"></span>
+            <span style="font-size:0.68rem;font-weight:700;letter-spacing:0.12em;color:#A78BFA;text-transform:uppercase;">Dashboard</span>
+          </div>
+          <h3 style="font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;letter-spacing:-0.03em;margin-bottom:0.4rem;">
+            Welcome back, <span id="dn" style="background:linear-gradient(135deg,#8B5CF6,#06B6D4,#EC4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-size:200%;animation:ga 4s ease infinite;">—</span> 👋
+          </h3>
+          <p style="color:var(--tx2);font-size:0.92rem;margin:0;">Your AI personality intelligence hub</p>
         </div>
-        <div class="sh">Quick Actions</div>
-        <div class="quick-actions">
+
+        <!-- Stats grid -->
+        <div class="overview-stats" style="margin-bottom:2.5rem;">
+          <div class="ov-stat">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.8rem;">
+              <div style="width:38px;height:38px;background:linear-gradient(135deg,rgba(139,92,246,0.2),rgba(139,92,246,0.05));border:1px solid rgba(139,92,246,0.3);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;">🧪</div>
+              <span style="font-size:0.62rem;color:rgba(139,92,246,0.6);font-weight:700;letter-spacing:0.1em;text-transform:uppercase;">Total</span>
+            </div>
+            <div class="ov-val" id="dt">0</div>
+            <div class="ov-lbl">Tests Taken</div>
+          </div>
+          <div class="ov-stat">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.8rem;">
+              <div style="width:38px;height:38px;background:linear-gradient(135deg,rgba(249,115,22,0.2),rgba(249,115,22,0.05));border:1px solid rgba(249,115,22,0.3);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;">🔥</div>
+              <span style="font-size:0.62rem;color:rgba(249,115,22,0.6);font-weight:700;letter-spacing:0.1em;text-transform:uppercase;">Streak</span>
+            </div>
+            <div class="ov-val" id="streak-val" style="background:linear-gradient(135deg,#F97316,#FBBF24);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">0</div>
+            <div class="ov-lbl">Day Streak</div>
+          </div>
+          <div class="ov-stat">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.8rem;">
+              <div style="width:38px;height:38px;background:linear-gradient(135deg,rgba(6,182,212,0.2),rgba(6,182,212,0.05));border:1px solid rgba(6,182,212,0.3);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;">🌟</div>
+              <span style="font-size:0.62rem;color:rgba(6,182,212,0.6);font-weight:700;letter-spacing:0.1em;text-transform:uppercase;">Top</span>
+            </div>
+            <div class="ov-val" id="dd">—</div>
+            <div class="ov-lbl">Dominant Trait</div>
+          </div>
+          <div class="ov-stat">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.8rem;">
+              <div style="width:38px;height:38px;background:linear-gradient(135deg,rgba(236,72,153,0.2),rgba(236,72,153,0.05));border:1px solid rgba(236,72,153,0.3);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;">📅</div>
+              <span style="font-size:0.62rem;color:rgba(236,72,153,0.6);font-weight:700;letter-spacing:0.1em;text-transform:uppercase;">Recent</span>
+            </div>
+            <div class="ov-val" id="dl">—</div>
+            <div class="ov-lbl">Last Test</div>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:1.2rem;">
+          <span style="font-size:0.68rem;font-weight:700;color:rgba(139,92,246,0.6);text-transform:uppercase;letter-spacing:0.14em;">Quick Actions</span>
+          <div style="flex:1;height:1px;background:linear-gradient(90deg,rgba(139,92,246,0.2),transparent);"></div>
+        </div>
+        <div class="quick-actions" style="margin-bottom:2.5rem;">
           <div class="qa-card" onclick="loadQuiz()">
-            <div class="qa-icon">🚀</div>
-            <div class="qa-title">New Assessment</div>
-            <div class="qa-desc">Take a fresh personality test</div>
+            <div style="width:44px;height:44px;background:linear-gradient(135deg,rgba(139,92,246,0.2),rgba(6,182,212,0.1));border:1px solid rgba(139,92,246,0.3);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;margin:0 auto 1rem;">⚡</div>
+            <div class="qa-title" style="font-family:'Syne',sans-serif;font-weight:700;font-size:0.95rem;margin-bottom:0.3rem;">New Assessment</div>
+            <div class="qa-desc" style="font-size:0.78rem;color:var(--tx2);">Take a fresh personality test</div>
           </div>
           <div class="qa-card" onclick="openChat()">
-            <div class="qa-icon">🤖</div>
-            <div class="qa-title">Chat with Twin</div>
-            <div class="qa-desc">Talk to your AI personality</div>
+            <div style="width:44px;height:44px;background:linear-gradient(135deg,rgba(236,72,153,0.2),rgba(139,92,246,0.1));border:1px solid rgba(236,72,153,0.3);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;margin:0 auto 1rem;">🤖</div>
+            <div class="qa-title" style="font-family:'Syne',sans-serif;font-weight:700;font-size:0.95rem;margin-bottom:0.3rem;">Chat with Twin</div>
+            <div class="qa-desc" style="font-size:0.78rem;color:var(--tx2);">Talk to your AI personality</div>
           </div>
           <div class="qa-card" onclick="switchTab('history',document.querySelector('.nav-item:nth-child(5)'))">
-            <div class="qa-icon">📊</div>
-            <div class="qa-title">View History</div>
-            <div class="qa-desc">See all past results</div>
+            <div style="width:44px;height:44px;background:linear-gradient(135deg,rgba(6,182,212,0.2),rgba(16,185,129,0.1));border:1px solid rgba(6,182,212,0.3);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;margin:0 auto 1rem;">📈</div>
+            <div class="qa-title" style="font-family:'Syne',sans-serif;font-weight:700;font-size:0.95rem;margin-bottom:0.3rem;">View History</div>
+            <div class="qa-desc" style="font-size:0.78rem;color:var(--tx2);">See all past results</div>
           </div>
         </div>
-        <div class="sh">Recent Results</div>
+
+        <!-- Recent Results -->
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:1.2rem;">
+          <span style="font-size:0.68rem;font-weight:700;color:rgba(6,182,212,0.6);text-transform:uppercase;letter-spacing:0.14em;">Recent Results</span>
+          <div style="flex:1;height:1px;background:linear-gradient(90deg,rgba(6,182,212,0.2),transparent);"></div>
+        </div>
         <div id="dhl"></div>
-        <!-- Badges Section -->
-        <div class="sh" style="margin-top:1.5rem;">🏅 Your Achievements</div>
+
+        <!-- Achievements -->
+        <div style="display:flex;align-items:center;gap:10px;margin-top:2rem;margin-bottom:1.2rem;">
+          <span style="font-size:0.68rem;font-weight:700;color:rgba(245,158,11,0.6);text-transform:uppercase;letter-spacing:0.14em;">🏅 Achievements</span>
+          <div style="flex:1;height:1px;background:linear-gradient(90deg,rgba(245,158,11,0.2),transparent);"></div>
+        </div>
         <div id="badges-grid" style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px;"></div>
       </div>
       <div class="dash-section" id="tab-insights">
@@ -2172,13 +2254,21 @@ body.light-mode .mob-nav span{background:#7C3A00;}
   </div>
 </div>
 <div id="pr" class="page hidden">
-  <div style="position:sticky;top:68px;z-index:50;padding:10px 2rem;background:var(--back-bar-bg, rgba(5,5,8,0.8));backdrop-filter:blur(10px);border-bottom:1px solid var(--bdr);display:flex;align-items:center;gap:12px;">
-    <button onclick="showPage('pd')" style="background:var(--glass);border:1px solid var(--bdr);color:var(--tx2);padding:7px 16px;border-radius:20px;font-family:'Space Grotesk',sans-serif;font-size:0.82rem;cursor:pointer;display:flex;align-items:center;gap:6px;">← Dashboard</button>
-    <button onclick="loadQuiz()" style="background:var(--glass);border:1px solid var(--bdr);color:var(--tx2);padding:7px 16px;border-radius:20px;font-family:'Space Grotesk',sans-serif;font-size:0.82rem;cursor:pointer;display:flex;align-items:center;gap:6px;">🔄 Retake</button>
-    <button onclick="showPage('ph')" style="background:var(--glass);border:1px solid var(--bdr);color:var(--tx2);padding:7px 16px;border-radius:20px;font-family:'Space Grotesk',sans-serif;font-size:0.82rem;cursor:pointer;display:flex;align-items:center;gap:6px;">📊 History</button>
+  <!-- Sticky top bar -->
+  <div style="position:sticky;top:68px;z-index:50;padding:10px 2rem;background:var(--back-bar-bg, rgba(5,5,8,0.92));backdrop-filter:blur(20px) saturate(180%);border-bottom:1px solid rgba(139,92,246,0.12);display:flex;align-items:center;gap:10px;">
+    <button onclick="showPage('pd')" style="background:rgba(139,92,246,0.08);border:1px solid rgba(139,92,246,0.2);color:var(--pu2);padding:7px 16px;border-radius:20px;font-family:'Space Grotesk',sans-serif;font-size:0.82rem;cursor:pointer;display:flex;align-items:center;gap:6px;transition:all 0.2s;" onmouseover="this.style.background='rgba(139,92,246,0.15)'" onmouseout="this.style.background='rgba(139,92,246,0.08)'">← Dashboard</button>
+    <button onclick="loadQuiz()" style="background:rgba(6,182,212,0.08);border:1px solid rgba(6,182,212,0.2);color:#67E8F9;padding:7px 16px;border-radius:20px;font-family:'Space Grotesk',sans-serif;font-size:0.82rem;cursor:pointer;display:flex;align-items:center;gap:6px;transition:all 0.2s;" onmouseover="this.style.background='rgba(6,182,212,0.15)'" onmouseout="this.style.background='rgba(6,182,212,0.08)'">🔄 Retake</button>
+    <button onclick="showPage('ph')" style="background:rgba(236,72,153,0.08);border:1px solid rgba(236,72,153,0.2);color:#F9A8D4;padding:7px 16px;border-radius:20px;font-family:'Space Grotesk',sans-serif;font-size:0.82rem;cursor:pointer;display:flex;align-items:center;gap:6px;transition:all 0.2s;" onmouseover="this.style.background='rgba(236,72,153,0.15)'" onmouseout="this.style.background='rgba(236,72,153,0.08)'">📊 History</button>
+    <div style="margin-left:auto;font-size:0.72rem;color:rgba(139,92,246,0.5);font-weight:700;letter-spacing:0.1em;text-transform:uppercase;">✦ PersonaIQ Report</div>
   </div>
+
+  <!-- Result Hero Header -->
   <div class="rh">
-    <div class="reb">AI Intelligence Report</div>
+    <!-- Animated background orbs -->
+    <div style="position:absolute;top:-80px;left:20%;width:400px;height:400px;background:radial-gradient(circle,rgba(139,92,246,0.08),transparent 70%);pointer-events:none;animation:of 8s ease-in-out infinite;"></div>
+    <div style="position:absolute;top:-40px;right:20%;width:300px;height:300px;background:radial-gradient(circle,rgba(6,182,212,0.06),transparent 70%);pointer-events:none;animation:of 10s ease-in-out infinite reverse;"></div>
+
+    <div class="reb">✦ AI Intelligence Report</div>
     <h2 id="rnt">Personality Profile</h2>
     <div class="rdt" id="rd"></div>
     <div class="pb" id="rdom">Balanced</div>
@@ -2327,10 +2417,11 @@ body.light-mode .mob-nav span{background:#7C3A00;}
       </div>
   </div>
   <div class="ra" id="pr-action-bar" style="display:none">
-    <button class="btn-p" onclick="downloadPDF()">📄 Download PDF</button>
-    <button class="btn-p" onclick="openEmailModal()" style="background:linear-gradient(135deg,#06B6D4,#0EA5E9);">📧 Email Report</button>
-    <button class="btn-g" onclick="openChat()">🤖 Chat Twin</button><button class="btn-g" onclick="showPage('ph')">📂 History</button>
-    <button class="btn-g" onclick="loadQuiz()">🔄 Retake</button>
+    <button class="btn-p" onclick="downloadPDF()" style="display:flex;align-items:center;gap:8px;padding:12px 24px;border-radius:14px;font-weight:700;">📄 Download PDF</button>
+    <button class="btn-p" onclick="openEmailModal()" style="background:linear-gradient(135deg,#06B6D4,#0EA5E9);display:flex;align-items:center;gap:8px;padding:12px 24px;border-radius:14px;font-weight:700;">📧 Email Report</button>
+    <button class="btn-g" onclick="openChat()" style="display:flex;align-items:center;gap:8px;padding:12px 20px;border-radius:14px;">🤖 Chat Twin</button>
+    <button class="btn-g" onclick="showPage('ph')" style="display:flex;align-items:center;gap:8px;padding:12px 20px;border-radius:14px;">�� History</button>
+    <button class="btn-g" onclick="loadQuiz()" style="display:flex;align-items:center;gap:8px;padding:12px 20px;border-radius:14px;">🔄 Retake</button>
   </div>
 </div>
 
