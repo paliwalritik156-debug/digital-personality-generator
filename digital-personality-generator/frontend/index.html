@@ -858,6 +858,14 @@ body.light-mode{
 body.light-mode::before{background:radial-gradient(ellipse at 20% 20%,rgba(234,88,12,0.08) 0%,transparent 60%),radial-gradient(ellipse at 80% 80%,rgba(251,191,36,0.06) 0%,transparent 60%);}
 body.light-mode::after{opacity:0.15;}
 body.light-mode nav{background:rgba(255,248,240,0.92);border-bottom:1px solid rgba(234,88,12,0.12);}
+/* Back button bars in light mode */
+body.light-mode #pr > div:first-child,
+body.light-mode #pq > div:first-child,
+body.light-mode #page-chat > div:first-child,
+body.light-mode #ph > div:first-child {
+  background:rgba(255,248,240,0.95)!important;
+  border-bottom:1px solid rgba(234,88,12,0.15)!important;
+}
 body.light-mode .nb{background:rgba(234,88,12,0.06);border-color:rgba(234,88,12,0.15);color:#7C3A00;}
 body.light-mode .nb:hover{color:#EA580C;border-color:rgba(234,88,12,0.4);}
 body.light-mode .nb.cta{background:var(--gr);color:#fff;border:none;}
