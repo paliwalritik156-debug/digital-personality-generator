@@ -588,7 +588,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:68px;display:flex;ali
 .nb.cta{background:var(--gr);border:none;color:#fff;font-weight:600}
 .nb.cta:hover{box-shadow:var(--gp);transform:translateY(-1px)}
 .nu{color:var(--tx2);font-size:0.83rem}
-#page-home{min-height:100vh;position:relative}
+#page-home{position:relative}
 #hero-canvas{position:absolute;inset:0;width:100%;height:100%;z-index:0}
 .hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:8rem 2rem 4rem;position:relative;z-index:1}
 .h-chip{display:inline-flex;align-items:center;gap:8px;background:rgba(139,92,246,0.1);border:1px solid rgba(139,92,246,0.25);padding:6px 16px;border-radius:30px;font-size:0.72rem;color:var(--pu2);font-weight:600;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:2.5rem;animation:fsd 0.8s ease both}
@@ -1605,14 +1605,12 @@ body.light-mode .mob-nav span{background:#7C3A00;}
         <button onclick="resetTheme()" style="background:var(--glass);border:1px solid var(--bdr);color:var(--tx2);padding:6px 14px;border-radius:20px;cursor:pointer;font-size:0.78rem">↺ Reset</button>
       </div>
     </div>
-  </div>
   <div class="ra">
     <button class="btn-p" onclick="downloadPDF()">📄 Download PDF</button>
     <button class="btn-p" onclick="openEmailModal()" style="background:linear-gradient(135deg,#06B6D4,#0EA5E9);">📧 Email Report</button>
     <button class="btn-g" onclick="openChat()">🤖 Chat Twin</button><button class="btn-g" onclick="showPage('ph')">📂 History</button>
     <button class="btn-g" onclick="loadQuiz()">🔄 Retake</button>
   </div>
-</div>
 
 <!-- Email Modal -->
 <div id="email-modal" style="display:none;position:fixed;inset:0;background:rgba(5,5,8,0.85);z-index:9990;align-items:center;justify-content:center;backdrop-filter:blur(8px);">
