@@ -43,7 +43,8 @@ const generatePDFBuffer = (result, user) => {
 
     // Personality type
     doc.fillColor('#1a1a2e').fontSize(16).font('Helvetica-Bold').text('Personality Type:');
-    doc.fontSize(14).font('Helvetica').fillColor('#7c5cfc').text(result.personalityType);
+    const cleanType = (result.personalityType || 'Balanced').replace(/[^\x00-\x7F]/g, '').trim() || 'Balanced';
+    doc.fontSize(14).font('Helvetica').fillColor('#7c5cfc').text(cleanType);
 
     doc.moveDown(1);
 

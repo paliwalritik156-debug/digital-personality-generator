@@ -119,62 +119,97 @@ const downloadPDF = async (req, res) => {
     const result = await Result.findOne({ sessionId: req.params.sessionId, userId: req.user._id });
     if (!result) return res.status(404).json({ success: false, message: 'Result not found.' });
     const user = req.user;
+
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', `attachment; filename="personality-report-${result.sessionId}.pdf"`);
-    const doc = new PDFDocument({ margin: 50, size: 'A4' });
+
+    const doc = new PDFDocument({ margin: 50, size: 'A4', bufferPages: true });
     doc.pipe(res);
-    doc.rect(0, 0, 612, 120).fill('#1a1a2e');
-    doc.fillColor('#ffffff').fontSize(28).font('Helvetica-Bold').text('Digital Personality Report', 50, 35, { align: 'center' });
-    doc.fontSize(12).font('Helvetica').text('Powered by the Big Five (OCEAN) Model', 50, 72, { align: 'center' });
-    doc.moveDown(3);
-    doc.fillColor('#1a1a2e').fontSize(14).font('Helvetica-Bold').text(`Name: ${user.name}`);
-    doc.fontSize(11).font('Helvetica').fillColor('#555').text(`Email: ${user.email}`);
-    doc.text(`Date: ${new Date(result.completedAt).toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' })}`);
+
+    const PAGE_WIDTH = 512; // usable width (612 - 50*2)
+    const LEFT = 50;
+
+    // ── Header ──────────────────────────────────────────────
+    doc.rect(0, 0, 612, 110).fill('#1a1a2e');
+    doc.fillColor('#ffffff').fontSize(26).font('Helvetica-Bold')
+      .text('Digital Personality Report', LEFT, 30, { align: 'center', width: PAGE_WIDTH });
+    doc.fontSize(11).font('Helvetica')
+      .text('Powered by the Big Five (OCEAN) Model', LEFT, 68, { align: 'center', width: PAGE_WIDTH });
+
+    // ── User Info ────────────────────────────────────────────
+    doc.moveDown(2);
+    doc.fillColor('#1a1a2e').fontSize(12).font('Helvetica-Bold').text(`Name: ${user.name}`, LEFT);
+    doc.fillColor('#555').fontSize(10).font('Helvetica').text(`Email: ${user.email}`, LEFT);
+    doc.text(`Date: ${new Date(result.completedAt).toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' })}`, LEFT);
+
+    // ── Personality Type ─────────────────────────────────────
     doc.moveDown(1);
-    doc.fillColor('#1a1a2e').fontSize(16).font('Helvetica-Bold').text('Personality Type:');
-    doc.fontSize(14).font('Helvetica').fillColor('#7c5cfc').text((result.personalityType||'').replace(/[^\w\s]/g,'').trim());
+    doc.fillColor('#1a1a2e').fontSize(14).font('Helvetica-Bold').text('Personality Type:', LEFT);
+    // Strip emojis from personality type
+    const cleanType = (result.personalityType || 'Balanced').replace(/[^\x00-\x7F]/g, '').trim() || 'Balanced';
+    doc.fillColor('#7c5cfc').fontSize(13).font('Helvetica').text(cleanType, LEFT);
+
+    // ── Trait Scores ─────────────────────────────────────────
     doc.moveDown(1);
-    doc.fillColor('#1a1a2e').fontSize(16).font('Helvetica-Bold').text('Trait Scores');
-    doc.moveDown(0.5);
+    doc.fillColor('#1a1a2e').fontSize(14).font('Helvetica-Bold').text('Trait Scores', LEFT);
+    doc.moveDown(0.4);
+
     const traitColors = { openness:'#a855f7', conscientiousness:'#00d4aa', extraversion:'#f5c842', agreeableness:'#ff6b6b', neuroticism:'#4fc3f7' };
     const traitLabels = { openness:'Openness', conscientiousness:'Conscientiousness', extraversion:'Extraversion', agreeableness:'Agreeableness', neuroticism:'Neuroticism' };
+    const BAR_X = 180;
+    const BAR_W = 270;
+    const SCORE_X = BAR_X + BAR_W + 10;
+
     Object.entries(result.scores).forEach(([trait, score]) => {
-      const s = typeof score === 'object' ? score.score : score;
-      const rowY = doc.y;
+      const s = typeof score === 'object' ? score.score : (score || 0);
+      const y = doc.y;
+
       // Label
       doc.fillColor('#333').fontSize(10).font('Helvetica-Bold')
-        .text(`${traitLabels[trait]}`, 50, rowY, { width: 120 });
+        .text(traitLabels[trait] || trait, LEFT, y, { width: 125, lineBreak: false });
+
       // Bar background
-      doc.rect(175, rowY + 2, 280, 10).fill('#e0e0e0');
+      doc.rect(BAR_X, y + 3, BAR_W, 9).fill('#e8e8e8');
+
       // Bar fill
-      const filledW = Math.round((s / 100) * 280);
-      if (filledW > 0) doc.rect(175, rowY + 2, filledW, 10).fill(traitColors[trait] || '#666');
-      // Score %
-      doc.fillColor(traitColors[trait] || '#333').fontSize(10).font('Helvetica')
-        .text(`${s}%`, 462, rowY, { width: 40, align: 'right' });
-      // Move to next row with fixed spacing
-      doc.text('', 50, rowY + 24);
+      const filled = Math.max(0, Math.round((s / 100) * BAR_W));
+      if (filled > 0) doc.rect(BAR_X, y + 3, filled, 9).fill(traitColors[trait] || '#888');
+
+      // Score
+      doc.fillColor(traitColors[trait] || '#333').fontSize(10).font('Helvetica-Bold')
+        .text(`${s}%`, SCORE_X, y, { width: 35, align: 'right', lineBreak: false });
+
+      // Next row
+      doc.moveDown(1.2);
     });
+
+    // ── Summary ──────────────────────────────────────────────
+    doc.moveDown(0.5);
+    doc.fillColor('#1a1a2e').fontSize(14).font('Helvetica-Bold').text('Personality Summary', LEFT, doc.y, { width: PAGE_WIDTH });
+    doc.moveDown(0.3);
+    doc.fillColor('#333').fontSize(10).font('Helvetica')
+      .text(result.summary || '', LEFT, doc.y, { width: PAGE_WIDTH, lineGap: 4 });
+
+    // ── Suggestions ──────────────────────────────────────────
     doc.moveDown(1);
-    doc.text('', 50, doc.y);doc.fillColor('#1a1a2e').fontSize(16).font('Helvetica-Bold').text('Personality Summary', 50, doc.y, {width:490});
-    doc.moveDown(0.5);
-    doc.text('', 50, doc.y);doc.fillColor('#333').fontSize(11).font('Helvetica').text(result.summary, 50, doc.y, { lineGap: 6, width: 490 });
-    doc.moveDown(1.5);
-    doc.text('', 50, doc.y);doc.fillColor('#1a1a2e').fontSize(16).font('Helvetica-Bold').text('Personalized Suggestions', 50, doc.y, {width:490});
-    doc.moveDown(0.5);
-    const pdfSuggestions = result.suggestions && result.suggestions.length > 0 ? result.suggestions : [
-      'Try incorporating small new experiences weekly to expand your comfort zone.',
-      'Experiment with time-blocking or habit stacking to build productive routines.',
-      'Deep-focus roles like programming, writing, or research suit your nature.',
-      'Set clear social boundaries to protect your energy levels.',
-      'Practice mindfulness or journaling to build emotional resilience.'
-    ];
-    pdfSuggestions.forEach((s, i) => {
-      doc.text('', 50, doc.y);doc.fillColor('#333').fontSize(11).font('Helvetica').text(`${i+1}. ${s}`, { lineGap: 4, width: 490 });
-      doc.moveDown(0.5);
+    doc.fillColor('#1a1a2e').fontSize(14).font('Helvetica-Bold').text('Personalized Suggestions', LEFT, doc.y, { width: PAGE_WIDTH });
+    doc.moveDown(0.3);
+
+    const suggestions = (result.suggestions && result.suggestions.length > 0)
+      ? result.suggestions
+      : ['Explore new experiences weekly.', 'Build consistent daily routines.', 'Leverage your strengths in your career.'];
+
+    suggestions.forEach((s, i) => {
+      doc.fillColor('#333').fontSize(10).font('Helvetica')
+        .text(`${i + 1}.  ${s}`, LEFT, doc.y, { width: PAGE_WIDTH, lineGap: 3 });
+      doc.moveDown(0.4);
     });
-    doc.moveDown(2);
-    doc.fillColor('#999').fontSize(9).font('Helvetica').text('This report is based on the Big Five Personality Model (OCEAN). Results are for self-reflection purposes only.', { align:'center', width:512 });
+
+    // ── Footer ───────────────────────────────────────────────
+    doc.moveDown(1.5);
+    doc.fillColor('#aaa').fontSize(8).font('Helvetica')
+      .text('This report is based on the Big Five Personality Model (OCEAN). Results are for self-reflection purposes only.', LEFT, doc.y, { align: 'center', width: PAGE_WIDTH });
+
     doc.end();
   } catch (error) {
     console.error('PDF error:', error);
