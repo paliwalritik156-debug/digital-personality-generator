@@ -1592,8 +1592,7 @@ body.light-mode .mob-nav span{background:#7C3A00;}
         </div>
       </div>
     </div>
-  </div>
-  <div class="rc w">
+  <div class="rc w" id="pr-theme-section">
       <div class="cl">🎨 Personality Theme</div>
       <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
         <span style="font-size:0.82rem;color:var(--tx2)">Switch theme based on trait:</span>
@@ -1604,13 +1603,14 @@ body.light-mode .mob-nav span{background:#7C3A00;}
         <button onclick="applyPersonalityTheme('neuroticism')" style="background:linear-gradient(135deg,#F59E0B,#FBBF24);border:none;color:#fff;padding:6px 14px;border-radius:20px;cursor:pointer;font-size:0.78rem;font-weight:600">⚡ Neuroticism</button>
         <button onclick="resetTheme()" style="background:var(--glass);border:1px solid var(--bdr);color:var(--tx2);padding:6px 14px;border-radius:20px;cursor:pointer;font-size:0.78rem">↺ Reset</button>
       </div>
-    </div>
+  </div>
   <div class="ra">
     <button class="btn-p" onclick="downloadPDF()">📄 Download PDF</button>
     <button class="btn-p" onclick="openEmailModal()" style="background:linear-gradient(135deg,#06B6D4,#0EA5E9);">📧 Email Report</button>
     <button class="btn-g" onclick="openChat()">🤖 Chat Twin</button><button class="btn-g" onclick="showPage('ph')">📂 History</button>
     <button class="btn-g" onclick="loadQuiz()">🔄 Retake</button>
   </div>
+</div>
 
 <!-- Email Modal -->
 <div id="email-modal" style="display:none;position:fixed;inset:0;background:rgba(5,5,8,0.85);z-index:9990;align-items:center;justify-content:center;backdrop-filter:blur(8px);">
