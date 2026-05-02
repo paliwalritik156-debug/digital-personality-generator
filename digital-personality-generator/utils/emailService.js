@@ -35,9 +35,8 @@ const generatePDFBuffer = (result, user) => {
     doc.fontSize(11).font('Helvetica')
       .text('Powered by the Big Five (OCEAN) Model', LEFT, 68, { align: 'center', width: PAGE_WIDTH });
 
-    // User info
-    doc.moveDown(2);
-    doc.fillColor('#1a1a2e').fontSize(12).font('Helvetica-Bold').text(`Name: ${user.name}`, LEFT);
+    // User info - start below header
+    doc.fillColor('#1a1a2e').fontSize(12).font('Helvetica-Bold').text(`Name: ${user.name}`, LEFT, 130);
     doc.fillColor('#555').fontSize(10).font('Helvetica').text(`Email: ${user.email}`, LEFT);
     doc.text(`Date: ${new Date(result.completedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}`, LEFT);
 
