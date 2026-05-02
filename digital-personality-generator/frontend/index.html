@@ -2852,24 +2852,54 @@ function applyHomeSectionColors(isLight){
   function s(el, prop, val){ if(el) el.style.setProperty(prop, val, 'important'); }
 
   // ── HERO inline colors ───────────────────────────────────────
-  // "Discover Your" span
-  q('h1 span[style*="color:#EEEAF8"]').forEach(function(el){ s(el,'color',C.heading); });
-  // hero sub paragraph
+  // "Discover Your" span - was #EEEAF8 (invisible on light bg)
+  q('h1 span[style*="color:#EEEAF8"]').forEach(function(el){
+    s(el,'color', isLight ? C.heading : '#EEEAF8');
+  });
+  // hero sub paragraph - was #C4C0D8 (too light on white)
+  q('p[style*="color:#C4C0D8"][style*="max-width:520px"]').forEach(function(el){
+    s(el,'color', isLight ? C.heroSub : '#C4C0D8');
+  });
+  // hero sub old selector fallback
   q('p[style*="color:#8B87A8"]').forEach(function(el){ s(el,'color',C.heroSub); });
-  // Sign In button
-  q('button[style*="color:#EEEAF8"][style*="border-radius:50px"]').forEach(function(el){ s(el,'color',C.heading); s(el,'border-color','rgba(234,88,12,0.25)'); s(el,'background','rgba(234,88,12,0.04)'); });
-  // Stats card labels
+  // Sign In button - was #EEEAF8
+  q('button[style*="color:#EEEAF8"][style*="border-radius:50px"]').forEach(function(el){
+    if(isLight){ s(el,'color',C.heading); s(el,'border-color','rgba(154,52,18,0.3)'); s(el,'background','rgba(154,52,18,0.06)'); }
+    else { s(el,'color','#EEEAF8'); el.style.removeProperty('border-color'); el.style.removeProperty('background'); }
+  });
+  // Stats card labels - was #B8B4CC (too light on white)
+  q('div[style*="color:#B8B4CC"][style*="letter-spacing:0.1em"]').forEach(function(el){
+    s(el,'color', isLight ? C.statLbl : '#B8B4CC');
+  });
+  // Stats card labels old selector
   q('div[style*="color:#4A4668"][style*="letter-spacing:0.1em"]').forEach(function(el){ s(el,'color',C.statLbl); });
-  // Trust badge text
+  // Trust badge text - was #B8B4CC
+  q('div[style*="color:#B8B4CC"][style*="font-size:0.8rem"]').forEach(function(el){
+    s(el,'color', isLight ? C.trustTxt : '#B8B4CC');
+  });
   q('div[style*="color:#4A4668"][style*="font-size:0.8rem"]').forEach(function(el){ s(el,'color',C.trustTxt); });
   // Stats card backgrounds
   q('div[style*="background:rgba(255,255,255,0.04)"][style*="border-radius:20px"]').forEach(function(el){
-    s(el,'background','rgba(234,88,12,0.04)');
-    s(el,'border-color','rgba(234,88,12,0.15)');
+    if(isLight){
+      s(el,'background','rgba(154,52,18,0.05)');
+      s(el,'border-color','rgba(154,52,18,0.18)');
+    } else {
+      el.style.removeProperty('background');
+      el.style.removeProperty('border-color');
+    }
   });
 
-  // ── SECTION H2 headings (color:#EEEAF8) ─────────────────────
+  // ── SECTION H2 headings ─────────────────────────────────────
+  // color:#EEEAF8 (dark mode) - fix for light
   q('section h2[style*="color:#EEEAF8"]').forEach(function(el){ s(el,'color',C.heading); });
+  // Also fix h3 with #EEEAF8 (feature card titles)
+  q('#page-home h3[style*="color:#EEEAF8"]').forEach(function(el){ s(el,'color',C.heading); });
+  // Fix reviewer names with #EEEAF8
+  q('#page-home div[style*="color:#EEEAF8"][style*="font-size:0.9rem"]').forEach(function(el){ s(el,'color',C.heading); });
+  // Fix pricing big number
+  q('#page-home span[style*="color:#EEEAF8"][style*="font-size:3.5rem"]').forEach(function(el){ s(el,'color',C.priceBig); });
+  // Fix rating number 4.9
+  q('#page-home div[style*="color:#EEEAF8"][style*="font-size:1.8rem"]').forEach(function(el){ s(el,'color',C.ratingNum); });
   // gradient span inside h2 — keep gradient but swap for light
   q('section h2 span[style*="-webkit-background-clip:text"]').forEach(function(el){
     if(isLight){
@@ -2896,6 +2926,13 @@ function applyHomeSectionColors(isLight){
   // ── SECTION body text ────────────────────────────────────────
   q('section p[style*="color:#6B6890"]').forEach(function(el){ s(el,'color',C.body); });
   q('section p[style*="color:#9B97B8"]').forEach(function(el){ s(el,'color',C.muted); });
+  // Updated selectors after color migration
+  q('section p[style*="color:#C4C0D8"]').forEach(function(el){ s(el,'color', isLight ? C.body : '#C4C0D8'); });
+  q('section p[style*="color:#B8B4CC"]').forEach(function(el){ s(el,'color', isLight ? C.muted : '#B8B4CC'); });
+  q('section div[style*="color:#C4C0D8"]').forEach(function(el){ s(el,'color', isLight ? C.body : '#C4C0D8'); });
+  q('section div[style*="color:#B8B4CC"]').forEach(function(el){ s(el,'color', isLight ? C.muted : '#B8B4CC'); });
+  q('section span[style*="color:#C4C0D8"]').forEach(function(el){ s(el,'color', isLight ? C.body : '#C4C0D8'); });
+  q('section span[style*="color:#B8B4CC"]').forEach(function(el){ s(el,'color', isLight ? C.muted : '#B8B4CC'); });
 
   // ── FEATURE CARDS ────────────────────────────────────────────
   // card h3
@@ -3019,6 +3056,10 @@ function applyHomeSectionColors(isLight){
     ft.querySelectorAll('div[style*="color:#6B6890"][style*="letter-spacing:0.15em"]').forEach(function(el){ s(el,'color',C.ftColHdr); });
     // links
     ft.querySelectorAll('a[style*="color:#4A4668"]').forEach(function(el){ s(el,'color',C.ftLink); });
+    ft.querySelectorAll('a[style*="color:#C4C0D8"]').forEach(function(el){ s(el,'color', isLight ? C.ftLink : '#C4C0D8'); });
+    ft.querySelectorAll('p[style*="color:#C4C0D8"]').forEach(function(el){ s(el,'color', isLight ? C.ftDesc : '#C4C0D8'); });
+    ft.querySelectorAll('div[style*="color:#B8B4CC"]').forEach(function(el){ s(el,'color', isLight ? C.ftDesc : '#B8B4CC'); });
+    ft.querySelectorAll('p[style*="color:#B8B4CC"]').forEach(function(el){ s(el,'color', isLight ? C.ftDesc : '#B8B4CC'); });
     // copyright & status
     ft.querySelectorAll('p[style*="color:#8B87A8"]').forEach(function(el){ s(el,'color',C.ftCopy); });
     ft.querySelectorAll('div[style*="color:#8B87A8"]').forEach(function(el){ s(el,'color',C.ftStatus); });
