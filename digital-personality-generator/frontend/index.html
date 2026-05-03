@@ -4164,7 +4164,7 @@ async function loadDash(){
   // Feature 11: animate counters after load
 if(!US)return;
   var dn=document.getElementById('dn');if(dn)dn.textContent=US.name.split(' ')[0];
-  var sbn=document.getElementById('sb-name');if(sbn){sbn.textContent=US.name;var _dark=!document.body.classList.contains('light-mode');sbn.style.color=_dark?'#EEEAF8':'#1A0800';sbn.style.webkitTextFillColor=_dark?'#EEEAF8':'#1A0800';}
+  var sbn=document.getElementById('sb-name');if(sbn){sbn.textContent=US.name;var _dark=!document.body.classList.contains('light-mode');sbn.style.color=_dark?'#ffffff':'#1A0800';sbn.style.webkitTextFillColor=_dark?'#ffffff':'#1A0800';sbn.style.fontWeight='800';}
   var sbe=document.getElementById('sb-email');if(sbe){sbe.textContent=US.email;var _dark2=!document.body.classList.contains('light-mode');sbe.style.color=_dark2?'#A78BFA':'#7C2D00';sbe.style.webkitTextFillColor=_dark2?'#A78BFA':'#7C2D00';}
   // Load streak from server
   api('/api/auth/me').then(function(d){
@@ -4175,7 +4175,7 @@ if(!US)return;
       US.longestStreak=d.user.longestStreak||0;
     }
   }).catch(function(){});
-  try{const d=await api('/api/history');if(d.success){const h=d.results||d.data||[];document.getElementById('dt').textContent=h.length;var hb=document.getElementById('hist-badge');if(hb)hb.textContent=h.length;if(h.length>0){const l=h[0];var _ddMap={openness:'Open',conscientiousness:'Conscient.',extraversion:'Extravert',agreeableness:'Agreeable',neuroticism:'Neurotic'};var _ddTrait=_ddMap[l.dominantTrait]||TL[l.dominantTrait]||l.dominantTrait||'—';document.getElementById('dd').textContent=_ddTrait;document.getElementById('dl').textContent=l.completedAt?new Date(l.completedAt).toLocaleDateString('en',{month:'short',day:'numeric'}):l.lastTest?new Date(l.lastTest).toLocaleDateString('en',{month:'short',day:'numeric'}):'—';document.getElementById('dhl').innerHTML=h.slice(0,3).map(r=>hCard(r)).join('');}}}catch(e){console.error(e);}}
+  try{const d=await api('/api/history');if(d.success){const h=d.results||d.data||[];document.getElementById('dt').textContent=h.length;var hb=document.getElementById('hist-badge');if(hb)hb.textContent=h.length;if(h.length>0){const l=h[0];var _ddMap={openness:'Open',conscientiousness:'Conscient.',extraversion:'Extravert',agreeableness:'Agreeable',neuroticism:'Neurotic'};var _rawTrait=(l.dominantTrait||'').toLowerCase();var _ddTrait=_ddMap[_rawTrait]||TL[_rawTrait]||l.dominantTrait||l.personalityType||'—';document.getElementById('dd').textContent=_ddTrait;document.getElementById('dl').textContent=l.completedAt?new Date(l.completedAt).toLocaleDateString('en',{month:'short',day:'numeric'}):l.lastTest?new Date(l.lastTest).toLocaleDateString('en',{month:'short',day:'numeric'}):'—';document.getElementById('dhl').innerHTML=h.slice(0,3).map(r=>hCard(r)).join('');}}}catch(e){console.error(e);}}
 function handleStart(){if(!TK){showPage('pa','reg');return;}loadQuiz();}
 async function loadQuiz(){
   showPage('pl');animL();
