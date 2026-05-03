@@ -970,155 +970,232 @@ body.light-mode #tab-profile input{background:#FFFAF5;border:1px solid rgba(234,
 body.light-mode .toast{background:#fff;border:1px solid rgba(234,88,12,0.15);color:#0F0500;box-shadow:0 4px 20px rgba(234,88,12,0.1);}
 body.light-mode footer{border-top:1px solid rgba(234,88,12,0.1);}body.light-mode footer p{color:#7A3800;}
 
-/* ===== LIGHT MODE: NEW HOME SECTIONS (Features, Testimonials, Pricing, FAQ, Footer) ===== */
+/* ===== LIGHT MODE: HOME PAGE - COMPLETE ORANGE+WHITE THEME ===== */
 
-/* Section headings & body text */
-body.light-mode #page-home section h2{color:#1C0A00 !important;}
-body.light-mode #page-home section h3{color:#1C0A00 !important;}
-body.light-mode #page-home section p{color:#7C3A00 !important;}
-
-/* Section badge chips */
-body.light-mode #page-home section [style*="background:rgba(139,92,246,0.08)"],
-body.light-mode #page-home section [style*="background:rgba(6,182,212,0.08)"],
-body.light-mode #page-home section [style*="background:rgba(16,185,129,0.08)"],
-body.light-mode #page-home section [style*="background:rgba(245,158,11,0.08)"]{
-  background:rgba(234,88,12,0.08) !important;
-  border-color:rgba(234,88,12,0.2) !important;
+/* ── Page background ── */
+body.light-mode #page-home,
+body.light-mode #page-home section{
+  background:transparent !important;
 }
 
-/* Feature cards */
-body.light-mode #page-home section > div > div > div[style*="border-radius:24px"]{
-  background:#fff !important;
-  border-color:rgba(234,88,12,0.15) !important;
-  box-shadow:0 4px 20px rgba(234,88,12,0.06) !important;
+/* ── All section headings ── */
+body.light-mode #page-home h1,
+body.light-mode #page-home h2,
+body.light-mode #page-home h3{
+  color:#1A0800 !important;
+  -webkit-text-fill-color:#1A0800 !important;
 }
-body.light-mode #page-home section > div > div > div[style*="border-radius:24px"]:hover{
-  border-color:rgba(234,88,12,0.4) !important;
-  box-shadow:0 24px 60px rgba(234,88,12,0.12) !important;
-}
-
-/* Feature tag pills */
-body.light-mode #page-home section span[style*="border-radius:50px"][style*="font-size:0.7rem"]{
-  background:rgba(234,88,12,0.08) !important;
-  border-color:rgba(234,88,12,0.2) !important;
-  color:#EA580C !important;
-}
-
-/* Testimonial cards */
-body.light-mode #page-home section div[style*="font-style:italic"]{color:#5C3A1E !important;}
-body.light-mode #page-home section div[style*="border-radius:24px"][style*="rgba(255,255,255,0.03)"]{
-  background:#fff !important;
-  border-color:rgba(234,88,12,0.12) !important;
-}
-body.light-mode #page-home section div[style*="border-radius:24px"][style*="rgba(255,255,255,0.03)"]:hover{
-  background:rgba(234,88,12,0.04) !important;
-  border-color:rgba(234,88,12,0.3) !important;
-}
-
-/* Reviewer name & location */
-body.light-mode #page-home section div[style*="font-weight:700"][style*="font-size:0.9rem"]{color:#1C0A00 !important;}
-body.light-mode #page-home section div[style*="font-size:0.75rem"][style*="color:#4A4668"]{color:#B86A00 !important;}
-
-/* Pricing cards */
-body.light-mode #page-home section div[style*="border-radius:28px"][style*="rgba(255,255,255,0.03)"]{
-  background:#fff !important;
-  border-color:rgba(234,88,12,0.15) !important;
-}
-body.light-mode #page-home section div[style*="border-radius:28px"][style*="rgba(255,255,255,0.03)"]:hover{
-  border-color:rgba(234,88,12,0.35) !important;
-}
-
-/* Pricing plan label */
-body.light-mode #page-home section div[style*="letter-spacing:0.12em"][style*="color:#6B6890"]{color:#B86A00 !important;}
-body.light-mode #page-home section div[style*="letter-spacing:0.12em"][style*="color:#F9A8D4"]{color:#EA580C !important;}
-
-/* Pricing price number */
-body.light-mode #page-home section span[style*="font-size:3.5rem"][style*="color:#EEEAF8"]{color:#1C0A00 !important;}
-body.light-mode #page-home section span[style*="color:#4A4668"][style*="font-size:0.9rem"]{color:#B86A00 !important;}
-
-/* Pricing feature list items */
-body.light-mode #page-home section div[style*="align-items:center"][style*="font-size:0.88rem"][style*="color:#9B97B8"]{color:#5C3A1E !important;}
-body.light-mode #page-home section div[style*="align-items:center"][style*="font-size:0.88rem"][style*="color:#4A4668"]{color:#D4A574 !important;}
-
-/* Pricing free plan button */
-body.light-mode #page-home section button[style*="rgba(255,255,255,0.05)"]{
-  background:rgba(234,88,12,0.06) !important;
-  border-color:rgba(234,88,12,0.2) !important;
-  color:#7C3A00 !important;
-}
-
-/* Money back guarantee text */
-body.light-mode #page-home section div[style*="color:#4A4668"][style*="font-size:0.85rem"]{color:#B86A00 !important;}
-
-/* FAQ accordion buttons */
-body.light-mode #page-home section button[style*="padding:1.4rem 1.8rem"]{
-  background:none !important;
-}
-body.light-mode #page-home section button[style*="padding:1.4rem 1.8rem"] span:first-child{
-  color:#1C0A00 !important;
-}
-body.light-mode #page-home section button[style*="padding:1.4rem 1.8rem"] span.faq-icon{
-  color:#EA580C !important;
-}
-
-/* FAQ answer text */
-body.light-mode #page-home section div[style*="max-height"] p{color:#7C3A00 !important;}
-
-/* FAQ cards background */
-body.light-mode #page-home section div[style*="border-radius:18px"][style*="rgba(255,255,255,0.03)"]{
-  background:#fff !important;
-  border-color:rgba(234,88,12,0.12) !important;
-}
-
-/* FAQ bottom CTA block */
-body.light-mode #page-home section div[style*="border-radius:28px"][style*="rgba(139,92,246,0.08)"]{
-  background:rgba(234,88,12,0.05) !important;
-  border-color:rgba(234,88,12,0.2) !important;
-}
-body.light-mode #page-home section div[style*="border-radius:28px"][style*="rgba(139,92,246,0.08)"] h3{color:#1C0A00 !important;}
-body.light-mode #page-home section div[style*="border-radius:28px"][style*="rgba(139,92,246,0.08)"] p{color:#7C3A00 !important;}
-
-/* Stats bar (4.9 rating) */
-body.light-mode #page-home section div[style*="font-size:1.8rem"][style*="color:#EEEAF8"]{color:#1C0A00 !important;}
-body.light-mode #page-home section div[style*="font-size:0.85rem"][style*="color:#6B6890"]{color:#B86A00 !important;}
-
-/* Section sub-description text */
-body.light-mode #page-home section p[style*="color:#6B6890"]{color:#7C3A00 !important;}
-body.light-mode #page-home section p[style*="color:#9B97B8"]{color:#5C3A1E !important;}
-
-/* Premium Footer light mode */
-body.light-mode #main-footer{background:linear-gradient(180deg,rgba(234,88,12,0.04) 0%,transparent 100%) !important;}
-body.light-mode #main-footer div[style*="font-family:'Syne'"][style*="font-size:1.5rem"]{
-  background:linear-gradient(135deg,#EA580C,#D97706,#F97316) !important;
-  -webkit-background-clip:text !important;
+/* Keep gradient text spans working */
+body.light-mode #page-home h1 span[style*="-webkit-text-fill-color:transparent"],
+body.light-mode #page-home h2 span[style*="-webkit-text-fill-color:transparent"],
+body.light-mode #page-home h3 span[style*="-webkit-text-fill-color:transparent"]{
   -webkit-text-fill-color:transparent !important;
 }
-body.light-mode #main-footer p[style*="color:#4A4668"]{color:#7C3A00 !important;}
-body.light-mode #main-footer div[style*="font-size:0.72rem"][style*="color:#6B6890"]{color:#B86A00 !important;}
-body.light-mode #main-footer a[style*="color:#4A4668"]{color:#7C3A00 !important;}
-body.light-mode #main-footer a:hover{color:#EA580C !important;}
-body.light-mode #main-footer p[style*="color:#8B87A8"]{color:#B86A00 !important;}
-body.light-mode #main-footer div[style*="color:#8B87A8"]{color:#B86A00 !important;}
-body.light-mode #main-footer > div[style*="height:1px"]{
-  background:linear-gradient(90deg,transparent,rgba(234,88,12,0.4),rgba(217,119,6,0.4),rgba(249,115,22,0.4),transparent) !important;
+
+/* ── All body text ── */
+body.light-mode #page-home p{ color:#7C2D00 !important; }
+body.light-mode #page-home div[style*="color:var(--tx2)"]{ color:#7C2D00 !important; }
+body.light-mode #page-home span[style*="color:var(--tx3)"]{ color:#B45309 !important; }
+
+/* ── Section badge chips ── */
+body.light-mode #page-home div[style*="border-radius:50px"][style*="background:rgba(139,92,246"],
+body.light-mode #page-home div[style*="border-radius:50px"][style*="background:rgba(6,182,212"],
+body.light-mode #page-home div[style*="border-radius:50px"][style*="background:rgba(16,185,129"],
+body.light-mode #page-home div[style*="border-radius:50px"][style*="background:rgba(245,158,11"],
+body.light-mode #page-home div[style*="border-radius:50px"][style*="background:rgba(236,72,153"]{
+  background:rgba(234,88,12,0.08) !important;
+  border-color:rgba(234,88,12,0.22) !important;
 }
-body.light-mode #main-footer div[style*="height:1px"][style*="rgba(255,255,255,0.06)"]{
-  background:linear-gradient(90deg,transparent,rgba(234,88,12,0.15),transparent) !important;
+body.light-mode #page-home div[style*="border-radius:50px"] span[style*="color:#A78BFA"],
+body.light-mode #page-home div[style*="border-radius:50px"] span[style*="color:#67E8F9"],
+body.light-mode #page-home div[style*="border-radius:50px"] span[style*="color:#34D399"],
+body.light-mode #page-home div[style*="border-radius:50px"] span[style*="color:#FCD34D"],
+body.light-mode #page-home div[style*="border-radius:50px"] span[style*="color:#F9A8D4"]{
+  color:#EA580C !important;
 }
-/* Social icon buttons in footer */
+
+/* ── Hero section ── */
+body.light-mode #page-home .hero,
+body.light-mode #page-home section:first-of-type{
+  background:transparent !important;
+}
+/* Hero badge */
+body.light-mode #page-home div[style*="background:linear-gradient(135deg,rgba(139,92,246,0.12)"][style*="border-radius:50px"]{
+  background:linear-gradient(135deg,rgba(234,88,12,0.1),rgba(251,146,60,0.06)) !important;
+  border-color:rgba(234,88,12,0.3) !important;
+}
+/* Hero stat cards */
+body.light-mode #page-home div[style*="background:linear-gradient(135deg,rgba(139,92,246,0.1)"][style*="border-radius:22px"],
+body.light-mode #page-home div[style*="background:linear-gradient(135deg,rgba(6,182,212,0.1)"][style*="border-radius:22px"],
+body.light-mode #page-home div[style*="background:linear-gradient(135deg,rgba(236,72,153,0.1)"][style*="border-radius:22px"],
+body.light-mode #page-home div[style*="background:linear-gradient(135deg,rgba(245,158,11,0.1)"][style*="border-radius:22px"]{
+  background:linear-gradient(135deg,#ffffff,#FFF7ED) !important;
+  border-color:rgba(234,88,12,0.2) !important;
+  box-shadow:0 4px 20px rgba(234,88,12,0.1) !important;
+}
+/* Hero trust badges */
+body.light-mode #page-home div[style*="color:var(--tx3)"][style*="font-size:0.82rem"]{
+  color:#B45309 !important;
+}
+/* Hero Sign In button */
+body.light-mode #page-home button[style*="rgba(255,255,255,0.04)"][style*="border-radius:50px"]{
+  background:rgba(234,88,12,0.06) !important;
+  border-color:rgba(234,88,12,0.25) !important;
+  color:#C2410C !important;
+}
+/* Scroll indicator */
+body.light-mode #page-home div[style*="color:var(--tx3)"][style*="letter-spacing:0.2em"]{
+  color:#B45309 !important;
+}
+
+/* ── About section cards ── */
+body.light-mode #page-home div[style*="background:linear-gradient(135deg,rgba(139,92,246,0.1)"][style*="border-radius:20px"],
+body.light-mode #page-home div[style*="background:linear-gradient(135deg,rgba(6,182,212,0.1)"][style*="border-radius:20px"],
+body.light-mode #page-home div[style*="background:linear-gradient(135deg,rgba(236,72,153,0.1)"][style*="border-radius:20px"],
+body.light-mode #page-home div[style*="background:linear-gradient(135deg,rgba(245,158,11,0.1)"][style*="border-radius:20px"]{
+  background:linear-gradient(135deg,#ffffff,#FFF7ED) !important;
+  border-color:rgba(234,88,12,0.18) !important;
+  box-shadow:0 4px 20px rgba(234,88,12,0.08) !important;
+}
+
+/* ── Feature cards ── */
+body.light-mode #page-home div[style*="background:linear-gradient(135deg,rgba(139,92,246,0.08)"][style*="border-radius:24px"],
+body.light-mode #page-home div[style*="background:linear-gradient(135deg,rgba(6,182,212,0.08)"][style*="border-radius:24px"],
+body.light-mode #page-home div[style*="background:linear-gradient(135deg,rgba(236,72,153,0.08)"][style*="border-radius:24px"],
+body.light-mode #page-home div[style*="background:linear-gradient(135deg,rgba(245,158,11,0.08)"][style*="border-radius:24px"],
+body.light-mode #page-home div[style*="background:linear-gradient(135deg,rgba(16,185,129,0.08)"][style*="border-radius:24px"]{
+  background:linear-gradient(135deg,#ffffff,#FFF7ED) !important;
+  border-color:rgba(234,88,12,0.18) !important;
+  box-shadow:0 4px 24px rgba(234,88,12,0.1) !important;
+}
+/* Feature pill tags */
+body.light-mode #page-home span[style*="border-radius:50px"][style*="font-size:0.68rem"]{
+  background:rgba(234,88,12,0.08) !important;
+  border-color:rgba(234,88,12,0.2) !important;
+  color:#EA580C !important;
+}
+
+/* ── AI Showcase cards ── */
+body.light-mode #page-home div[style*="background:rgba(255,255,255,0.03)"][style*="border-radius:20px"]{
+  background:linear-gradient(135deg,#ffffff,#FFF7ED) !important;
+  border-color:rgba(234,88,12,0.15) !important;
+  box-shadow:0 4px 16px rgba(234,88,12,0.08) !important;
+}
+
+/* ── Testimonial cards ── */
+body.light-mode #page-home div[style*="background:linear-gradient(135deg,rgba(255,255,255,0.04)"][style*="border-radius:24px"]{
+  background:linear-gradient(135deg,#ffffff,#FFF7ED) !important;
+  border-color:rgba(234,88,12,0.15) !important;
+  box-shadow:0 4px 20px rgba(234,88,12,0.08) !important;
+}
+/* Testimonial top color bar - keep as orange */
+body.light-mode #page-home div[style*="height:2px"][style*="background:linear-gradient"]{
+  opacity:0.8 !important;
+}
+/* Reviewer location */
+body.light-mode #page-home div[style*="color:var(--tx3)"][style*="font-size:0.72rem"]{
+  color:#B45309 !important;
+}
+/* Quote text */
+body.light-mode #page-home p[style*="font-style:italic"]{
+  color:#92400E !important;
+}
+/* Rating number */
+body.light-mode #page-home div[style*="font-size:1.6rem"][style*="font-weight:800"]{
+  color:#1A0800 !important;
+}
+/* Rating label */
+body.light-mode #page-home div[style*="font-size:0.82rem"][style*="color:var(--tx3)"]{
+  color:#B45309 !important;
+}
+
+/* ── Pricing cards ── */
+body.light-mode #page-home div[style*="background:rgba(255,255,255,0.03)"][style*="border-radius:28px"]{
+  background:linear-gradient(135deg,#ffffff,#FFF7ED) !important;
+  border-color:rgba(234,88,12,0.18) !important;
+  box-shadow:0 4px 24px rgba(234,88,12,0.1) !important;
+}
+/* Pricing plan label muted */
+body.light-mode #page-home div[style*="color:var(--tx3)"][style*="letter-spacing:0.12em"]{
+  color:#B45309 !important;
+}
+/* Price /forever /month */
+body.light-mode #page-home span[style*="color:var(--tx3)"][style*="font-size:0.9rem"]{
+  color:#B45309 !important;
+}
+/* Feature list excluded items */
+body.light-mode #page-home div[style*="color:var(--tx3)"][style*="font-size:0.88rem"]{
+  color:#D97706 !important;
+}
+/* Free plan button */
+body.light-mode #page-home button[style*="rgba(255,255,255,0.05)"][style*="border-radius:14px"]{
+  background:rgba(234,88,12,0.06) !important;
+  border-color:rgba(234,88,12,0.2) !important;
+  color:#C2410C !important;
+}
+/* Money back text */
+body.light-mode #page-home div[style*="color:var(--tx3)"][style*="font-size:0.85rem"]{
+  color:#B45309 !important;
+}
+
+/* ── FAQ cards ── */
+body.light-mode #page-home div[style*="background:rgba(255,255,255,0.03)"][style*="border-radius:18px"]{
+  background:#ffffff !important;
+  border-color:rgba(234,88,12,0.15) !important;
+  box-shadow:0 2px 12px rgba(234,88,12,0.06) !important;
+}
+/* FAQ question text */
+body.light-mode #page-home button[style*="padding:1.4rem"] span:first-child{
+  color:#1A0800 !important;
+}
+/* FAQ + icon */
+body.light-mode #page-home span.fi{
+  color:#EA580C !important;
+}
+/* FAQ answer */
+body.light-mode #page-home div[style*="max-height"] p{
+  color:#7C2D00 !important;
+}
+/* FAQ CTA block */
+body.light-mode #page-home div[style*="rgba(139,92,246,0.08)"][style*="border-radius:28px"]{
+  background:linear-gradient(135deg,rgba(234,88,12,0.06),rgba(251,146,60,0.03)) !important;
+  border-color:rgba(234,88,12,0.22) !important;
+}
+
+/* ── Contact cards ── */
+body.light-mode #page-home div[style*="background:rgba(255,255,255,0.03)"][style*="border-radius:20px"]{
+  background:linear-gradient(135deg,#ffffff,#FFF7ED) !important;
+  border-color:rgba(234,88,12,0.15) !important;
+}
+
+/* ── Section divider lines ── */
+body.light-mode #page-home div[style*="height:1px"][style*="background:linear-gradient(90deg,transparent,rgba(139,92,246"],
+body.light-mode #page-home div[style*="height:1px"][style*="background:linear-gradient(90deg,transparent,rgba(6,182,212"],
+body.light-mode #page-home div[style*="height:1px"][style*="background:linear-gradient(90deg,transparent,rgba(245,158,11"],
+body.light-mode #page-home div[style*="height:1px"][style*="background:linear-gradient(90deg,transparent,rgba(236,72,153"]{
+  background:linear-gradient(90deg,transparent,rgba(234,88,12,0.3),transparent) !important;
+}
+body.light-mode #page-home section > div[style*="position:absolute"][style*="height:1px"]{
+  background:linear-gradient(90deg,transparent,rgba(234,88,12,0.25),transparent) !important;
+}
+
+/* ── Footer ── */
+body.light-mode #main-footer{
+  background:linear-gradient(180deg,rgba(255,247,237,0.9) 0%,rgba(255,250,245,0.6) 100%) !important;
+  border-top:1px solid rgba(234,88,12,0.15) !important;
+}
+body.light-mode #main-footer div[style*="height:1px"]{
+  background:linear-gradient(90deg,transparent,rgba(234,88,12,0.2),transparent) !important;
+}
+body.light-mode #main-footer > div > div[style*="height:1px"]:first-child{
+  background:linear-gradient(90deg,transparent,rgba(234,88,12,0.4),rgba(251,146,60,0.3),transparent) !important;
+}
 body.light-mode #main-footer a[style*="width:36px"]{
   background:rgba(234,88,12,0.06) !important;
   border-color:rgba(234,88,12,0.15) !important;
   color:#EA580C !important;
 }
-body.light-mode #main-footer a[style*="width:36px"]:hover{
-  background:rgba(234,88,12,0.12) !important;
-  border-color:rgba(234,88,12,0.35) !important;
-}
-body.light-mode ::-webkit-scrollbar-track{background:#FFF3E8;}body.light-mode ::-webkit-scrollbar-thumb{background:linear-gradient(180deg,#FB923C,#EA580C);}
-body.light-mode .mob-menu{background:rgba(255,250,245,0.99);border-bottom:1px solid rgba(234,88,12,0.15);box-shadow:0 8px 30px rgba(234,88,12,0.1);}
-body.light-mode .mob-item{color:#5C2800;}body.light-mode .mob-item:hover{background:rgba(234,88,12,0.06);color:#9A3412;}
-body.light-mode .mob-nav span{background:#7C3A00;}
+
 
 /* ===== MOBILE FIXES ===== */
 @media(max-width:768px){
