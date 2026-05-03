@@ -4165,7 +4165,7 @@ async function loadDash(){
 if(!US)return;
   var dn=document.getElementById('dn');if(dn)dn.textContent=US.name.split(' ')[0];
   var sbn=document.getElementById('sb-name');if(sbn)sbn.textContent=US.name;
-  var sbe=document.getElementById('sb-email');if(sbe)sbe.textContent=US.email;
+  var sbe=document.getElementById('sb-email');if(sbe){sbe.textContent=US.email;sbe.style.cssText='font-size:0.7rem;color:rgba(196,181,253,0.85);margin-top:3px;display:block;opacity:1;-webkit-text-fill-color:rgba(196,181,253,0.85);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:150px;';}
   // Load streak from server
   api('/api/auth/me').then(function(d){
     if(d.success&&d.user){
