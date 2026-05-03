@@ -610,6 +610,49 @@ function resetTheme(){
   animation:orbFloat2 10s ease-in-out infinite;
 }
 
+
+/* ===== SCROLL REVEAL ANIMATIONS ===== */
+.reveal{
+  opacity:0;
+  transform:translateY(40px);
+  transition:opacity 0.7s cubic-bezier(0.4,0,0.2,1), transform 0.7s cubic-bezier(0.4,0,0.2,1);
+}
+.reveal.revealed{
+  opacity:1;
+  transform:translateY(0);
+}
+.reveal-left{
+  opacity:0;
+  transform:translateX(-40px);
+  transition:opacity 0.7s cubic-bezier(0.4,0,0.2,1), transform 0.7s cubic-bezier(0.4,0,0.2,1);
+}
+.reveal-left.revealed{opacity:1;transform:translateX(0);}
+.reveal-right{
+  opacity:0;
+  transform:translateX(40px);
+  transition:opacity 0.7s cubic-bezier(0.4,0,0.2,1), transform 0.7s cubic-bezier(0.4,0,0.2,1);
+}
+.reveal-right.revealed{opacity:1;transform:translateX(0);}
+.reveal-scale{
+  opacity:0;
+  transform:scale(0.92);
+  transition:opacity 0.6s cubic-bezier(0.4,0,0.2,1), transform 0.6s cubic-bezier(0.4,0,0.2,1);
+}
+.reveal-scale.revealed{opacity:1;transform:scale(1);}
+/* Stagger delays */
+.reveal-d1{transition-delay:0.1s}
+.reveal-d2{transition-delay:0.2s}
+.reveal-d3{transition-delay:0.3s}
+.reveal-d4{transition-delay:0.4s}
+.reveal-d5{transition-delay:0.5s}
+.reveal-d6{transition-delay:0.6s}
+
+
+/* ===== MOUSE PARALLAX ===== */
+.parallax-slow{transition:transform 0.1s linear}
+.parallax-med{transition:transform 0.08s linear}
+.parallax-fast{transition:transform 0.05s linear}
+
 :root{--void:#050508;--deep:#08080F;--glass:rgba(255,255,255,0.04);--glass2:rgba(255,255,255,0.07);--bdr:rgba(255,255,255,0.07);--bdr2:rgba(139,92,246,0.4);--tx:#EEEAF8;--tx2:#C4C0D8;--tx3:#7A7698;--pu:#8B5CF6;--pu2:#A78BFA;--cy:#06B6D4;--pk:#EC4899;--gn:#10B981;--gd:#F59E0B;--gr:linear-gradient(135deg,#8B5CF6,#06B6D4);--gr2:linear-gradient(135deg,#EC4899,#8B5CF6);--gr3:linear-gradient(135deg,#8B5CF6,#06B6D4,#EC4899);--gp:0 0 40px rgba(139,92,246,0.3);--tr:0.3s cubic-bezier(0.4,0,0.2,1)}
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -1786,9 +1829,9 @@ body.light-mode #main-footer{
 }
 
 .page{opacity:1;transform:translateY(0);transition:opacity 0.3s ease,transform 0.3s ease}
-.page-exit{opacity:0;transform:translateY(10px);pointer-events:none}
-.page-enter{animation:pageIn 0.4s cubic-bezier(0.34,1.56,0.64,1) both}
-@keyframes pageIn{from{opacity:0;transform:translateY(20px) scale(0.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+.page-exit{opacity:0;transform:translateY(16px) scale(0.99);pointer-events:none;transition:opacity 0.22s ease,transform 0.22s ease}
+.page-enter{animation:pageIn 0.45s cubic-bezier(0.22,1,0.36,1) both}
+@keyframes pageIn{from{opacity:0;transform:translateY(24px) scale(0.97)}to{opacity:1;transform:translateY(0) scale(1)}}
 
 /* ── NEW HOME ANIMATIONS ── */
 @keyframes fadeSlideDown{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
@@ -2026,7 +2069,7 @@ body.light-mode #main-footer{
       <!-- Features Grid -->
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:20px;">
         <!-- F1 -->
-        <div style="background:linear-gradient(135deg,rgba(139,92,246,0.08),rgba(6,182,212,0.03));border:1px solid rgba(139,92,246,0.18);border-radius:24px;padding:2.5rem;transition:all 0.4s;cursor:default;position:relative;overflow:hidden;" onmouseover="this.style.transform='translateY(-8px)';this.style.borderColor='rgba(139,92,246,0.45)';this.style.boxShadow='0 24px 60px rgba(139,92,246,0.18)'" onmouseout="this.style.transform='translateY(0)';this.style.borderColor='rgba(139,92,246,0.18)';this.style.boxShadow='none'">
+        <div class="reveal-scale reveal-d1" style="background:linear-gradient(135deg,rgba(139,92,246,0.08),rgba(6,182,212,0.03));border:1px solid rgba(139,92,246,0.18);border-radius:24px;padding:2.5rem;transition:all 0.4s;cursor:default;position:relative;overflow:hidden;" onmouseover="this.style.transform='translateY(-8px)';this.style.borderColor='rgba(139,92,246,0.45)';this.style.boxShadow='0 24px 60px rgba(139,92,246,0.18)'" onmouseout="this.style.transform='translateY(0)';this.style.borderColor='rgba(139,92,246,0.18)';this.style.boxShadow='none'">
           <div style="position:absolute;top:-30px;right:-30px;width:100px;height:100px;background:radial-gradient(circle,rgba(139,92,246,0.15),transparent);border-radius:50%;"></div>
           <div style="width:52px;height:52px;background:linear-gradient(135deg,rgba(139,92,246,0.25),rgba(139,92,246,0.08));border:1px solid rgba(139,92,246,0.35);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;margin-bottom:1.5rem;box-shadow:0 4px 20px rgba(139,92,246,0.2);">🧠</div>
           <h3 style="font-family:'Syne',sans-serif;font-size:1.15rem;font-weight:700;color:var(--tx);margin-bottom:0.8rem;">Deep OCEAN Analysis</h3>
@@ -2081,7 +2124,7 @@ body.light-mode #main-footer{
           </div>
         </div>
         <!-- F6 -->
-        <div style="background:linear-gradient(135deg,rgba(139,92,246,0.08),rgba(236,72,153,0.03));border:1px solid rgba(139,92,246,0.18);border-radius:24px;padding:2.5rem;transition:all 0.4s;cursor:default;position:relative;overflow:hidden;" onmouseover="this.style.transform='translateY(-8px)';this.style.borderColor='rgba(139,92,246,0.45)';this.style.boxShadow='0 24px 60px rgba(139,92,246,0.18)'" onmouseout="this.style.transform='translateY(0)';this.style.borderColor='rgba(139,92,246,0.18)';this.style.boxShadow='none'">
+        <div class="reveal-scale reveal-d6" style="background:linear-gradient(135deg,rgba(139,92,246,0.08),rgba(236,72,153,0.03));border:1px solid rgba(139,92,246,0.18);border-radius:24px;padding:2.5rem;transition:all 0.4s;cursor:default;position:relative;overflow:hidden;" onmouseover="this.style.transform='translateY(-8px)';this.style.borderColor='rgba(139,92,246,0.45)';this.style.boxShadow='0 24px 60px rgba(139,92,246,0.18)'" onmouseout="this.style.transform='translateY(0)';this.style.borderColor='rgba(139,92,246,0.18)';this.style.boxShadow='none'">
           <div style="position:absolute;top:-30px;right:-30px;width:100px;height:100px;background:radial-gradient(circle,rgba(139,92,246,0.15),transparent);border-radius:50%;"></div>
           <div style="width:52px;height:52px;background:linear-gradient(135deg,rgba(139,92,246,0.25),rgba(236,72,153,0.1));border:1px solid rgba(139,92,246,0.35);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;margin-bottom:1.5rem;box-shadow:0 4px 20px rgba(139,92,246,0.2);">🌐</div>
           <h3 style="font-family:'Syne',sans-serif;font-size:1.15rem;font-weight:700;color:var(--tx);margin-bottom:0.8rem;">Works Everywhere</h3>
@@ -2183,7 +2226,7 @@ body.light-mode #main-footer{
       </div>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;">
         <!-- T1 -->
-        <div style="background:linear-gradient(135deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02));border:1px solid rgba(255,255,255,0.08);border-radius:24px;padding:2rem;transition:all 0.3s;position:relative;overflow:hidden;" onmouseover="this.style.borderColor='rgba(139,92,246,0.35)';this.style.background='rgba(139,92,246,0.05)';this.style.transform='translateY(-4px)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.08)';this.style.background='linear-gradient(135deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02))';this.style.transform='translateY(0)'">
+        <div class="reveal reveal-d1" style="background:linear-gradient(135deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02));border:1px solid rgba(255,255,255,0.08);border-radius:24px;padding:2rem;transition:all 0.3s;position:relative;overflow:hidden;" onmouseover="this.style.borderColor='rgba(139,92,246,0.35)';this.style.background='rgba(139,92,246,0.05)';this.style.transform='translateY(-4px)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.08)';this.style.background='linear-gradient(135deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02))';this.style.transform='translateY(0)'">
           <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#8B5CF6,#06B6D4);opacity:0.6;"></div>
           <div style="color:#F59E0B;font-size:0.9rem;margin-bottom:1rem;letter-spacing:2px;">★★★★★</div>
           <p style="font-size:0.9rem;color:var(--tx2);line-height:1.8;margin-bottom:1.5rem;font-style:italic;">"I've tried Myers-Briggs, Enneagram, everything. PersonaIQ is on another level. The AI insights felt like talking to a therapist who actually knows me."</p>
@@ -2193,7 +2236,7 @@ body.light-mode #main-footer{
           </div>
         </div>
         <!-- T2 -->
-        <div style="background:linear-gradient(135deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02));border:1px solid rgba(255,255,255,0.08);border-radius:24px;padding:2rem;transition:all 0.3s;position:relative;overflow:hidden;" onmouseover="this.style.borderColor='rgba(6,182,212,0.35)';this.style.background='rgba(6,182,212,0.05)';this.style.transform='translateY(-4px)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.08)';this.style.background='linear-gradient(135deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02))';this.style.transform='translateY(0)'">
+        <div class="reveal reveal-d2" style="background:linear-gradient(135deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02));border:1px solid rgba(255,255,255,0.08);border-radius:24px;padding:2rem;transition:all 0.3s;position:relative;overflow:hidden;" onmouseover="this.style.borderColor='rgba(6,182,212,0.35)';this.style.background='rgba(6,182,212,0.05)';this.style.transform='translateY(-4px)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.08)';this.style.background='linear-gradient(135deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02))';this.style.transform='translateY(0)'">
           <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#06B6D4,#EC4899);opacity:0.6;"></div>
           <div style="color:#F59E0B;font-size:0.9rem;margin-bottom:1rem;letter-spacing:2px;">★★★★★</div>
           <p style="font-size:0.9rem;color:var(--tx2);line-height:1.8;margin-bottom:1.5rem;font-style:italic;">"The Digital Twin feature blew my mind. Chatting with an AI version of myself helped me understand patterns I never noticed. Genuinely life-changing."</p>
@@ -2203,7 +2246,7 @@ body.light-mode #main-footer{
           </div>
         </div>
         <!-- T3 -->
-        <div style="background:linear-gradient(135deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02));border:1px solid rgba(255,255,255,0.08);border-radius:24px;padding:2rem;transition:all 0.3s;position:relative;overflow:hidden;" onmouseover="this.style.borderColor='rgba(236,72,153,0.35)';this.style.background='rgba(236,72,153,0.05)';this.style.transform='translateY(-4px)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.08)';this.style.background='linear-gradient(135deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02))';this.style.transform='translateY(0)'">
+        <div class="reveal reveal-d3" style="background:linear-gradient(135deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02));border:1px solid rgba(255,255,255,0.08);border-radius:24px;padding:2rem;transition:all 0.3s;position:relative;overflow:hidden;" onmouseover="this.style.borderColor='rgba(236,72,153,0.35)';this.style.background='rgba(236,72,153,0.05)';this.style.transform='translateY(-4px)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.08)';this.style.background='linear-gradient(135deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02))';this.style.transform='translateY(0)'">
           <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#EC4899,#F59E0B);opacity:0.6;"></div>
           <div style="color:#F59E0B;font-size:0.9rem;margin-bottom:1rem;letter-spacing:2px;">★★★★★</div>
           <p style="font-size:0.9rem;color:var(--tx2);line-height:1.8;margin-bottom:1.5rem;font-style:italic;">"Used this with my entire team. The OCEAN profiles helped us understand each other's working styles. Team dynamics improved dramatically within weeks."</p>
@@ -2213,7 +2256,7 @@ body.light-mode #main-footer{
           </div>
         </div>
         <!-- T4 -->
-        <div style="background:linear-gradient(135deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02));border:1px solid rgba(255,255,255,0.08);border-radius:24px;padding:2rem;transition:all 0.3s;position:relative;overflow:hidden;" onmouseover="this.style.borderColor='rgba(245,158,11,0.35)';this.style.background='rgba(245,158,11,0.05)';this.style.transform='translateY(-4px)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.08)';this.style.background='linear-gradient(135deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02))';this.style.transform='translateY(0)'">
+        <div class="reveal reveal-d4" style="background:linear-gradient(135deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02));border:1px solid rgba(255,255,255,0.08);border-radius:24px;padding:2rem;transition:all 0.3s;position:relative;overflow:hidden;" onmouseover="this.style.borderColor='rgba(245,158,11,0.35)';this.style.background='rgba(245,158,11,0.05)';this.style.transform='translateY(-4px)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.08)';this.style.background='linear-gradient(135deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02))';this.style.transform='translateY(0)'">
           <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#F59E0B,#10B981);opacity:0.6;"></div>
           <div style="color:#F59E0B;font-size:0.9rem;margin-bottom:1rem;letter-spacing:2px;">★★★★★</div>
           <p style="font-size:0.9rem;color:var(--tx2);line-height:1.8;margin-bottom:1.5rem;font-style:italic;">"The radar chart visualization is stunning. I track my personality monthly and can literally see how I've grown. No other tool does this so beautifully."</p>
@@ -2223,7 +2266,7 @@ body.light-mode #main-footer{
           </div>
         </div>
         <!-- T5 -->
-        <div style="background:linear-gradient(135deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02));border:1px solid rgba(255,255,255,0.08);border-radius:24px;padding:2rem;transition:all 0.3s;position:relative;overflow:hidden;" onmouseover="this.style.borderColor='rgba(16,185,129,0.35)';this.style.background='rgba(16,185,129,0.05)';this.style.transform='translateY(-4px)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.08)';this.style.background='linear-gradient(135deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02))';this.style.transform='translateY(0)'">
+        <div class="reveal reveal-d5" style="background:linear-gradient(135deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02));border:1px solid rgba(255,255,255,0.08);border-radius:24px;padding:2rem;transition:all 0.3s;position:relative;overflow:hidden;" onmouseover="this.style.borderColor='rgba(16,185,129,0.35)';this.style.background='rgba(16,185,129,0.05)';this.style.transform='translateY(-4px)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.08)';this.style.background='linear-gradient(135deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02))';this.style.transform='translateY(0)'">
           <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#10B981,#8B5CF6);opacity:0.6;"></div>
           <div style="color:#F59E0B;font-size:0.9rem;margin-bottom:1rem;letter-spacing:2px;">★★★★★</div>
           <p style="font-size:0.9rem;color:var(--tx2);line-height:1.8;margin-bottom:1.5rem;font-style:italic;">"Took the assessment during a career transition. The insights about my strengths and blind spots were spot-on. Helped me choose the right path with confidence."</p>
@@ -2233,7 +2276,7 @@ body.light-mode #main-footer{
           </div>
         </div>
         <!-- T6 -->
-        <div style="background:linear-gradient(135deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02));border:1px solid rgba(255,255,255,0.08);border-radius:24px;padding:2rem;transition:all 0.3s;position:relative;overflow:hidden;" onmouseover="this.style.borderColor='rgba(139,92,246,0.35)';this.style.background='rgba(139,92,246,0.05)';this.style.transform='translateY(-4px)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.08)';this.style.background='linear-gradient(135deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02))';this.style.transform='translateY(0)'">
+        <div class="reveal reveal-d6" style="background:linear-gradient(135deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02));border:1px solid rgba(255,255,255,0.08);border-radius:24px;padding:2rem;transition:all 0.3s;position:relative;overflow:hidden;" onmouseover="this.style.borderColor='rgba(139,92,246,0.35)';this.style.background='rgba(139,92,246,0.05)';this.style.transform='translateY(-4px)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.08)';this.style.background='linear-gradient(135deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02))';this.style.transform='translateY(0)'">
           <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#A78BFA,#67E8F9);opacity:0.6;"></div>
           <div style="color:#F59E0B;font-size:0.9rem;margin-bottom:1rem;letter-spacing:2px;">★★★★★</div>
           <p style="font-size:0.9rem;color:var(--tx2);line-height:1.8;margin-bottom:1.5rem;font-style:italic;">"Free, fast, and frighteningly accurate. I shared my results with my partner and we had the most meaningful conversation about ourselves we've ever had."</p>
@@ -2259,7 +2302,7 @@ body.light-mode #main-footer{
         <p style="font-size:1rem;color:var(--tx2);max-width:440px;margin:0 auto;line-height:1.8;">No hidden fees. No credit card required. Cancel anytime.</p>
       </div>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px;align-items:start;">
-        <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:28px;padding:2.5rem;transition:all 0.3s;" onmouseover="this.style.borderColor='rgba(255,255,255,0.18)';this.style.transform='translateY(-4px)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.08)';this.style.transform='translateY(0)'">
+        <div class="reveal reveal-d1" style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:28px;padding:2.5rem;transition:all 0.3s;" onmouseover="this.style.borderColor='rgba(255,255,255,0.18)';this.style.transform='translateY(-4px)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.08)';this.style.transform='translateY(0)'">
           <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.12em;color:var(--tx3);text-transform:uppercase;margin-bottom:1rem;">Free</div>
           <div style="display:flex;align-items:baseline;gap:4px;margin-bottom:0.5rem;"><span style="font-family:'Syne',sans-serif;font-size:3.5rem;font-weight:900;color:var(--tx);">$0</span><span style="color:var(--tx3);font-size:0.9rem;">/forever</span></div>
           <p style="font-size:0.85rem;color:var(--tx2);margin-bottom:2rem;line-height:1.6;">Everything you need to discover your personality.</p>
@@ -2273,7 +2316,7 @@ body.light-mode #main-footer{
           </div>
           <button onclick="handleStart()" style="width:100%;padding:14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);border-radius:14px;color:var(--tx);font-family:'Space Grotesk',sans-serif;font-size:0.95rem;font-weight:600;cursor:pointer;transition:all 0.3s;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='rgba(255,255,255,0.05)'">Get Started Free</button>
         </div>
-        <div style="background:linear-gradient(135deg,rgba(139,92,246,0.14),rgba(6,182,212,0.07));border:1px solid rgba(139,92,246,0.45);border-radius:28px;padding:2.5rem;position:relative;transition:all 0.3s;box-shadow:0 0 60px rgba(139,92,246,0.18);" onmouseover="this.style.transform='translateY(-8px)';this.style.boxShadow='0 30px 80px rgba(139,92,246,0.3)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 0 60px rgba(139,92,246,0.18)'">
+        <div class="reveal reveal-d2" style="background:linear-gradient(135deg,rgba(139,92,246,0.14),rgba(6,182,212,0.07));border:1px solid rgba(139,92,246,0.45);border-radius:28px;padding:2.5rem;position:relative;transition:all 0.3s;box-shadow:0 0 60px rgba(139,92,246,0.18);" onmouseover="this.style.transform='translateY(-8px)';this.style.boxShadow='0 30px 80px rgba(139,92,246,0.3)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 0 60px rgba(139,92,246,0.18)'">
           <div style="position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#8B5CF6,#06B6D4);border-radius:50px;padding:5px 20px;font-size:0.7rem;font-weight:700;color:#fff;letter-spacing:0.1em;white-space:nowrap;box-shadow:0 4px 20px rgba(139,92,246,0.5);">✦ MOST POPULAR</div>
           <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.12em;color:#A78BFA;text-transform:uppercase;margin-bottom:1rem;">Pro</div>
           <div style="display:flex;align-items:baseline;gap:4px;margin-bottom:0.5rem;"><span style="font-family:'Syne',sans-serif;font-size:3.5rem;font-weight:900;background:linear-gradient(135deg,#8B5CF6,#06B6D4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">$9</span><span style="color:var(--tx3);font-size:0.9rem;">/month</span></div>
@@ -2288,7 +2331,7 @@ body.light-mode #main-footer{
           </div>
           <button onclick="handleStart()" style="width:100%;padding:14px;background:linear-gradient(135deg,#8B5CF6,#06B6D4);border:none;border-radius:14px;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:0.95rem;font-weight:700;cursor:pointer;transition:all 0.3s;box-shadow:0 8px 30px rgba(139,92,246,0.4);" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">Start Pro Free Trial</button>
         </div>
-        <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:28px;padding:2.5rem;transition:all 0.3s;" onmouseover="this.style.borderColor='rgba(236,72,153,0.35)';this.style.transform='translateY(-4px)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.08)';this.style.transform='translateY(0)'">
+        <div class="reveal reveal-d3" style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:28px;padding:2.5rem;transition:all 0.3s;" onmouseover="this.style.borderColor='rgba(236,72,153,0.35)';this.style.transform='translateY(-4px)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.08)';this.style.transform='translateY(0)'">
           <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.12em;color:#F9A8D4;text-transform:uppercase;margin-bottom:1rem;">Team</div>
           <div style="display:flex;align-items:baseline;gap:4px;margin-bottom:0.5rem;"><span style="font-family:'Syne',sans-serif;font-size:3.5rem;font-weight:900;color:var(--tx);">$29</span><span style="color:var(--tx3);font-size:0.9rem;">/month</span></div>
           <p style="font-size:0.85rem;color:var(--tx2);margin-bottom:2rem;line-height:1.6;">For teams who want to understand each other better.</p>
@@ -2317,7 +2360,7 @@ body.light-mode #main-footer{
         <h2 style="font-family:'Syne',sans-serif;font-size:clamp(2.2rem,5vw,3.8rem);font-weight:800;line-height:1.05;letter-spacing:-0.03em;color:var(--tx);margin-bottom:1rem;">Questions?<br><span style="background:linear-gradient(135deg,#F59E0B,#EC4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">We've got answers.</span></h2>
       </div>
       <div style="display:flex;flex-direction:column;gap:12px;">
-        <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:18px;overflow:hidden;transition:all 0.3s;">
+        <div class="reveal" style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:18px;overflow:hidden;transition:all 0.3s;">
           <button onclick="var c=this.nextElementSibling;var i=this.querySelector('.fi');var open=c.style.maxHeight&&c.style.maxHeight!='0px';c.style.maxHeight=open?'0px':'400px';c.style.paddingBottom=open?'0':'1.2rem';i.style.transform=open?'rotate(0deg)':'rotate(45deg)';" style="width:100%;padding:1.4rem 1.8rem;background:none;border:none;display:flex;align-items:center;justify-content:space-between;cursor:pointer;text-align:left;gap:16px;">
             <span style="font-weight:600;color:var(--tx);font-size:0.95rem;font-family:'Space Grotesk',sans-serif;">How accurate is the PersonaIQ assessment?</span>
             <span class="fi" style="color:#8B5CF6;font-size:1.4rem;flex-shrink:0;transition:transform 0.3s;line-height:1;">+</span>
@@ -2326,7 +2369,7 @@ body.light-mode #main-footer{
             <p style="font-size:0.9rem;color:var(--tx2);line-height:1.8;">PersonaIQ uses the scientifically validated Big Five (OCEAN) model, the most widely researched personality framework in psychology. Our AI-enhanced scoring provides accuracy comparable to professional psychological assessments.</p>
           </div>
         </div>
-        <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:18px;overflow:hidden;transition:all 0.3s;">
+        <div class="reveal" style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:18px;overflow:hidden;transition:all 0.3s;">
           <button onclick="var c=this.nextElementSibling;var i=this.querySelector('.fi');var open=c.style.maxHeight&&c.style.maxHeight!='0px';c.style.maxHeight=open?'0px':'400px';c.style.paddingBottom=open?'0':'1.2rem';i.style.transform=open?'rotate(0deg)':'rotate(45deg)';" style="width:100%;padding:1.4rem 1.8rem;background:none;border:none;display:flex;align-items:center;justify-content:space-between;cursor:pointer;text-align:left;gap:16px;">
             <span style="font-weight:600;color:var(--tx);font-size:0.95rem;font-family:'Space Grotesk',sans-serif;">Is my data private and secure?</span>
             <span class="fi" style="color:#8B5CF6;font-size:1.4rem;flex-shrink:0;transition:transform 0.3s;line-height:1;">+</span>
@@ -2335,7 +2378,7 @@ body.light-mode #main-footer{
             <p style="font-size:0.9rem;color:var(--tx2);line-height:1.8;">Absolutely. Your psychological data is encrypted at rest and in transit. We never sell, share, or use your data for advertising. You can delete your account and all data at any time. Fully GDPR compliant.</p>
           </div>
         </div>
-        <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:18px;overflow:hidden;transition:all 0.3s;">
+        <div class="reveal" style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:18px;overflow:hidden;transition:all 0.3s;">
           <button onclick="var c=this.nextElementSibling;var i=this.querySelector('.fi');var open=c.style.maxHeight&&c.style.maxHeight!='0px';c.style.maxHeight=open?'0px':'400px';c.style.paddingBottom=open?'0':'1.2rem';i.style.transform=open?'rotate(0deg)':'rotate(45deg)';" style="width:100%;padding:1.4rem 1.8rem;background:none;border:none;display:flex;align-items:center;justify-content:space-between;cursor:pointer;text-align:left;gap:16px;">
             <span style="font-weight:600;color:var(--tx);font-size:0.95rem;font-family:'Space Grotesk',sans-serif;">What is the Digital Twin feature?</span>
             <span class="fi" style="color:#8B5CF6;font-size:1.4rem;flex-shrink:0;transition:transform 0.3s;line-height:1;">+</span>
@@ -2344,7 +2387,7 @@ body.light-mode #main-footer{
             <p style="font-size:0.9rem;color:var(--tx2);line-height:1.8;">Your Digital Twin is an AI model trained on your personality profile. It mirrors your communication style, values, and thought patterns. You can have conversations with it to explore how you might react in different situations. Available on Pro plan.</p>
           </div>
         </div>
-        <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:18px;overflow:hidden;transition:all 0.3s;">
+        <div class="reveal" style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:18px;overflow:hidden;transition:all 0.3s;">
           <button onclick="var c=this.nextElementSibling;var i=this.querySelector('.fi');var open=c.style.maxHeight&&c.style.maxHeight!='0px';c.style.maxHeight=open?'0px':'400px';c.style.paddingBottom=open?'0':'1.2rem';i.style.transform=open?'rotate(0deg)':'rotate(45deg)';" style="width:100%;padding:1.4rem 1.8rem;background:none;border:none;display:flex;align-items:center;justify-content:space-between;cursor:pointer;text-align:left;gap:16px;">
             <span style="font-weight:600;color:var(--tx);font-size:0.95rem;font-family:'Space Grotesk',sans-serif;">How long does the assessment take?</span>
             <span class="fi" style="color:#8B5CF6;font-size:1.4rem;flex-shrink:0;transition:transform 0.3s;line-height:1;">+</span>
@@ -2353,7 +2396,7 @@ body.light-mode #main-footer{
             <p style="font-size:0.9rem;color:var(--tx2);line-height:1.8;">25 carefully crafted questions, typically 3-5 minutes. Answer instinctively — your first response is usually the most accurate reflection of your true personality.</p>
           </div>
         </div>
-        <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:18px;overflow:hidden;transition:all 0.3s;">
+        <div class="reveal" style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:18px;overflow:hidden;transition:all 0.3s;">
           <button onclick="var c=this.nextElementSibling;var i=this.querySelector('.fi');var open=c.style.maxHeight&&c.style.maxHeight!='0px';c.style.maxHeight=open?'0px':'400px';c.style.paddingBottom=open?'0':'1.2rem';i.style.transform=open?'rotate(0deg)':'rotate(45deg)';" style="width:100%;padding:1.4rem 1.8rem;background:none;border:none;display:flex;align-items:center;justify-content:space-between;cursor:pointer;text-align:left;gap:16px;">
             <span style="font-weight:600;color:var(--tx);font-size:0.95rem;font-family:'Space Grotesk',sans-serif;">Do I need to create an account?</span>
             <span class="fi" style="color:#8B5CF6;font-size:1.4rem;flex-shrink:0;transition:transform 0.3s;line-height:1;">+</span>
@@ -3219,7 +3262,7 @@ function showPage(n,sub){
       var skelRes=document.getElementById('page-loader-results');if(skelRes)skelRes.style.display='none';
       var target=document.getElementById(n);
       if(target){target.classList.remove('hidden');target.classList.add('page-enter');setTimeout(function(){target.classList.remove('page-enter');},400);}
-      if(n==='pa')toggleAuth(sub||'login');if(n==='ph')loadHist();if(n==='pd')loadDash();
+      if(n==='pa')toggleAuth(sub||'login');if(n==='ph')loadHist();if(n==='pd')loadDash();if(n==='page-home'&&window._revealInit){setTimeout(window._revealInit,100);}
       window.scrollTo(0,0);
     },200);
   } else {
@@ -3227,12 +3270,83 @@ function showPage(n,sub){
     var skelRes=document.getElementById('page-loader-results');if(skelRes)skelRes.style.display='none';
     var target=document.getElementById(n);
     if(target){target.classList.remove('hidden');}
-    if(n==='pa')toggleAuth(sub||'login');if(n==='ph')loadHist();if(n==='pd')loadDash();
+    if(n==='pa')toggleAuth(sub||'login');if(n==='ph')loadHist();if(n==='pd')loadDash();if(n==='page-home'&&window._revealInit){setTimeout(window._revealInit,100);}
     window.scrollTo(0,0);
   }
 }
 function showResultSkeleton(){document.querySelectorAll('.page').forEach(p=>p.classList.add('hidden'));var s=document.getElementById('page-loader-results');if(s){s.classList.remove('hidden');s.style.display='block';window.scrollTo(0,0);}}
 function goHome(){TK?showPage('pd'):showPage('page-home');}
+
+
+// ===== FEATURE 1: SCROLL REVEAL =====
+(function(){
+  function initScrollReveal(){
+    var els = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale');
+    if(!els.length) return;
+    var observer = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          entry.target.classList.add('revealed');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, {threshold:0.12, rootMargin:'0px 0px -40px 0px'});
+    els.forEach(function(el){ observer.observe(el); });
+  }
+
+  // Run on page load and whenever page-home becomes visible
+  document.addEventListener('DOMContentLoaded', initScrollReveal);
+
+  // Re-run when navigating to home
+  var origShowPage = window.showPage;
+  window._revealInit = initScrollReveal;
+})();
+
+// ===== FEATURE 2: MOUSE PARALLAX =====
+(function(){
+  var mouseX = 0, mouseY = 0;
+  var targetX = 0, targetY = 0;
+
+  document.addEventListener('mousemove', function(e){
+    mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+    mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+  });
+
+  function parallaxLoop(){
+    targetX += (mouseX - targetX) * 0.06;
+    targetY += (mouseY - targetY) * 0.06;
+
+    // Move ambient orbs in page-home
+    var orbs = document.querySelectorAll('#page-home > div[style*="position:fixed"]');
+    orbs.forEach(function(orb, i){
+      var speed = (i % 3 === 0) ? 18 : (i % 3 === 1) ? 12 : 8;
+      orb.style.transform = 'translate(' + (targetX * speed) + 'px, ' + (targetY * speed) + 'px)';
+    });
+
+    // Subtle parallax on hero h1
+    var h1 = document.querySelector('#page-home h1');
+    if(h1) h1.style.transform = 'translate(' + (targetX * -4) + 'px, ' + (targetY * -3) + 'px)';
+
+    // Hero badge
+    var badge = document.querySelector('#page-home .h-chip, #page-home div[style*="border-radius:50px"][style*="animation:fadeSlideDown"]');
+    if(badge) badge.style.transform = 'translate(' + (targetX * -6) + 'px, ' + (targetY * -4) + 'px)';
+
+    requestAnimationFrame(parallaxLoop);
+  }
+  parallaxLoop();
+})();
+
+// ===== FEATURE 3: SMOOTH PAGE TRANSITIONS - enhanced =====
+// Already handled by CSS, but add scroll-to-top smooth behavior
+var _origScrollTo = window.scrollTo;
+window.scrollTo = function(x, y){
+  if(x === 0 && y === 0){
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+  } else {
+    _origScrollTo.apply(window, arguments);
+  }
+};
 
 // ===== INITIAL PAGE LOADER =====
 (function(){
