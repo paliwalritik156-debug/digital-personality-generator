@@ -3621,7 +3621,7 @@ async function loadQuiz(){
   }
   renderQ();showPage('pq');
 }
-let li;
+// li replaced by window._li
 function animL(){
   var msgs=['Mapping your cognitive landscape','Detecting personality patterns','Building your Digital Twin','Running life simulations','Generating your AI report'];
   var i=0;
@@ -3643,7 +3643,7 @@ function prevQ(){if(CQ>0){CQ--;renderQ();}}
 document.addEventListener('keydown',e=>{if(document.getElementById('pq').classList.contains('hidden'))return;const q=QS[CQ];if(!q)return;if(['1','2','3','4','5'].includes(e.key))pickA(q._id,parseInt(e.key));if(e.key==='ArrowRight')nextQ();if(e.key==='ArrowLeft')prevQ();});
 async function submitQ(){
   // Clear saved progress on submit
-  try{localStorage.removeItem('piq_quiz_progress');}catch(e){}showPage('pl');animL();const arr=Object.entries(ANS).map(([qId,v])=>({questionId:qId,value:v}));const d=await api('/api/submit','POST',{answers:arr});clearInterval(li);if(d.success){
+  try{localStorage.removeItem('piq_quiz_progress');}catch(e){}showPage('pl');animL();const arr=Object.entries(ANS).map(([qId,v])=>({questionId:qId,value:v}));const d=await api('/api/submit','POST',{answers:arr});clearInterval(window._li);if(d.success){
   // Show streak toast
   if(d.streak&&d.streak.current>1){
     setTimeout(function(){toast('🔥 '+d.streak.current+' day streak! Keep it up!');},1500);
@@ -3848,7 +3848,7 @@ function buildPOTChart(results){
     insightEl.innerHTML = '💡 <strong>Biggest change:</strong> Your <span style="color:'+top.color+'">'+top.trait+'</span> has '+(top.diff>0?'<span style="color:#10B981">increased by +'+top.diff+'%</span>':'<span style="color:#ff6b6b">decreased by '+top.diff+'%</span>')+' since your first assessment.';
   }
 }
-async function viewR(id){showPage('pl');animL();CRID=id;const f=await api('/api/result/'+id);clearInterval(li);if(f.success)renderR(f.result||f.data);else toast('Could not load');}
+async function viewR(id){showPage('pl');animL();CRID=id;const f=await api('/api/result/'+id);clearInterval(window._li);if(f.success)renderR(f.result||f.data);else toast('Could not load');}
 async function downloadPDF(){if(!CRID)return toast('No result to download');toast('Generating PDF');try{const res=await fetch('/api/result/'+CRID+'/pdf',{headers:{'Authorization':'Bearer '+TK}});if(!res.ok){toast('PDF failed');return;}const blob=await res.blob();const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='PersonaIQ-Report.pdf';a.click();URL.revokeObjectURL(url);toast('PDF Downloaded!');}catch(e){toast('Error: '+e.message);}}
 function openEmailModal(){if(!CRID)return toast('No result to email');const modal=document.getElementById('email-modal');const inp=document.getElementById('email-modal-input');if(US&&US.email)inp.value=US.email;modal.style.display='flex';modal.onclick=function(e){if(e.target===modal)modal.style.display='none';};}
 async function sendEmailReport(){const inp=document.getElementById('email-modal-input');const email=inp.value.trim();if(!email)return toast('Enter an email address');const emailRx=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;if(!emailRx.test(email))return toast('Invalid email address');const btn=document.getElementById('btn-send-email');btn.disabled=true;btn.textContent='Sending…';try{const d=await api('/api/result/'+CRID+'/email','POST',{email});if(d.success){document.getElementById('email-modal').style.display='none';toast('Report sent to '+email+' 📧');}else{toast(d.message||'Failed to send');}}catch(e){toast('Error: '+e.message);}finally{btn.disabled=false;btn.textContent='Send Report →';}}
