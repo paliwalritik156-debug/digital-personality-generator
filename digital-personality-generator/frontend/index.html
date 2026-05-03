@@ -808,8 +808,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:68px;display:flex;ali
 /* ── PREMIUM SIDEBAR ── */
 .sidebar{
   background:linear-gradient(180deg,
-    rgba(8,5,25,0.99) 0%,
-    rgba(5,3,18,0.98) 100%
+    rgba(12,8,35,0.99) 0%,
+    rgba(8,5,25,0.98) 100%
   );
   border-right:1px solid rgba(139,92,246,0.15);
   backdrop-filter:blur(60px) saturate(200%);
@@ -858,7 +858,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:68px;display:flex;ali
   background:linear-gradient(135deg,#EEEAF8,#C4B5FD);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;
 }
-.sidebar-email{font-size:0.7rem;color:rgba(167,139,250,0.5);margin-top:2px;}
+.sidebar-email{font-size:0.7rem;color:rgba(167,139,250,0.65);margin-top:2px;}
 .sidebar-label{
   font-size:0.6rem;font-weight:700;
   color:rgba(139,92,246,0.5);
@@ -870,7 +870,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:68px;display:flex;ali
   padding:11px 14px;border-radius:14px;
   cursor:pointer;
   transition:all 0.25s cubic-bezier(0.4,0,0.2,1);
-  font-size:0.87rem;color:rgba(167,139,250,0.6);
+  font-size:0.87rem;color:rgba(196,181,253,0.7);
   border:1px solid transparent;
   position:relative;overflow:hidden;
 }
@@ -932,23 +932,23 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:68px;display:flex;ali
 /* ── STAT CARDS ── */
 .overview-stats{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
   gap:1.2rem;margin-bottom:3rem;
 }
 .ov-stat{
   background:linear-gradient(135deg,
-    rgba(255,255,255,0.06) 0%,
-    rgba(255,255,255,0.02) 100%
+    rgba(139,92,246,0.08) 0%,
+    rgba(255,255,255,0.03) 100%
   );
-  border:1px solid rgba(255,255,255,0.08);
+  border:1px solid rgba(139,92,246,0.2);
   border-radius:24px;padding:1.6rem;
   transition:all 0.4s cubic-bezier(0.4,0,0.2,1);
   position:relative;overflow:hidden;
   backdrop-filter:blur(40px) saturate(180%);
   box-shadow:
-    0 4px 24px rgba(0,0,0,0.4),
-    inset 0 1px 0 rgba(255,255,255,0.08),
-    inset 0 -1px 0 rgba(0,0,0,0.2);
+    0 4px 24px rgba(0,0,0,0.3),
+    0 0 0 1px rgba(139,92,246,0.08),
+    inset 0 1px 0 rgba(255,255,255,0.08);
 }
 .ov-stat::before{
   content:'';position:absolute;top:0;left:0;right:0;height:1px;
@@ -970,13 +970,13 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:68px;display:flex;ali
 }
 .ov-stat:hover::before{opacity:1;}
 .ov-val{
-  font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:900;
+  font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:900;
   background:linear-gradient(135deg,#8B5CF6,#06B6D4);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-  line-height:1.2;
+  line-height:1.2;word-break:break-word;overflow-wrap:break-word;
 }
 .ov-lbl{
-  font-size:0.68rem;color:rgba(167,139,250,0.5);
+  font-size:0.68rem;color:rgba(196,181,253,0.6);
   margin-top:4px;text-transform:uppercase;letter-spacing:0.1em;font-weight:600;
 }
 .ov-icon{font-size:1.4rem;margin-bottom:0.8rem;}
@@ -2005,7 +2005,7 @@ body.light-mode #main-footer{
 .sidebar::-webkit-scrollbar-thumb{background:rgba(139,92,246,0.3);border-radius:3px}
 
 /* Premium overview stats grid */
-.overview-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1.2rem;margin-bottom:2.5rem}
+.overview-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1.2rem;margin-bottom:2.5rem}
 
 /* Glow on active nav item */
 .nav-item.active::before{
