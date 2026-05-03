@@ -1273,6 +1273,8 @@ body.light-mode #pd div[style*="border-bottom:1px solid rgba(139,92,246"]{border
 body.light-mode #pd div[style*="border-top:1px solid rgba(139,92,246"]{border-top-color:rgba(234,88,12,0.2) !important;}
 
 /* ── Sidebar New Assessment special item ── */
+body.light-mode #nav-new-assessment{background:linear-gradient(135deg,rgba(234,88,12,0.14),rgba(251,146,60,0.07)) !important;border-color:rgba(234,88,12,0.35) !important;}
+body.light-mode #nav-new-text{background:linear-gradient(135deg,#C2410C,#EA580C) !important;-webkit-background-clip:text !important;-webkit-text-fill-color:transparent !important;font-weight:700 !important;}
 body.light-mode #pd .nav-item[style*="rgba(139,92,246,0.12)"]{background:linear-gradient(135deg,rgba(234,88,12,0.14),rgba(251,146,60,0.07)) !important;border-color:rgba(234,88,12,0.35) !important;}
 
 /* ── Quick action icon boxes ── */
@@ -2216,9 +2218,9 @@ body.light-mode .prw{background:transparent !important;}
       </div>
 
       <div class="sidebar-label">Actions</div>
-      <div class="nav-item" onclick="loadQuiz()" style="background:linear-gradient(135deg,rgba(139,92,246,0.12),rgba(6,182,212,0.06));border-color:rgba(139,92,246,0.25);">
+      <div class="nav-item" onclick="loadQuiz()" id="nav-new-assessment" style="background:linear-gradient(135deg,rgba(139,92,246,0.12),rgba(6,182,212,0.06));border-color:rgba(139,92,246,0.25);">
         <span class="nav-item-icon">⚡</span>
-        <span style="background:linear-gradient(135deg,#A78BFA,#67E8F9);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:600;">New Assessment</span>
+        <span id="nav-new-text" style="background:linear-gradient(135deg,#A78BFA,#67E8F9);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:600;">New Assessment</span>
       </div>
       <div class="nav-item" onclick="openChat()">
         <span class="nav-item-icon">🤖</span>Chat Twin
