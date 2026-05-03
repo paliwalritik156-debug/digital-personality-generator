@@ -3131,9 +3131,23 @@ function toggleDarkLight(){
   _isLight = !_isLight;
   localStorage.setItem('piq_theme', _isLight ? 'light' : 'dark');
   applyThemeMode();
+  // Re-run after CSS class settles (fixes first-toggle color bug)
+  setTimeout(function(){ applyHomeSectionColors(_isLight); }, 50);
   toast(_isLight ? '☀️ Light mode' : '🌙 Dark mode');
 }
+// Apply theme immediately (CSS class)
 applyThemeMode();
+
+// Re-apply home section colors after DOM is fully ready
+// This fixes the bug where colors are wrong on first load / theme switch
+if(document.readyState === 'loading'){
+  document.addEventListener('DOMContentLoaded', function(){
+    applyHomeSectionColors(_isLight);
+  });
+} else {
+  // DOM already ready (script at bottom of body)
+  setTimeout(function(){ applyHomeSectionColors(_isLight); }, 0);
+}
 
 // Forgot Password
 function showForgotPassword(){
