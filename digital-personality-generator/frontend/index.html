@@ -1156,6 +1156,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:68px;display:flex;ali
   background:linear-gradient(90deg,transparent,rgba(139,92,246,0.2),transparent);
   animation:glowLine 4s ease-in-out infinite;pointer-events:none;
 }
+.rc:nth-child(1){animation-delay:0.05s}.rc:nth-child(2){animation-delay:0.1s}.rc:nth-child(3){animation-delay:0.15s}.rc:nth-child(4){animation-delay:0.2s}.rc:nth-child(5){animation-delay:0.25s}.rc:nth-child(6){animation-delay:0.3s}.rc:nth-child(7){animation-delay:0.35s}.rc:nth-child(8){animation-delay:0.4s}.rc:nth-child(9){animation-delay:0.45s}.rc:nth-child(10){animation-delay:0.5s}.rc:nth-child(11){animation-delay:0.55s}.rc:nth-child(12){animation-delay:0.6s}.rc:nth-child(13){animation-delay:0.65s}.rc:nth-child(14){animation-delay:0.7s}.rc:nth-child(15){animation-delay:0.75s}.rc:nth-child(16){animation-delay:0.8s}
 .rc:hover{
   border-color:rgba(139,92,246,0.4);
   transform:translateY(-6px);
@@ -1971,6 +1972,7 @@ body.light-mode #main-footer{
 @keyframes floatCard{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
 @keyframes glowLine{0%,100%{opacity:0.3;transform:scaleX(0.8)}50%{opacity:1;transform:scaleX(1)}}
 @keyframes countUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes cr{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
 @keyframes borderGlow{0%,100%{border-color:rgba(139,92,246,0.2)}50%{border-color:rgba(139,92,246,0.5)}}
 @keyframes scanLine{0%{transform:translateY(-100%)}100%{transform:translateY(100vh)}}
 
@@ -3221,7 +3223,7 @@ body.light-mode #main-footer{
     <!-- Global Comparison -->
     <div id="global-comparison" style="display:none;margin-top:20px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;"></div>
   </div>
-  <div class="rg" style="display:block!important;">
+  <div class="rg">
     <div class="rc w"><div class="cl">📝 Summary <button class="cbtn" onclick="copyEl('rsum')">Copy</button><button class="cbtn" onclick="listenToReport()" id="btn-listen" style="margin-left:6px;">🔊 Listen</button></div><div class="st" id="rsum"></div></div>
     <div class="rc w">
       <div class="cl">🧬 Your AI Avatar</div>
