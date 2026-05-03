@@ -1541,6 +1541,40 @@ body.light-mode #page-home div[style*="color:var(--tx3)"][style*="font-size:0.82
 body.light-mode #page-home span[style*="background:linear-gradient(135deg,#10B981"]{
   background:linear-gradient(135deg,#059669,#10B981) !important;
 }
+/* ===== LIGHT MODE: FOOTER COMPLETE FIX ===== */
+/* All footer links */
+body.light-mode #main-footer a{color:#7C2D00 !important;}
+body.light-mode #main-footer a:hover{color:#EA580C !important;}
+/* Footer column headers (PRODUCT, COMPANY, LEGAL) */
+body.light-mode #main-footer div[style*="letter-spacing:0.15em"]{color:#C2410C !important;font-weight:700 !important;}
+/* Footer tagline */
+body.light-mode #main-footer p[style*="line-height:1.8"]{color:#7C2D00 !important;}
+/* Social icon buttons */
+body.light-mode #main-footer a[style*="width:36px"]{
+  background:rgba(234,88,12,0.08) !important;
+  border-color:rgba(234,88,12,0.3) !important;
+  color:#C2410C !important;
+}
+body.light-mode #main-footer a[style*="width:36px"]:hover{
+  background:rgba(234,88,12,0.15) !important;
+  border-color:rgba(234,88,12,0.5) !important;
+}
+/* Copyright text */
+body.light-mode #main-footer p[style*="font-size:0.78rem"]{color:#92400E !important;}
+/* All systems operational */
+body.light-mode #main-footer div[style*="font-size:0.78rem"]{color:#92400E !important;}
+/* Footer top gradient border */
+body.light-mode #main-footer > div[style*="height:1px"]:first-child{
+  background:linear-gradient(90deg,transparent,rgba(234,88,12,0.5),rgba(251,146,60,0.4),rgba(194,65,12,0.5),transparent) !important;
+}
+/* Footer inner divider */
+body.light-mode #main-footer div[style*="rgba(255,255,255,0.06)"]{
+  background:linear-gradient(90deg,transparent,rgba(234,88,12,0.2),transparent) !important;
+}
+/* Footer background */
+body.light-mode #main-footer{
+  background:linear-gradient(180deg,rgba(255,247,237,0.95) 0%,rgba(255,250,245,0.8) 100%) !important;
+}
 
 /* ===== MOBILE FIXES ===== */
 @media(max-width:768px){
