@@ -2888,12 +2888,12 @@ body.light-mode #main-footer{
         <div style="display:flex;align-items:center;gap:12px;">
           <div class="sidebar-avatar">👤</div>
           <div style="flex:1;min-width:0;">
-            <div class="sidebar-name" id="sb-name">—</div>
-            <div class="sidebar-email" id="sb-email" style="font-size:0.7rem;color:rgba(196,181,253,0.85);margin-top:3px;display:block;-webkit-text-fill-color:rgba(196,181,253,0.85);">—</div>
+            <div id="sb-name" style="font-family:'Syne',sans-serif;font-weight:800;font-size:0.95rem;color:#EEEAF8;-webkit-text-fill-color:#EEEAF8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">—</div>
+            <div id="sb-email" style="font-size:0.7rem;color:#A78BFA;-webkit-text-fill-color:#A78BFA;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:150px;display:block;">—</div>
           </div>
         </div>
-        <div style="display:flex;align-items:center;gap:6px;margin-top:10px;font-size:0.7rem;color:rgba(16,185,129,0.9);font-weight:600;">
-          <span style="width:6px;height:6px;border-radius:50%;background:#10B981;display:inline-block;animation:pulse 2s ease infinite;box-shadow:0 0 6px rgba(16,185,129,0.8);"></span>
+        <div style="display:flex;align-items:center;gap:6px;margin-top:10px;font-size:0.7rem;color:rgba(16,185,129,0.9);font-weight:600;-webkit-text-fill-color:rgba(16,185,129,0.9);">
+          <span style="width:6px;height:6px;border-radius:50%;background:#10B981;display:inline-block;animation:pulse 2s ease infinite;box-shadow:0 0 6px rgba(16,185,129,0.8);flex-shrink:0;"></span>
           Active session
         </div>
       </div>
@@ -4165,7 +4165,7 @@ async function loadDash(){
 if(!US)return;
   var dn=document.getElementById('dn');if(dn)dn.textContent=US.name.split(' ')[0];
   var sbn=document.getElementById('sb-name');if(sbn)sbn.textContent=US.name;
-  var sbe=document.getElementById('sb-email');if(sbe){sbe.textContent=US.email;sbe.style.cssText='font-size:0.7rem;color:rgba(196,181,253,0.85);margin-top:3px;display:block;opacity:1;-webkit-text-fill-color:rgba(196,181,253,0.85);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:150px;';}
+  var sbe=document.getElementById('sb-email');if(sbe){sbe.textContent=US.email;}
   // Load streak from server
   api('/api/auth/me').then(function(d){
     if(d.success&&d.user){
