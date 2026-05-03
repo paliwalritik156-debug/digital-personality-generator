@@ -787,15 +787,15 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:68px;display:flex;ali
 .lm{color:var(--tx2);font-size:0.9rem;letter-spacing:0.05em;animation:tf 2.5s ease-in-out infinite}
 @keyframes tf{0%,100%{opacity:0.4}50%{opacity:1}}
 #pr{max-width:940px;margin:0 auto;padding:5.5rem 2rem 5rem}
-.rh{text-align:center;margin-bottom:4rem;padding:4rem 2rem 3rem;position:relative;overflow:hidden}.rh::before{content:"";position:absolute;top:-100px;left:50%;transform:translateX(-50%);width:600px;height:400px;background:radial-gradient(ellipse,rgba(139,92,246,0.12) 0%,transparent 70%);pointer-events:none}
+.rh{text-align:center;margin-bottom:4rem;padding:5rem 2rem 4rem;position:relative;overflow:hidden}.rh::before{content:"";position:absolute;top:-120px;left:50%;transform:translateX(-50%);width:800px;height:500px;background:radial-gradient(ellipse,rgba(139,92,246,0.15) 0%,rgba(6,182,212,0.05) 40%,transparent 70%);pointer-events:none;animation:glowPulse 4s ease-in-out infinite}
 .reb{display:inline-flex;align-items:center;gap:8px;font-size:0.7rem;font-weight:700;color:var(--pu2);text-transform:uppercase;letter-spacing:0.15em;margin-bottom:1.2rem;background:rgba(139,92,246,0.1);border:1px solid rgba(139,92,246,0.25);padding:6px 16px;border-radius:50px}
-.rh h2{font-family:'Syne',sans-serif;font-size:clamp(2rem,5vw,3.5rem);font-weight:800;letter-spacing:-0.04em;margin-bottom:0.4rem;background:linear-gradient(135deg,#EEEAF8 0%,#A78BFA 50%,#67E8F9 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.rh h2{font-family:'Syne',sans-serif;font-size:clamp(2.2rem,6vw,4.5rem);font-weight:900;letter-spacing:-0.05em;margin-bottom:0.4rem;background:linear-gradient(135deg,#EEEAF8 0%,#C4B5FD 30%,#A78BFA 55%,#67E8F9 80%,#EEEAF8 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-size:200%;animation:ga 6s ease infinite;filter:drop-shadow(0 0 30px rgba(139,92,246,0.3))}
 .rdt{color:var(--tx3);font-size:0.83rem;margin-bottom:1.5rem;letter-spacing:0.05em}
-.pb{display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,rgba(139,92,246,0.15),rgba(6,182,212,0.1));border:1px solid rgba(139,92,246,0.4);padding:12px 28px;border-radius:50px;font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;color:var(--pu2);letter-spacing:0.08em;text-transform:uppercase;animation:bg 2.5s ease-in-out infinite;box-shadow:0 0 30px rgba(139,92,246,0.2)}
+.pb{display:inline-flex;align-items:center;gap:12px;background:linear-gradient(135deg,rgba(139,92,246,0.18),rgba(6,182,212,0.12));border:1px solid rgba(139,92,246,0.45);padding:14px 32px;border-radius:50px;font-family:'Syne',sans-serif;font-weight:800;font-size:1.05rem;color:var(--pu2);letter-spacing:0.1em;text-transform:uppercase;animation:bg 2.5s ease-in-out infinite;box-shadow:0 0 40px rgba(139,92,246,0.25),0 0 80px rgba(139,92,246,0.1),inset 0 1px 0 rgba(255,255,255,0.1);backdrop-filter:blur(20px)}
 @keyframes bg{0%,100%{box-shadow:0 0 20px rgba(139,92,246,0.2)}50%{box-shadow:0 0 50px rgba(139,92,246,0.5),0 0 80px rgba(6,182,212,0.2)}}
-.rg{display:grid;grid-template-columns:1fr 1fr;gap:1.4rem;padding:0 2rem 3rem;max-width:1200px;margin:0 auto}
-.rc{background:linear-gradient(135deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02));border:1px solid rgba(255,255,255,0.07);border-radius:24px;padding:1.8rem;backdrop-filter:blur(20px);transition:all 0.3s cubic-bezier(0.4,0,0.2,1);opacity:0;transform:translateY(20px);animation:cr 0.6s ease forwards;position:relative;overflow:hidden}
-.rc:hover{border-color:rgba(139,92,246,0.35);box-shadow:0 20px 60px rgba(139,92,246,0.12);transform:translateY(-3px)}
+.rg{display:grid;grid-template-columns:1fr 1fr;gap:1.6rem;padding:0 2rem 4rem;max-width:1240px;margin:0 auto}
+.rc{background:linear-gradient(135deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02));border:1px solid rgba(255,255,255,0.08);border-radius:26px;padding:2rem;backdrop-filter:blur(30px) saturate(150%);transition:all 0.4s cubic-bezier(0.4,0,0.2,1);opacity:0;transform:translateY(24px);animation:cr 0.7s cubic-bezier(0.22,1,0.36,1) forwards;position:relative;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.3),inset 0 1px 0 rgba(255,255,255,0.06)}
+.rc:hover{border-color:rgba(139,92,246,0.4);box-shadow:0 24px 70px rgba(139,92,246,0.15),0 0 0 1px rgba(139,92,246,0.1);transform:translateY(-5px)}
 @keyframes cr{to{opacity:1;transform:translateY(0)}}
 .rc:nth-child(1){animation-delay:0.08s}.rc:nth-child(2){animation-delay:0.14s}.rc:nth-child(3){animation-delay:0.20s}.rc:nth-child(4){animation-delay:0.26s}.rc:nth-child(5){animation-delay:0.32s}.rc:nth-child(6){animation-delay:0.38s}.rc:nth-child(7){animation-delay:0.44s}.rc:nth-child(8){animation-delay:0.50s}.rc:nth-child(9){animation-delay:0.56s}.rc:nth-child(10){animation-delay:0.62s}.rc:nth-child(11){animation-delay:0.68s}.rc:nth-child(12){animation-delay:0.74s}.rc:nth-child(13){animation-delay:0.80s}.rc:nth-child(14){animation-delay:0.86s}.rc:nth-child(15){animation-delay:0.92s}.rc:nth-child(16){animation-delay:0.98s}
 .rc::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(139,92,246,0.4),rgba(6,182,212,0.3),transparent);opacity:0;transition:opacity 0.3s}
@@ -809,7 +809,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:68px;display:flex;ali
 .ov-val{font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;background:var(--gr);-webkit-background-clip:text;-webkit-text-fill-color:transparent;word-break:break-word;line-height:1.3}
 .ov-lbl{font-size:0.72rem;color:var(--tx3);margin-top:2px;text-transform:uppercase;letter-spacing:0.06em}
 .rc.w{grid-column:1/-1}
-.cl{font-size:0.68rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--pu2);margin-bottom:1.2rem;display:flex;align-items:center;justify-content:space-between;padding-bottom:0.8rem;border-bottom:1px solid rgba(139,92,246,0.1)}
+.cl{font-size:0.68rem;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:var(--pu2);margin-bottom:1.4rem;display:flex;align-items:center;justify-content:space-between;padding-bottom:0.9rem;border-bottom:1px solid rgba(139,92,246,0.12);opacity:0.9}
 .cbtn{background:rgba(139,92,246,0.08);border:1px solid rgba(139,92,246,0.2);color:var(--pu2);padding:4px 12px;border-radius:20px;font-size:0.68rem;cursor:pointer;transition:all 0.2s;font-family:'Space Grotesk',sans-serif}
 .cbtn:hover{border-color:var(--pu);background:rgba(139,92,246,0.15);color:var(--pu2)}
 .st{font-size:0.97rem;line-height:1.8;color:var(--tx2)}
@@ -853,7 +853,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:68px;display:flex;ali
 .et{font-size:0.84rem;line-height:1.6;color:var(--tx2)}
 .ea{color:var(--tx3);font-size:1.5rem;margin-top:22px;flex-shrink:0}
 .ib{background:linear-gradient(135deg,rgba(139,92,246,0.07),rgba(6,182,212,0.05));border:1px solid rgba(139,92,246,0.12);border-radius:14px;padding:1.2rem;text-align:center;font-size:0.95rem;line-height:1.8;color:var(--tx2);font-style:italic}
-.ra{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:3rem;padding:2rem;border-top:1px solid rgba(139,92,246,0.1);background:linear-gradient(180deg,transparent,rgba(139,92,246,0.03));border-radius:0 0 24px 24px}
+.ra{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-top:3rem;padding:2.5rem 2rem;border-top:1px solid rgba(139,92,246,0.12);background:linear-gradient(180deg,transparent,rgba(139,92,246,0.05));border-radius:0 0 28px 28px;backdrop-filter:blur(20px)}
 .shcard{background:linear-gradient(135deg,#0D0B1E,#130B2E,#0B1A2E);border:1px solid rgba(139,92,246,0.3);border-radius:24px;padding:2rem;text-align:center;position:relative;overflow:hidden;margin-top:0.5rem}
 .shcard::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:conic-gradient(from 0deg,transparent 0deg,rgba(139,92,246,0.06) 60deg,transparent 120deg);animation:rot 8s linear infinite}
 @keyframes rot{to{transform:rotate(360deg)}}
@@ -1672,6 +1672,63 @@ body.light-mode #main-footer{
   background:linear-gradient(180deg,rgba(255,247,237,0.95) 0%,rgba(255,250,245,0.8) 100%) !important;
 }
 
+/* ===== PREMIUM DASHBOARD + RESULT ANIMATIONS ===== */
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+@keyframes floatCard{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@keyframes glowLine{0%,100%{opacity:0.3;transform:scaleX(0.8)}50%{opacity:1;transform:scaleX(1)}}
+@keyframes countUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes borderGlow{0%,100%{border-color:rgba(139,92,246,0.2)}50%{border-color:rgba(139,92,246,0.5)}}
+@keyframes scanLine{0%{transform:translateY(-100%)}100%{transform:translateY(100vh)}}
+
+/* Shimmer effect on stat cards */
+.ov-stat::after{
+  content:'';position:absolute;top:0;left:-100%;width:60%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.04),transparent);
+  animation:shimmer 4s ease infinite;pointer-events:none;
+}
+/* Floating animation on qa-cards */
+.qa-card:nth-child(1){animation:floatCard 6s ease-in-out infinite}
+.qa-card:nth-child(2){animation:floatCard 6s ease-in-out 2s infinite}
+.qa-card:nth-child(3){animation:floatCard 6s ease-in-out 4s infinite}
+
+/* Glow line on result cards */
+.rc::after{
+  content:'';position:absolute;bottom:0;left:10%;right:10%;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(139,92,246,0.3),transparent);
+  animation:glowLine 3s ease-in-out infinite;pointer-events:none;
+}
+
+/* Premium scrollbar for dash-main */
+.dash-main::-webkit-scrollbar{width:4px}
+.dash-main::-webkit-scrollbar-track{background:transparent}
+.dash-main::-webkit-scrollbar-thumb{background:linear-gradient(180deg,#8B5CF6,#06B6D4);border-radius:4px}
+
+/* Sidebar scrollbar */
+.sidebar::-webkit-scrollbar{width:3px}
+.sidebar::-webkit-scrollbar-track{background:transparent}
+.sidebar::-webkit-scrollbar-thumb{background:rgba(139,92,246,0.3);border-radius:3px}
+
+/* Premium overview stats grid */
+.overview-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1.2rem;margin-bottom:2.5rem}
+
+/* Glow on active nav item */
+.nav-item.active::before{
+  content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);
+  width:3px;height:60%;background:linear-gradient(180deg,#8B5CF6,#06B6D4);
+  border-radius:0 3px 3px 0;
+}
+
+/* Premium result badge */
+.reb{
+  display:inline-flex;align-items:center;gap:8px;font-size:0.7rem;font-weight:700;
+  color:var(--pu2);text-transform:uppercase;letter-spacing:0.18em;margin-bottom:1.5rem;
+  background:linear-gradient(135deg,rgba(139,92,246,0.12),rgba(6,182,212,0.06));
+  border:1px solid rgba(139,92,246,0.3);padding:8px 20px;border-radius:50px;
+  box-shadow:0 0 20px rgba(139,92,246,0.15),inset 0 1px 0 rgba(255,255,255,0.08);
+  backdrop-filter:blur(20px);
+}
+
+
 /* ===== MOBILE FIXES ===== */
 @media(max-width:768px){
   /* Share card buttons */
@@ -1782,38 +1839,38 @@ body.light-mode #main-footer{
 .skel-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem}
 
 #pd{padding:0;max-width:100%;margin:0}
-.dash-layout{display:grid;grid-template-columns:260px 1fr;min-height:calc(100vh - 68px);margin-top:68px;background:var(--void)}
-.sidebar{background:linear-gradient(180deg,rgba(8,8,15,0.98),rgba(5,5,8,0.95));border-right:1px solid rgba(139,92,246,0.12);backdrop-filter:blur(40px);padding:1.8rem 1rem;display:flex;flex-direction:column;gap:3px;position:sticky;top:68px;height:calc(100vh - 68px);overflow-y:auto;box-shadow:4px 0 30px rgba(0,0,0,0.3)}
-.sidebar-user{padding:1rem;margin-bottom:1rem;border-bottom:1px solid rgba(139,92,246,0.1);padding-bottom:1.5rem;background:linear-gradient(135deg,rgba(139,92,246,0.06),rgba(6,182,212,0.03));border-radius:16px;margin-bottom:1.2rem}
-.sidebar-avatar{width:48px;height:48px;background:linear-gradient(135deg,#8B5CF6,#06B6D4);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.3rem;margin-bottom:0.8rem;box-shadow:0 0 20px rgba(139,92,246,0.4);border:2px solid rgba(139,92,246,0.3)}
+.dash-layout{display:grid;grid-template-columns:260px 1fr;min-height:calc(100vh - 68px);margin-top:68px;background:radial-gradient(ellipse at 20% 0%,rgba(139,92,246,0.06) 0%,transparent 50%),radial-gradient(ellipse at 80% 100%,rgba(6,182,212,0.04) 0%,transparent 50%),var(--void)}
+.sidebar{background:linear-gradient(180deg,rgba(6,4,20,0.99),rgba(4,3,14,0.98));border-right:1px solid rgba(139,92,246,0.15);backdrop-filter:blur(60px) saturate(180%);padding:1.8rem 1rem;display:flex;flex-direction:column;gap:3px;position:sticky;top:68px;height:calc(100vh - 68px);overflow-y:auto;box-shadow:4px 0 40px rgba(0,0,0,0.5),inset -1px 0 0 rgba(139,92,246,0.08)}
+.sidebar-user{padding:1.2rem;margin-bottom:1.2rem;border-bottom:1px solid rgba(139,92,246,0.12);padding-bottom:1.5rem;background:linear-gradient(135deg,rgba(139,92,246,0.1),rgba(6,182,212,0.05));border-radius:20px;border:1px solid rgba(139,92,246,0.12);box-shadow:0 4px 20px rgba(139,92,246,0.08),inset 0 1px 0 rgba(255,255,255,0.05)}
+.sidebar-avatar{width:52px;height:52px;background:linear-gradient(135deg,#8B5CF6,#06B6D4,#EC4899);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin-bottom:0.8rem;box-shadow:0 0 30px rgba(139,92,246,0.5),0 0 60px rgba(139,92,246,0.2);border:2px solid rgba(139,92,246,0.4);animation:glowPulse 3s ease-in-out infinite}
 .sidebar-name{font-family:'Syne',sans-serif;font-weight:700;font-size:0.95rem;background:linear-gradient(135deg,#EEEAF8,#A78BFA);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .sidebar-email{font-size:0.72rem;color:var(--tx3);margin-top:2px;opacity:0.7}
 .sidebar-label{font-size:0.62rem;font-weight:700;color:rgba(139,92,246,0.5);text-transform:uppercase;letter-spacing:0.15em;padding:0.8rem 0.8rem 0.4rem;margin-top:0.5rem}
-.nav-item{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:14px;cursor:pointer;transition:all 0.25s cubic-bezier(0.4,0,0.2,1);font-size:0.87rem;color:var(--tx2);border:1px solid transparent;position:relative;overflow:hidden}
+.nav-item{display:flex;align-items:center;gap:10px;padding:11px 14px;border-radius:14px;cursor:pointer;transition:all 0.25s cubic-bezier(0.4,0,0.2,1);font-size:0.87rem;color:var(--tx2);border:1px solid transparent;position:relative;overflow:hidden}
 .nav-item:hover{background:rgba(139,92,246,0.08);color:var(--tx);border-color:rgba(139,92,246,0.2);transform:translateX(3px)}
-.nav-item.active{background:linear-gradient(135deg,rgba(139,92,246,0.18),rgba(6,182,212,0.08));color:var(--pu2);border-color:rgba(139,92,246,0.35);box-shadow:0 4px 20px rgba(139,92,246,0.15),inset 0 1px 0 rgba(255,255,255,0.05)}
+.nav-item.active{background:linear-gradient(135deg,rgba(139,92,246,0.2),rgba(6,182,212,0.1));color:var(--pu2);border-color:rgba(139,92,246,0.4);box-shadow:0 4px 24px rgba(139,92,246,0.2),inset 0 1px 0 rgba(255,255,255,0.08);font-weight:600}
 .nav-item-icon{font-size:1rem;width:22px;text-align:center;flex-shrink:0}
 .nav-item-badge{margin-left:auto;background:linear-gradient(135deg,#8B5CF6,#06B6D4);color:#fff;font-size:0.6rem;font-weight:700;padding:2px 8px;border-radius:20px;box-shadow:0 2px 8px rgba(139,92,246,0.4)}
 .sidebar-bottom{margin-top:auto;padding-top:1rem;border-top:1px solid rgba(139,92,246,0.1)}
-.dash-main{padding:2.5rem;overflow-y:auto;background:radial-gradient(ellipse at 80% 0%,rgba(139,92,246,0.04) 0%,transparent 60%)}
+.dash-main{padding:2.5rem;overflow-y:auto;background:transparent}
 .dash-section{display:none}
 .dash-section.active{display:block;animation:fsu 0.3s ease both}
-.dash-section h3{font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;letter-spacing:-0.03em;margin-bottom:0.4rem;background:linear-gradient(135deg,var(--tx),var(--pu2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.dash-section h3{font-family:'Syne',sans-serif;font-size:2rem;font-weight:900;letter-spacing:-0.04em;margin-bottom:0.4rem;background:linear-gradient(135deg,#EEEAF8 0%,#A78BFA 60%,#67E8F9 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 20px rgba(139,92,246,0.2))}
 .dash-section p{color:var(--tx2);font-size:0.88rem;margin-bottom:2rem}
 .overview-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;margin-bottom:2rem}
-.ov-stat{background:linear-gradient(135deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02));border:1px solid rgba(255,255,255,0.07);border-radius:20px;padding:1.5rem;transition:all 0.3s cubic-bezier(0.4,0,0.2,1);position:relative;overflow:hidden;min-width:0;backdrop-filter:blur(20px)}
+.ov-stat{background:linear-gradient(135deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02));border:1px solid rgba(255,255,255,0.08);border-radius:22px;padding:1.6rem;transition:all 0.4s cubic-bezier(0.4,0,0.2,1);position:relative;overflow:hidden;min-width:0;backdrop-filter:blur(30px) saturate(150%);box-shadow:0 4px 24px rgba(0,0,0,0.3),inset 0 1px 0 rgba(255,255,255,0.06)}
 .ov-stat::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#8B5CF6,#06B6D4,#EC4899);opacity:0;transition:opacity 0.3s}
-.ov-stat:hover{border-color:rgba(139,92,246,0.4);transform:translateY(-4px);box-shadow:0 16px 40px rgba(139,92,246,0.12)}.ov-stat:hover::before{opacity:1}
+.ov-stat:hover{border-color:rgba(139,92,246,0.5);transform:translateY(-6px) scale(1.02);box-shadow:0 20px 50px rgba(139,92,246,0.18),0 0 0 1px rgba(139,92,246,0.15)}.ov-stat:hover::before{opacity:1}
 .ov-icon{font-size:1.4rem;margin-bottom:0.7rem}
 .ov-val{font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;background:var(--gr);-webkit-background-clip:text;-webkit-text-fill-color:transparent;word-break:break-word;line-height:1.3}
 .ov-lbl{font-size:0.72rem;color:var(--tx3);margin-top:2px;text-transform:uppercase;letter-spacing:0.06em}
 .quick-actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-bottom:2rem}
-.qa-card{background:linear-gradient(135deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02));border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:1.8rem 1.5rem;cursor:pointer;transition:all 0.3s cubic-bezier(0.4,0,0.2,1);text-align:center;position:relative;overflow:hidden}
-.qa-card:hover{border-color:rgba(139,92,246,0.4);transform:translateY(-6px);box-shadow:0 20px 50px rgba(139,92,246,0.2)}
+.qa-card{background:linear-gradient(135deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02));border:1px solid rgba(255,255,255,0.08);border-radius:22px;padding:2rem 1.5rem;cursor:pointer;transition:all 0.4s cubic-bezier(0.4,0,0.2,1);text-align:center;position:relative;overflow:hidden;backdrop-filter:blur(20px);box-shadow:0 4px 20px rgba(0,0,0,0.2),inset 0 1px 0 rgba(255,255,255,0.06)}
+.qa-card:hover{border-color:rgba(139,92,246,0.5);transform:translateY(-8px) scale(1.02);box-shadow:0 24px 60px rgba(139,92,246,0.25),0 0 0 1px rgba(139,92,246,0.15)}
 .qa-icon{font-size:2rem;margin-bottom:0.8rem}
 .qa-title{font-family:'Syne',sans-serif;font-weight:700;font-size:0.95rem;margin-bottom:0.3rem}
 .qa-desc{font-size:0.78rem;color:var(--tx2)}
-.insight-tip{background:linear-gradient(135deg,rgba(139,92,246,0.08),rgba(6,182,212,0.04));border:1px solid rgba(139,92,246,0.2);border-radius:20px;padding:1.8rem;margin-bottom:1.5rem;position:relative;overflow:hidden}
+.insight-tip{background:linear-gradient(135deg,rgba(139,92,246,0.1),rgba(6,182,212,0.05));border:1px solid rgba(139,92,246,0.25);border-radius:22px;padding:2rem;margin-bottom:1.5rem;position:relative;overflow:hidden;backdrop-filter:blur(20px);box-shadow:0 4px 24px rgba(139,92,246,0.1),inset 0 1px 0 rgba(255,255,255,0.06)}
 .insight-tip h4{font-family:'Syne',sans-serif;font-weight:700;margin-bottom:0.5rem;font-size:1rem}
 .insight-tip p{color:var(--tx2);font-size:0.87rem;line-height:1.7}
 @media(max-width:768px){.dash-layout{grid-template-columns:1fr}.sidebar{display:none}}
@@ -2554,20 +2611,25 @@ body.light-mode #main-footer{
 </div>
 <div id="pd" class="page hidden">
   <div class="dash-layout">
-    <!-- ── SIDEBAR ── -->
+
+    <!-- ══════════════════════════════════════════
+         PREMIUM SIDEBAR
+    ══════════════════════════════════════════ -->
     <div class="sidebar">
+      <!-- Ambient glow -->
+      <div style="position:absolute;top:-60px;left:-60px;width:200px;height:200px;background:radial-gradient(circle,rgba(139,92,246,0.12),transparent 70%);pointer-events:none;"></div>
+
       <!-- User card -->
       <div class="sidebar-user">
         <div style="display:flex;align-items:center;gap:12px;">
           <div class="sidebar-avatar">👤</div>
-          <div>
+          <div style="flex:1;min-width:0;">
             <div class="sidebar-name" id="sb-name">—</div>
             <div class="sidebar-email" id="sb-email">—</div>
           </div>
         </div>
-        <!-- Online indicator -->
-        <div style="display:flex;align-items:center;gap:6px;margin-top:10px;font-size:0.72rem;color:rgba(16,185,129,0.8);">
-          <span style="width:6px;height:6px;border-radius:50%;background:#10B981;display:inline-block;animation:pulse 2s ease infinite;"></span>
+        <div style="display:flex;align-items:center;gap:6px;margin-top:10px;font-size:0.7rem;color:rgba(16,185,129,0.9);font-weight:600;">
+          <span style="width:6px;height:6px;border-radius:50%;background:#10B981;display:inline-block;animation:pulse 2s ease infinite;box-shadow:0 0 6px rgba(16,185,129,0.8);"></span>
           Active session
         </div>
       </div>
@@ -2591,68 +2653,72 @@ body.light-mode #main-footer{
       </div>
 
       <div class="sidebar-label">Actions</div>
-      <div class="nav-item" onclick="loadQuiz()" id="nav-new-assessment" style="background:linear-gradient(135deg,rgba(139,92,246,0.12),rgba(6,182,212,0.06));border-color:rgba(139,92,246,0.25);">
+      <div class="nav-item" onclick="loadQuiz()" id="nav-new-assessment" style="background:linear-gradient(135deg,rgba(139,92,246,0.15),rgba(6,182,212,0.08));border-color:rgba(139,92,246,0.3);box-shadow:0 4px 20px rgba(139,92,246,0.15);">
         <span class="nav-item-icon">⚡</span>
-        <span id="nav-new-text" style="background:linear-gradient(135deg,#A78BFA,#67E8F9);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:600;">New Assessment</span>
+        <span id="nav-new-text" style="background:linear-gradient(135deg,#A78BFA,#67E8F9);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:700;">New Assessment</span>
       </div>
       <div class="nav-item" onclick="openChat()">
         <span class="nav-item-icon">🤖</span>Chat Twin
       </div>
 
       <div class="sidebar-bottom">
-        <div class="nav-item" onclick="doLogout()" style="color:rgba(236,72,153,0.7);" onmouseover="this.style.background='rgba(236,72,153,0.08)';this.style.borderColor='rgba(236,72,153,0.2)'" onmouseout="this.style.background='';this.style.borderColor='transparent'">
+        <div style="height:1px;background:linear-gradient(90deg,transparent,rgba(139,92,246,0.2),transparent);margin-bottom:12px;"></div>
+        <div class="nav-item" onclick="doLogout()" style="color:rgba(236,72,153,0.8);" onmouseover="this.style.background='rgba(236,72,153,0.1)';this.style.borderColor='rgba(236,72,153,0.25)'" onmouseout="this.style.background='';this.style.borderColor='transparent'">
           <span class="nav-item-icon">🚪</span>Logout
         </div>
       </div>
     </div>
 
-    <!-- ── MAIN CONTENT ── -->
+    <!-- ══════════════════════════════════════════
+         MAIN CONTENT
+    ══════════════════════════════════════════ -->
     <div class="dash-main">
 
       <!-- ── OVERVIEW TAB ── -->
       <div class="dash-section active" id="tab-overview">
+
         <!-- Welcome header -->
-        <div style="margin-bottom:2.5rem;padding-bottom:2rem;border-bottom:1px solid rgba(139,92,246,0.1);">
-          <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(139,92,246,0.08);border:1px solid rgba(139,92,246,0.2);border-radius:50px;padding:5px 14px;margin-bottom:1rem;">
+        <div style="margin-bottom:3rem;padding-bottom:2rem;border-bottom:1px solid rgba(139,92,246,0.1);position:relative;">
+          <div style="display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,rgba(139,92,246,0.1),rgba(6,182,212,0.06));border:1px solid rgba(139,92,246,0.25);border-radius:50px;padding:5px 16px;margin-bottom:1.2rem;box-shadow:0 0 20px rgba(139,92,246,0.1);">
             <span style="width:6px;height:6px;border-radius:50%;background:#10B981;display:inline-block;animation:pulse 2s ease infinite;"></span>
-            <span style="font-size:0.68rem;font-weight:700;letter-spacing:0.12em;color:#A78BFA;text-transform:uppercase;">Dashboard</span>
+            <span style="font-size:0.68rem;font-weight:700;letter-spacing:0.14em;color:#A78BFA;text-transform:uppercase;">Dashboard</span>
           </div>
-          <h3 style="font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;letter-spacing:-0.03em;margin-bottom:0.4rem;">
+          <h3 style="font-family:'Syne',sans-serif;font-size:2.2rem;font-weight:900;letter-spacing:-0.04em;margin-bottom:0.5rem;">
             Welcome back, <span id="dn" style="background:linear-gradient(135deg,#8B5CF6,#06B6D4,#EC4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-size:200%;animation:ga 4s ease infinite;">—</span> 👋
           </h3>
-          <p style="color:var(--tx2);font-size:0.92rem;margin:0;">Your AI personality intelligence hub</p>
+          <p style="color:var(--tx2);font-size:0.95rem;margin:0;">Your AI personality intelligence hub</p>
         </div>
 
         <!-- Stats grid -->
-        <div class="overview-stats" style="margin-bottom:2.5rem;">
+        <div class="overview-stats">
           <div class="ov-stat">
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.8rem;">
-              <div style="width:38px;height:38px;background:linear-gradient(135deg,rgba(139,92,246,0.2),rgba(139,92,246,0.05));border:1px solid rgba(139,92,246,0.3);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;">🧪</div>
-              <span style="font-size:0.62rem;color:rgba(139,92,246,0.6);font-weight:700;letter-spacing:0.1em;text-transform:uppercase;">Total</span>
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
+              <div style="width:40px;height:40px;background:linear-gradient(135deg,rgba(139,92,246,0.25),rgba(139,92,246,0.08));border:1px solid rgba(139,92,246,0.35);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;box-shadow:0 4px 16px rgba(139,92,246,0.2);">🧪</div>
+              <span style="font-size:0.6rem;color:rgba(139,92,246,0.7);font-weight:700;letter-spacing:0.12em;text-transform:uppercase;background:rgba(139,92,246,0.1);padding:3px 8px;border-radius:20px;">Total</span>
             </div>
             <div class="ov-val" id="dt">0</div>
             <div class="ov-lbl">Tests Taken</div>
           </div>
           <div class="ov-stat">
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.8rem;">
-              <div style="width:38px;height:38px;background:linear-gradient(135deg,rgba(249,115,22,0.2),rgba(249,115,22,0.05));border:1px solid rgba(249,115,22,0.3);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;">🔥</div>
-              <span style="font-size:0.62rem;color:rgba(249,115,22,0.6);font-weight:700;letter-spacing:0.1em;text-transform:uppercase;">Streak</span>
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
+              <div style="width:40px;height:40px;background:linear-gradient(135deg,rgba(249,115,22,0.25),rgba(249,115,22,0.08));border:1px solid rgba(249,115,22,0.35);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;box-shadow:0 4px 16px rgba(249,115,22,0.2);">🔥</div>
+              <span style="font-size:0.6rem;color:rgba(249,115,22,0.7);font-weight:700;letter-spacing:0.12em;text-transform:uppercase;background:rgba(249,115,22,0.1);padding:3px 8px;border-radius:20px;">Streak</span>
             </div>
             <div class="ov-val" id="streak-val" style="background:linear-gradient(135deg,#F97316,#FBBF24);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">0</div>
             <div class="ov-lbl">Day Streak</div>
           </div>
           <div class="ov-stat">
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.8rem;">
-              <div style="width:38px;height:38px;background:linear-gradient(135deg,rgba(6,182,212,0.2),rgba(6,182,212,0.05));border:1px solid rgba(6,182,212,0.3);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;">🌟</div>
-              <span style="font-size:0.62rem;color:rgba(6,182,212,0.6);font-weight:700;letter-spacing:0.1em;text-transform:uppercase;">Top</span>
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
+              <div style="width:40px;height:40px;background:linear-gradient(135deg,rgba(6,182,212,0.25),rgba(6,182,212,0.08));border:1px solid rgba(6,182,212,0.35);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;box-shadow:0 4px 16px rgba(6,182,212,0.2);">🌟</div>
+              <span style="font-size:0.6rem;color:rgba(6,182,212,0.7);font-weight:700;letter-spacing:0.12em;text-transform:uppercase;background:rgba(6,182,212,0.1);padding:3px 8px;border-radius:20px;">Top</span>
             </div>
             <div class="ov-val" id="dd">—</div>
             <div class="ov-lbl">Dominant Trait</div>
           </div>
           <div class="ov-stat">
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.8rem;">
-              <div style="width:38px;height:38px;background:linear-gradient(135deg,rgba(236,72,153,0.2),rgba(236,72,153,0.05));border:1px solid rgba(236,72,153,0.3);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;">📅</div>
-              <span style="font-size:0.62rem;color:rgba(236,72,153,0.6);font-weight:700;letter-spacing:0.1em;text-transform:uppercase;">Recent</span>
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
+              <div style="width:40px;height:40px;background:linear-gradient(135deg,rgba(236,72,153,0.25),rgba(236,72,153,0.08));border:1px solid rgba(236,72,153,0.35);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;box-shadow:0 4px 16px rgba(236,72,153,0.2);">📅</div>
+              <span style="font-size:0.6rem;color:rgba(236,72,153,0.7);font-weight:700;letter-spacing:0.12em;text-transform:uppercase;background:rgba(236,72,153,0.1);padding:3px 8px;border-radius:20px;">Recent</span>
             </div>
             <div class="ov-val" id="dl">—</div>
             <div class="ov-lbl">Last Test</div>
@@ -2660,59 +2726,62 @@ body.light-mode #main-footer{
         </div>
 
         <!-- Quick Actions -->
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:1.2rem;">
-          <span style="font-size:0.68rem;font-weight:700;color:rgba(139,92,246,0.6);text-transform:uppercase;letter-spacing:0.14em;">Quick Actions</span>
-          <div style="flex:1;height:1px;background:linear-gradient(90deg,rgba(139,92,246,0.2),transparent);"></div>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:1.4rem;">
+          <span style="font-size:0.65rem;font-weight:700;color:rgba(139,92,246,0.6);text-transform:uppercase;letter-spacing:0.16em;white-space:nowrap;">Quick Actions</span>
+          <div style="flex:1;height:1px;background:linear-gradient(90deg,rgba(139,92,246,0.3),transparent);"></div>
         </div>
-        <div class="quick-actions" style="margin-bottom:2.5rem;">
+        <div class="quick-actions" style="margin-bottom:3rem;">
           <div class="qa-card" onclick="loadQuiz()" id="qa-new">
-            <div style="width:44px;height:44px;background:linear-gradient(135deg,rgba(139,92,246,0.2),rgba(6,182,212,0.1));border:1px solid rgba(139,92,246,0.3);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;margin:0 auto 1rem;">⚡</div>
-            <div class="qa-title" style="font-family:'Syne',sans-serif;font-weight:700;font-size:0.95rem;margin-bottom:0.3rem;">New Assessment</div>
-            <div class="qa-desc" style="font-size:0.78rem;color:var(--tx2);">Take a fresh personality test</div>
+            <div style="width:48px;height:48px;background:linear-gradient(135deg,rgba(139,92,246,0.25),rgba(6,182,212,0.12));border:1px solid rgba(139,92,246,0.35);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin:0 auto 1.2rem;box-shadow:0 4px 20px rgba(139,92,246,0.2);">⚡</div>
+            <div class="qa-title">New Assessment</div>
+            <div class="qa-desc">Take a fresh personality test</div>
           </div>
           <div class="qa-card" onclick="openChat()" id="qa-chat">
-            <div style="width:44px;height:44px;background:linear-gradient(135deg,rgba(236,72,153,0.2),rgba(139,92,246,0.1));border:1px solid rgba(236,72,153,0.3);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;margin:0 auto 1rem;">🤖</div>
-            <div class="qa-title" style="font-family:'Syne',sans-serif;font-weight:700;font-size:0.95rem;margin-bottom:0.3rem;">Chat with Twin</div>
-            <div class="qa-desc" style="font-size:0.78rem;color:var(--tx2);">Talk to your AI personality</div>
+            <div style="width:48px;height:48px;background:linear-gradient(135deg,rgba(236,72,153,0.25),rgba(139,92,246,0.12));border:1px solid rgba(236,72,153,0.35);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin:0 auto 1.2rem;box-shadow:0 4px 20px rgba(236,72,153,0.2);">🤖</div>
+            <div class="qa-title">Chat with Twin</div>
+            <div class="qa-desc">Talk to your AI personality</div>
           </div>
           <div class="qa-card" onclick="switchTab('history',document.querySelector('.nav-item:nth-child(5)'))" id="qa-hist">
-            <div style="width:44px;height:44px;background:linear-gradient(135deg,rgba(6,182,212,0.2),rgba(16,185,129,0.1));border:1px solid rgba(6,182,212,0.3);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;margin:0 auto 1rem;">📈</div>
-            <div class="qa-title" style="font-family:'Syne',sans-serif;font-weight:700;font-size:0.95rem;margin-bottom:0.3rem;">View History</div>
-            <div class="qa-desc" style="font-size:0.78rem;color:var(--tx2);">See all past results</div>
+            <div style="width:48px;height:48px;background:linear-gradient(135deg,rgba(6,182,212,0.25),rgba(16,185,129,0.12));border:1px solid rgba(6,182,212,0.35);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin:0 auto 1.2rem;box-shadow:0 4px 20px rgba(6,182,212,0.2);">📈</div>
+            <div class="qa-title">View History</div>
+            <div class="qa-desc">See all past results</div>
           </div>
         </div>
 
         <!-- Recent Results -->
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:1.2rem;">
-          <span style="font-size:0.68rem;font-weight:700;color:rgba(6,182,212,0.6);text-transform:uppercase;letter-spacing:0.14em;">Recent Results</span>
-          <div style="flex:1;height:1px;background:linear-gradient(90deg,rgba(6,182,212,0.2),transparent);"></div>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:1.4rem;">
+          <span style="font-size:0.65rem;font-weight:700;color:rgba(6,182,212,0.6);text-transform:uppercase;letter-spacing:0.16em;white-space:nowrap;">Recent Results</span>
+          <div style="flex:1;height:1px;background:linear-gradient(90deg,rgba(6,182,212,0.3),transparent);"></div>
         </div>
         <div id="dhl"></div>
 
         <!-- Achievements -->
-        <div style="display:flex;align-items:center;gap:10px;margin-top:2rem;margin-bottom:1.2rem;">
-          <span style="font-size:0.68rem;font-weight:700;color:rgba(245,158,11,0.6);text-transform:uppercase;letter-spacing:0.14em;">🏅 Achievements</span>
-          <div style="flex:1;height:1px;background:linear-gradient(90deg,rgba(245,158,11,0.2),transparent);"></div>
+        <div style="display:flex;align-items:center;gap:12px;margin-top:2.5rem;margin-bottom:1.4rem;">
+          <span style="font-size:0.65rem;font-weight:700;color:rgba(245,158,11,0.6);text-transform:uppercase;letter-spacing:0.16em;white-space:nowrap;">🏅 Achievements</span>
+          <div style="flex:1;height:1px;background:linear-gradient(90deg,rgba(245,158,11,0.3),transparent);"></div>
         </div>
-        <div id="badges-grid" style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px;"></div>
+        <div id="badges-grid" style="display:flex;gap:10px;flex-wrap:wrap;"></div>
       </div>
+
+      <!-- ── AI INSIGHTS TAB ── -->
       <div class="dash-section" id="tab-insights">
         <h3>AI Insights</h3>
-        <p>Personalized intelligence based on your personality profile</p>
+        <p style="color:var(--tx2);font-size:0.9rem;margin-bottom:2rem;">Personalized intelligence based on your personality profile</p>
         <div class="insight-tip">
-          <h4>💡 Daily Insight</h4>
-          <p id="daily-insight">Complete an assessment to unlock personalized AI insights about your personality, career paths, and growth opportunities.</p>
+          <h4 style="font-family:'Syne',sans-serif;font-weight:700;margin-bottom:0.5rem;font-size:1rem;background:linear-gradient(135deg,#A78BFA,#67E8F9);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">💡 Daily Insight</h4>
+          <p id="daily-insight" style="color:var(--tx2);font-size:0.88rem;line-height:1.7;">Complete an assessment to unlock personalized AI insights about your personality, career paths, and growth opportunities.</p>
         </div>
         <div id="insights-content"><p style="color:var(--tx3);text-align:center;padding:3rem">Complete an assessment to see insights</p></div>
       </div>
+
+      <!-- ── HISTORY TAB ── -->
       <div class="dash-section" id="tab-history">
         <h3>Assessment History</h3>
-        <p>All your past personality assessments</p>
-        <!-- Personality Over Time Chart -->
-        <div id="pot-section" style="display:none;background:var(--glass);border:1px solid var(--bdr);border-radius:18px;padding:1.5rem;margin-bottom:1.5rem;">
+        <p style="color:var(--tx2);font-size:0.9rem;margin-bottom:2rem;">All your past personality assessments</p>
+        <div id="pot-section" style="display:none;background:linear-gradient(135deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02));border:1px solid rgba(255,255,255,0.08);border-radius:22px;padding:1.8rem;margin-bottom:1.5rem;backdrop-filter:blur(20px);">
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:8px;">
             <div>
-              <h4 style="font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;">📈 Personality Over Time</h4>
+              <h4 style="font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;background:linear-gradient(135deg,#A78BFA,#67E8F9);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">📈 Personality Over Time</h4>
               <p style="font-size:0.78rem;color:var(--tx3);margin-top:2px;">How your traits have evolved across assessments</p>
             </div>
             <div style="display:flex;gap:6px;flex-wrap:wrap;" id="pot-legend"></div>
@@ -2722,68 +2791,63 @@ body.light-mode #main-footer{
         </div>
         <div id="dash-history-list"></div>
       </div>
+
+      <!-- ── PROFILE TAB ── -->
       <div class="dash-section" id="tab-profile">
         <h3>Your Profile</h3>
-        <p>Account information and settings</p>
-
-        <!-- Profile Card -->
-        <div style="background:var(--glass);border:1px solid var(--bdr);border-radius:20px;padding:2rem;margin-top:1.5rem;display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;">
-          <div id="profile-avatar-big" style="width:72px;height:72px;border-radius:50%;background:var(--gr);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;color:#fff;flex-shrink:0;">?</div>
+        <p style="color:var(--tx2);font-size:0.9rem;margin-bottom:2rem;">Account information and settings</p>
+        <div style="background:linear-gradient(135deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02));border:1px solid rgba(139,92,246,0.2);border-radius:22px;padding:2rem;margin-top:1.5rem;display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;backdrop-filter:blur(20px);box-shadow:0 4px 24px rgba(139,92,246,0.08);">
+          <div id="profile-avatar-big" style="width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,#8B5CF6,#06B6D4);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;color:#fff;flex-shrink:0;box-shadow:0 0 30px rgba(139,92,246,0.4);">?</div>
           <div>
-            <div id="profile-name-big" style="font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;">—</div>
+            <div id="profile-name-big" style="font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;background:linear-gradient(135deg,#EEEAF8,#A78BFA);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">—</div>
             <div id="profile-email-big" style="font-size:0.85rem;color:var(--tx3);margin-top:2px;">—</div>
             <div id="profile-member" style="font-size:0.75rem;color:var(--tx3);margin-top:4px;">—</div>
           </div>
-          <div id="profile-type-badge" style="margin-left:auto;background:linear-gradient(135deg,rgba(139,92,246,0.15),rgba(6,182,212,0.1));border:1px solid rgba(139,92,246,0.3);border-radius:12px;padding:10px 18px;text-align:center;display:none;">
+          <div id="profile-type-badge" style="margin-left:auto;background:linear-gradient(135deg,rgba(139,92,246,0.15),rgba(6,182,212,0.1));border:1px solid rgba(139,92,246,0.3);border-radius:14px;padding:12px 20px;text-align:center;display:none;box-shadow:0 4px 20px rgba(139,92,246,0.15);">
             <div style="font-size:0.65rem;color:var(--tx3);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:4px;">Personality Type</div>
             <div id="profile-type-text" style="font-family:'Syne',sans-serif;font-weight:700;font-size:0.9rem;color:var(--pu2);">—</div>
           </div>
         </div>
-
-        <!-- Stats -->
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;margin-top:1.2rem;">
-          <div style="background:var(--glass);border:1px solid var(--bdr);border-radius:14px;padding:1rem;text-align:center;">
+          <div style="background:linear-gradient(135deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02));border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:1.2rem;text-align:center;backdrop-filter:blur(20px);">
             <div id="profile-total-tests" style="font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;background:var(--gr);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">0</div>
             <div style="font-size:0.72rem;color:var(--tx3);text-transform:uppercase;letter-spacing:0.08em;margin-top:4px;">Tests Taken</div>
           </div>
-          <div style="background:var(--glass);border:1px solid var(--bdr);border-radius:14px;padding:1rem;text-align:center;">
+          <div style="background:linear-gradient(135deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02));border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:1.2rem;text-align:center;backdrop-filter:blur(20px);">
             <div id="profile-auth-type" style="font-size:1.1rem;font-weight:700;color:var(--pu2);">—</div>
             <div style="font-size:0.72rem;color:var(--tx3);text-transform:uppercase;letter-spacing:0.08em;margin-top:4px;">Login Method</div>
           </div>
         </div>
-
-        <!-- Change Password -->
-        <div style="background:var(--glass);border:1px solid var(--bdr);border-radius:16px;padding:1.5rem;margin-top:1.2rem;">
-          <h4 style="font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;margin-bottom:1rem;">🔐 Change Password</h4>
+        <div style="background:linear-gradient(135deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02));border:1px solid rgba(255,255,255,0.08);border-radius:18px;padding:1.8rem;margin-top:1.2rem;backdrop-filter:blur(20px);">
+          <h4 style="font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;margin-bottom:1rem;background:linear-gradient(135deg,#A78BFA,#67E8F9);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">🔐 Change Password</h4>
           <div id="change-pw-msg" style="font-size:0.82rem;margin-bottom:10px;min-height:18px;"></div>
           <div style="display:flex;flex-direction:column;gap:10px;">
-            <input type="password" id="pw-current" placeholder="Current password" style="padding:11px 14px;background:rgba(255,255,255,0.04);border:1px solid var(--bdr);border-radius:12px;color:var(--tx);font-family:'Space Grotesk',sans-serif;font-size:0.88rem;outline:none;"/>
-            <input type="password" id="pw-new" placeholder="New password (min 6 chars)" style="padding:11px 14px;background:rgba(255,255,255,0.04);border:1px solid var(--bdr);border-radius:12px;color:var(--tx);font-family:'Space Grotesk',sans-serif;font-size:0.88rem;outline:none;"/>
-            <input type="password" id="pw-confirm" placeholder="Confirm new password" style="padding:11px 14px;background:rgba(255,255,255,0.04);border:1px solid var(--bdr);border-radius:12px;color:var(--tx);font-family:'Space Grotesk',sans-serif;font-size:0.88rem;outline:none;"/>
-            <button onclick="changePassword()" style="padding:12px;background:var(--gr);border:none;border-radius:12px;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:0.9rem;font-weight:600;cursor:pointer;">Update Password</button>
+            <input type="password" id="pw-current" placeholder="Current password" style="padding:12px 16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;color:var(--tx);font-family:'Space Grotesk',sans-serif;font-size:0.88rem;outline:none;transition:all 0.3s;" onfocus="this.style.borderColor='rgba(139,92,246,0.4)';this.style.boxShadow='0 0 0 3px rgba(139,92,246,0.1)'" onblur="this.style.borderColor='rgba(255,255,255,0.08)';this.style.boxShadow='none'"/>
+            <input type="password" id="pw-new" placeholder="New password (min 6 chars)" style="padding:12px 16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;color:var(--tx);font-family:'Space Grotesk',sans-serif;font-size:0.88rem;outline:none;transition:all 0.3s;" onfocus="this.style.borderColor='rgba(139,92,246,0.4)';this.style.boxShadow='0 0 0 3px rgba(139,92,246,0.1)'" onblur="this.style.borderColor='rgba(255,255,255,0.08)';this.style.boxShadow='none'"/>
+            <input type="password" id="pw-confirm" placeholder="Confirm new password" style="padding:12px 16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;color:var(--tx);font-family:'Space Grotesk',sans-serif;font-size:0.88rem;outline:none;transition:all 0.3s;" onfocus="this.style.borderColor='rgba(139,92,246,0.4)';this.style.boxShadow='0 0 0 3px rgba(139,92,246,0.1)'" onblur="this.style.borderColor='rgba(255,255,255,0.08)';this.style.boxShadow='none'"/>
+            <button onclick="changePassword()" style="padding:13px;background:linear-gradient(135deg,#8B5CF6,#06B6D4);border:none;border-radius:12px;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:0.9rem;font-weight:600;cursor:pointer;transition:all 0.3s;box-shadow:0 4px 20px rgba(139,92,246,0.3);" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 30px rgba(139,92,246,0.5)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 4px 20px rgba(139,92,246,0.3)'">Update Password</button>
           </div>
         </div>
-
-        <!-- Actions -->
         <div style="display:flex;gap:12px;margin-top:1.2rem;flex-wrap:wrap;">
-          <button class="btn-p" onclick="loadQuiz()">🚀 New Assessment</button>
+          <button class="btn-p" onclick="loadQuiz()">⚡ New Assessment</button>
           <button class="btn-g" onclick="doLogout()">🚪 Logout</button>
         </div>
       </div>
 
-      <!-- Compatibility Tab -->
+      <!-- ── COMPATIBILITY TAB ── -->
       <div class="dash-section" id="tab-compatibility">
         <h3>💞 Personality Compatibility</h3>
-        <p>See how compatible you are with different personality types</p>
+        <p style="color:var(--tx2);font-size:0.9rem;margin-bottom:2rem;">See how compatible you are with different personality types</p>
         <div id="compat-content" style="margin-top:1.5rem;">
           <div class="insight-tip" style="margin-bottom:1.5rem;">
-            <h4>🔗 Share Your Compatibility Link</h4>
-            <p style="margin-bottom:12px;">Share this link with a friend — they take the test and you both see your compatibility score!</p>
-            <button onclick="copyCompatLink()" style="padding:10px 20px;background:var(--gr);border:none;border-radius:12px;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:0.88rem;font-weight:600;cursor:pointer;">🔗 Copy My Compatibility Link</button>
+            <h4 style="font-family:'Syne',sans-serif;font-weight:700;margin-bottom:0.5rem;font-size:1rem;">🔗 Share Your Compatibility Link</h4>
+            <p style="color:var(--tx2);font-size:0.87rem;line-height:1.7;margin-bottom:12px;">Share this link with a friend — they take the test and you both see your compatibility score!</p>
+            <button onclick="copyCompatLink()" style="padding:10px 22px;background:linear-gradient(135deg,#8B5CF6,#06B6D4);border:none;border-radius:12px;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:0.88rem;font-weight:600;cursor:pointer;box-shadow:0 4px 16px rgba(139,92,246,0.3);">🔗 Copy My Compatibility Link</button>
           </div>
           <div id="compat-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;"></div>
         </div>
       </div>
+
     </div>
   </div>
 </div>
@@ -2874,26 +2938,30 @@ body.light-mode #main-footer{
   </div>
 </div>
 <div id="pr" class="page hidden">
-  <!-- Sticky top bar -->
-  <div style="position:sticky;top:68px;z-index:50;padding:10px 2rem;background:var(--back-bar-bg, rgba(5,5,8,0.92));backdrop-filter:blur(20px) saturate(180%);border-bottom:1px solid rgba(139,92,246,0.12);display:flex;align-items:center;gap:10px;">
-    <button onclick="showPage('pd')" style="background:rgba(139,92,246,0.08);border:1px solid rgba(139,92,246,0.2);color:var(--pu2);padding:7px 16px;border-radius:20px;font-family:'Space Grotesk',sans-serif;font-size:0.82rem;cursor:pointer;display:flex;align-items:center;gap:6px;transition:all 0.2s;" onmouseover="this.style.background='rgba(139,92,246,0.15)'" onmouseout="this.style.background='rgba(139,92,246,0.08)'">← Dashboard</button>
-    <button onclick="loadQuiz()" style="background:rgba(6,182,212,0.08);border:1px solid rgba(6,182,212,0.2);color:#67E8F9;padding:7px 16px;border-radius:20px;font-family:'Space Grotesk',sans-serif;font-size:0.82rem;cursor:pointer;display:flex;align-items:center;gap:6px;transition:all 0.2s;" onmouseover="this.style.background='rgba(6,182,212,0.15)'" onmouseout="this.style.background='rgba(6,182,212,0.08)'">🔄 Retake</button>
-    <button onclick="showPage('ph')" style="background:rgba(236,72,153,0.08);border:1px solid rgba(236,72,153,0.2);color:#F9A8D4;padding:7px 16px;border-radius:20px;font-family:'Space Grotesk',sans-serif;font-size:0.82rem;cursor:pointer;display:flex;align-items:center;gap:6px;transition:all 0.2s;" onmouseover="this.style.background='rgba(236,72,153,0.15)'" onmouseout="this.style.background='rgba(236,72,153,0.08)'">📊 History</button>
-    <div style="margin-left:auto;font-size:0.72rem;color:rgba(139,92,246,0.5);font-weight:700;letter-spacing:0.1em;text-transform:uppercase;">✦ PersonaIQ Report</div>
+  <!-- Sticky top bar - premium -->
+  <div style="position:sticky;top:68px;z-index:50;padding:12px 2rem;background:rgba(5,5,8,0.94);backdrop-filter:blur(40px) saturate(200%);border-bottom:1px solid rgba(139,92,246,0.15);display:flex;align-items:center;gap:10px;box-shadow:0 4px 30px rgba(0,0,0,0.4);">
+    <button onclick="showPage('pd')" style="background:linear-gradient(135deg,rgba(139,92,246,0.12),rgba(139,92,246,0.06));border:1px solid rgba(139,92,246,0.25);color:var(--pu2);padding:8px 18px;border-radius:22px;font-family:'Space Grotesk',sans-serif;font-size:0.82rem;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px;transition:all 0.25s;box-shadow:0 2px 12px rgba(139,92,246,0.15);" onmouseover="this.style.background='linear-gradient(135deg,rgba(139,92,246,0.2),rgba(139,92,246,0.1))';this.style.transform='translateY(-1px)'" onmouseout="this.style.background='linear-gradient(135deg,rgba(139,92,246,0.12),rgba(139,92,246,0.06))';this.style.transform='translateY(0)'">← Dashboard</button>
+    <button onclick="loadQuiz()" style="background:linear-gradient(135deg,rgba(6,182,212,0.12),rgba(6,182,212,0.06));border:1px solid rgba(6,182,212,0.25);color:#67E8F9;padding:8px 18px;border-radius:22px;font-family:'Space Grotesk',sans-serif;font-size:0.82rem;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px;transition:all 0.25s;" onmouseover="this.style.background='linear-gradient(135deg,rgba(6,182,212,0.2),rgba(6,182,212,0.1))';this.style.transform='translateY(-1px)'" onmouseout="this.style.background='linear-gradient(135deg,rgba(6,182,212,0.12),rgba(6,182,212,0.06))';this.style.transform='translateY(0)'">🔄 Retake</button>
+    <button onclick="showPage('ph')" style="background:linear-gradient(135deg,rgba(236,72,153,0.12),rgba(236,72,153,0.06));border:1px solid rgba(236,72,153,0.25);color:#F9A8D4;padding:8px 18px;border-radius:22px;font-family:'Space Grotesk',sans-serif;font-size:0.82rem;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px;transition:all 0.25s;" onmouseover="this.style.background='linear-gradient(135deg,rgba(236,72,153,0.2),rgba(236,72,153,0.1))';this.style.transform='translateY(-1px)'" onmouseout="this.style.background='linear-gradient(135deg,rgba(236,72,153,0.12),rgba(236,72,153,0.06))';this.style.transform='translateY(0)'">📊 History</button>
+    <div style="margin-left:auto;display:flex;align-items:center;gap:8px;">
+      <span style="width:6px;height:6px;border-radius:50%;background:linear-gradient(135deg,#8B5CF6,#06B6D4);display:inline-block;animation:pulse 2s ease infinite;box-shadow:0 0 8px rgba(139,92,246,0.6);"></span>
+      <span style="font-size:0.7rem;color:rgba(139,92,246,0.6);font-weight:700;letter-spacing:0.12em;text-transform:uppercase;">✦ PersonaIQ Report</span>
+    </div>
   </div>
 
-  <!-- Result Hero Header -->
+  <!-- Result Hero Header - cinematic -->
   <div class="rh">
-    <!-- Animated background orbs -->
-    <div style="position:absolute;top:-80px;left:20%;width:400px;height:400px;background:radial-gradient(circle,rgba(139,92,246,0.08),transparent 70%);pointer-events:none;animation:of 8s ease-in-out infinite;"></div>
-    <div style="position:absolute;top:-40px;right:20%;width:300px;height:300px;background:radial-gradient(circle,rgba(6,182,212,0.06),transparent 70%);pointer-events:none;animation:of 10s ease-in-out infinite reverse;"></div>
+    <!-- Multi-layer animated orbs -->
+    <div style="position:absolute;top:-100px;left:15%;width:500px;height:500px;background:radial-gradient(circle,rgba(139,92,246,0.1),transparent 70%);pointer-events:none;animation:orbFloat1 10s ease-in-out infinite;"></div>
+    <div style="position:absolute;top:-60px;right:15%;width:400px;height:400px;background:radial-gradient(circle,rgba(6,182,212,0.07),transparent 70%);pointer-events:none;animation:orbFloat2 12s ease-in-out infinite;"></div>
+    <div style="position:absolute;bottom:-40px;left:40%;width:300px;height:300px;background:radial-gradient(circle,rgba(236,72,153,0.05),transparent 70%);pointer-events:none;animation:orbFloat3 14s ease-in-out infinite;"></div>
 
     <div class="reb">✦ AI Intelligence Report</div>
     <h2 id="rnt">Personality Profile</h2>
     <div class="rdt" id="rd"></div>
     <div class="pb" id="rdom">Balanced</div>
     <!-- Global Comparison -->
-    <div id="global-comparison" style="display:none;margin-top:16px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;"></div>
+    <div id="global-comparison" style="display:none;margin-top:20px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;"></div>
   </div>
   <div class="rg" style="display:block!important;">
     <div class="rc w"><div class="cl">📝 Summary <button class="cbtn" onclick="copyEl('rsum')">Copy</button><button class="cbtn" onclick="listenToReport()" id="btn-listen" style="margin-left:6px;">🔊 Listen</button></div><div class="st" id="rsum"></div></div>
