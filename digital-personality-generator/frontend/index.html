@@ -973,7 +973,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:68px;display:flex;ali
   font-family:'Syne',sans-serif;font-size:1rem;font-weight:900;
   background:linear-gradient(135deg,#8B5CF6,#06B6D4);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-  line-height:1.3;word-break:break-word;overflow-wrap:break-word;white-space:normal;
+  line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block;
 }
 .ov-lbl{
   font-size:0.68rem;color:rgba(196,181,253,0.6);
@@ -1288,6 +1288,9 @@ body.light-mode .fi input:focus{border-color:#9A3412;box-shadow:0 0 0 3px rgba(2
 body.light-mode .fi input::placeholder{color:#9A6030;}
 body.light-mode .bsub{color:#fff;}
 body.light-mode .asw{color:#7A3800;}body.light-mode .asw a{color:#9A3412;}
+body.light-mode .dash-layout{background:#FFFAF5 !important;}
+body.light-mode #pd{background:#FFFAF5 !important;}
+body.light-mode #pd .dash-main{background:transparent !important;}
 body.light-mode .sidebar{background:linear-gradient(180deg,rgba(255,250,245,0.99),rgba(255,245,235,0.97));border-right:1px solid rgba(234,88,12,0.15);box-shadow:2px 0 20px rgba(234,88,12,0.06);}
 body.light-mode .sidebar-name{color:#1A0800 !important;font-weight:700 !important;-webkit-text-fill-color:#1A0800 !important;}body.light-mode .sidebar-email{color:#92400E !important;}body.light-mode .sidebar-label{color:#EA580C !important;font-weight:700 !important;letter-spacing:0.15em;}
 body.light-mode .nav-item{color:#7C2D00 !important;}body.light-mode .nav-item-badge{background:linear-gradient(135deg,#EA580C,#C2410C) !important;}
@@ -4171,7 +4174,7 @@ if(!US)return;
       US.longestStreak=d.user.longestStreak||0;
     }
   }).catch(function(){});
-  try{const d=await api('/api/history');if(d.success){const h=d.results||d.data||[];document.getElementById('dt').textContent=h.length;var hb=document.getElementById('hist-badge');if(hb)hb.textContent=h.length;if(h.length>0){const l=h[0];var _ddVal=l.personalityType||TL[l.dominantTrait]||'—';var _ddWords=_ddVal.split(' ');var _ddShow=_ddWords.length>1?_ddWords[_ddWords.length-1]:_ddVal;document.getElementById('dd').textContent=_ddShow;document.getElementById('dl').textContent=l.lastTest?new Date(l.lastTest).toLocaleDateString('en',{month:'short',day:'numeric'}):l.lastTestDate?new Date(l.lastTestDate).toLocaleDateString('en',{month:'short',day:'numeric'}):'—';document.getElementById('dhl').innerHTML=h.slice(0,3).map(r=>hCard(r)).join('');}}}catch(e){console.error(e);}}
+  try{const d=await api('/api/history');if(d.success){const h=d.results||d.data||[];document.getElementById('dt').textContent=h.length;var hb=document.getElementById('hist-badge');if(hb)hb.textContent=h.length;if(h.length>0){const l=h[0];var _ddVal=l.personalityType||TL[l.dominantTrait]||'—';var _ddWords=_ddVal.split(' ');var _ddShow=_ddWords.length>1?_ddWords[_ddWords.length-1]:_ddVal;if(_ddShow.length>9)_ddShow=_ddShow.substring(0,8)+'…';document.getElementById('dd').textContent=_ddShow;document.document.getElementById('dl').textContent=l.completedAt?new Date(l.completedAt).toLocaleDateString('en',{month:'short',day:'numeric'}):l.lastTest?new Date(l.lastTest).toLocaleDateString('en',{month:'short',day:'numeric'}):'—';document.getElementById('dhl').innerHTML=h.slice(0,3).map(r=>hCard(r)).join('');}}}catch(e){console.error(e);}}
 function handleStart(){if(!TK){showPage('pa','reg');return;}loadQuiz();}
 async function loadQuiz(){
   showPage('pl');animL();
