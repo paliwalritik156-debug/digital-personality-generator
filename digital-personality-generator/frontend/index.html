@@ -1462,9 +1462,20 @@ body.light-mode #page-home button[style*="rgba(255,255,255,0.04)"][style*="borde
 }
 /* ===== LIGHT MODE: HERO BUTTONS + STAT CARDS ===== */
 /* Start Free Analysis button - orange in light mode */
+body.light-mode #hero-cta-btn{
+  background:linear-gradient(135deg,#EA580C,#C2410C) !important;
+  box-shadow:0 0 0 1px rgba(234,88,12,0.5),0 8px 40px rgba(234,88,12,0.4),0 0 60px rgba(234,88,12,0.2) !important;
+}
 body.light-mode #page-home button[style*="linear-gradient(135deg,#8B5CF6,#06B6D4)"][style*="border-radius:50px"]{
   background:linear-gradient(135deg,#EA580C,#C2410C) !important;
   box-shadow:0 0 0 1px rgba(234,88,12,0.5),0 8px 40px rgba(234,88,12,0.4) !important;
+}
+/* Sign In button */
+body.light-mode #hero-signin-btn{
+  background:rgba(234,88,12,0.06) !important;
+  border-color:rgba(234,88,12,0.35) !important;
+  color:#C2410C !important;
+  box-shadow:none !important;
 }
 /* Sign In button */
 body.light-mode #page-home button[style*="rgba(255,255,255,0.04)"][style*="border-radius:50px"]{
@@ -1767,13 +1778,13 @@ body.light-mode #page-home span[style*="background:linear-gradient(135deg,#10B98
 
     <!-- CTA BUTTONS -->
     <div style="display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin-bottom:4rem;animation:fadeSlideUp 0.9s ease 0.3s both;">
-      <button onclick="handleStart()" style="position:relative;padding:18px 44px;background:linear-gradient(135deg,#8B5CF6,#06B6D4);border:none;border-radius:50px;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:1.05rem;font-weight:700;cursor:pointer;transition:all 0.3s;overflow:hidden;letter-spacing:-0.01em;box-shadow:0 0 0 1px rgba(139,92,246,0.5),0 8px 40px rgba(139,92,246,0.5),0 0 80px rgba(139,92,246,0.2);" onmouseover="this.style.transform='translateY(-3px) scale(1.04)';this.style.boxShadow='0 0 0 1px rgba(139,92,246,0.7),0 16px 60px rgba(139,92,246,0.7),0 0 100px rgba(139,92,246,0.3)'" onmouseout="this.style.transform='translateY(0) scale(1)';this.style.boxShadow='0 0 0 1px rgba(139,92,246,0.5),0 8px 40px rgba(139,92,246,0.5),0 0 80px rgba(139,92,246,0.2)'">
+      <button id="hero-cta-btn" onclick="handleStart()" style="position:relative;padding:18px 44px;background:linear-gradient(135deg,#8B5CF6,#06B6D4);border:none;border-radius:50px;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:1.05rem;font-weight:700;cursor:pointer;transition:all 0.3s;overflow:hidden;letter-spacing:-0.01em;box-shadow:0 0 0 1px rgba(139,92,246,0.5),0 8px 40px rgba(139,92,246,0.5),0 0 80px rgba(139,92,246,0.2);" onmouseover="this.style.transform='translateY(-3px) scale(1.04)'" onmouseout="this.style.transform='translateY(0) scale(1)'">
         <span style="position:relative;z-index:1;display:flex;align-items:center;gap:10px;">
           <span style="font-size:1.1rem;">⚡</span> Start Free Analysis
         </span>
         <div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,0.15),transparent);border-radius:50px;"></div>
       </button>
-      <button onclick="showPage('pa','login')" style="padding:18px 36px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.15);border-radius:50px;color:var(--tx);font-family:'Space Grotesk',sans-serif;font-size:1.05rem;cursor:pointer;transition:all 0.3s;backdrop-filter:blur(20px);box-shadow:inset 0 1px 0 rgba(255,255,255,0.08);" onmouseover="this.style.borderColor='rgba(139,92,246,0.6)';this.style.background='rgba(139,92,246,0.1)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.15)';this.style.background='rgba(255,255,255,0.04)';this.style.transform='translateY(0)'">
+      <button id="hero-signin-btn" onclick="showPage('pa','login')" style="padding:18px 36px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.15);border-radius:50px;color:var(--tx);font-family:'Space Grotesk',sans-serif;font-size:1.05rem;cursor:pointer;transition:all 0.3s;backdrop-filter:blur(20px);box-shadow:inset 0 1px 0 rgba(255,255,255,0.08);" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
         Sign In →
       </button>
     </div>
