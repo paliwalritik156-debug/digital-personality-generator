@@ -983,8 +983,8 @@ body.light-mode .quiz-top p{color:#C2410C !important;font-weight:500 !important;
 body.light-mode #btn-read-q{background:rgba(234,88,12,0.1) !important;border:1px solid rgba(234,88,12,0.35) !important;color:#C2410C !important;font-weight:600 !important;}
 body.light-mode #btn-voice-ans{background:rgba(234,88,12,0.1) !important;border:1px solid rgba(234,88,12,0.35) !important;color:#C2410C !important;font-weight:600 !important;}
 body.light-mode #voice-status{color:#B86A00 !important;}
-body.light-mode .reb{background:rgba(234,88,12,0.08);border:1px solid rgba(234,88,12,0.2);color:#9A3412;}
-body.light-mode #rnt{color:#0F0500;}body.light-mode .rdt{color:#7A3800;}
+body.light-mode .reb{background:rgba(234,88,12,0.12) !important;border:1px solid rgba(234,88,12,0.35) !important;color:#C2410C !important;font-weight:700 !important;}
+body.light-mode #rnt{color:#1A0800 !important;-webkit-text-fill-color:#1A0800 !important;}body.light-mode .rdt{color:#92400E !important;}
 body.light-mode .bi{background:#FFFAF5;border:1px solid rgba(234,88,12,0.1);}
 body.light-mode .bl{color:#7A3800;}body.light-mode .bv{color:#0F0500;}
 body.light-mode .ci{background:#FFFAF5;border:1px solid rgba(234,88,12,0.1);color:#5C2800;}
@@ -1310,6 +1310,76 @@ body.light-mode .kh{color:#92400E !important;}
 body.light-mode #voice-status{color:#92400E !important;}
 /* Progress ring track */
 body.light-mode .prw{background:transparent !important;}
+
+/* ===== LIGHT MODE: RESULT PAGE ===== */
+/* Top bar buttons */
+body.light-mode #pr > div:first-child button{background:rgba(234,88,12,0.08) !important;border-color:rgba(234,88,12,0.25) !important;color:#C2410C !important;font-weight:600 !important;}
+/* PersonaIQ Report label */
+body.light-mode #pr > div:first-child div[style*="color:rgba(139,92,246"]{color:#C2410C !important;}
+/* Result header background */
+body.light-mode .rh{background:linear-gradient(180deg,rgba(255,247,237,0.6),transparent) !important;}
+/* AI Intelligence Report badge */
+body.light-mode .reb{background:rgba(234,88,12,0.12) !important;border:1px solid rgba(234,88,12,0.35) !important;color:#C2410C !important;font-weight:700 !important;}
+/* Main heading - ritik's AI Profile */
+body.light-mode .rh h2{color:#1A0800 !important;-webkit-text-fill-color:#1A0800 !important;background:none !important;}
+/* Date */
+body.light-mode .rdt{color:#92400E !important;}
+/* Dominant trait badge (THE INDIVIDUAL) */
+body.light-mode .pb{background:linear-gradient(135deg,rgba(234,88,12,0.12),rgba(251,146,60,0.08)) !important;border:1px solid rgba(234,88,12,0.4) !important;color:#C2410C !important;box-shadow:0 0 30px rgba(234,88,12,0.15) !important;}
+/* Global comparison percentile badges */
+body.light-mode #global-comparison > div{background:#ffffff !important;border:1px solid rgba(234,88,12,0.25) !important;box-shadow:0 4px 16px rgba(234,88,12,0.1) !important;}
+body.light-mode #global-comparison span[style*="color:#8B5CF6"],
+body.light-mode #global-comparison span[style*="color:#06B6D4"],
+body.light-mode #global-comparison span[style*="color:#EC4899"],
+body.light-mode #global-comparison span[style*="color:#10B981"],
+body.light-mode #global-comparison span[style*="color:#F59E0B"]{color:#C2410C !important;}
+body.light-mode #global-comparison div[style*="font-size:1.4rem"],
+body.light-mode #global-comparison div[style*="font-size:1.2rem"]{color:#1A0800 !important;font-weight:800 !important;}
+body.light-mode #global-comparison div[style*="font-size:0.6rem"],
+body.light-mode #global-comparison div[style*="font-size:0.65rem"]{color:#92400E !important;font-weight:700 !important;}
+/* Result cards */
+body.light-mode .rc{background:linear-gradient(135deg,#ffffff,#FFF3E8) !important;border:1px solid rgba(234,88,12,0.22) !important;box-shadow:0 4px 24px rgba(234,88,12,0.1) !important;}
+body.light-mode .rc:hover{border-color:rgba(234,88,12,0.4) !important;box-shadow:0 20px 60px rgba(234,88,12,0.15) !important;}
+/* Card labels (.cl) */
+body.light-mode .cl{color:#C2410C !important;border-bottom-color:rgba(234,88,12,0.15) !important;}
+/* Copy buttons */
+body.light-mode .cbtn{background:rgba(234,88,12,0.08) !important;border-color:rgba(234,88,12,0.2) !important;color:#C2410C !important;}
+/* Summary text */
+body.light-mode .st{color:#7C2D00 !important;}
+/* List items */
+body.light-mode .li > *{color:#7C2D00 !important;}
+/* Trait bars */
+body.light-mode .bi{background:rgba(234,88,12,0.06) !important;border-color:rgba(234,88,12,0.15) !important;}
+body.light-mode .bl{color:#92400E !important;}
+body.light-mode .bv{color:#1A0800 !important;font-weight:700 !important;}
+/* Insight grid items */
+body.light-mode .ig > *{background:rgba(234,88,12,0.06) !important;border-color:rgba(234,88,12,0.15) !important;color:#7C2D00 !important;}
+/* Simulation mode */
+body.light-mode .smc{background:rgba(234,88,12,0.06) !important;border-color:rgba(234,88,12,0.15) !important;}
+body.light-mode .sms{color:#1A0800 !important;}
+body.light-mode .smr{color:#7C2D00 !important;}
+/* Trailer section */
+body.light-mode .trl{background:linear-gradient(135deg,rgba(234,88,12,0.08),rgba(251,146,60,0.04)) !important;border-color:rgba(234,88,12,0.2) !important;}
+/* Share card */
+body.light-mode .shcard{background:linear-gradient(135deg,#1A0800,#2D0F00,#0F1A2E) !important;}
+/* Action bar */
+body.light-mode .ra{background:linear-gradient(180deg,transparent,rgba(234,88,12,0.04)) !important;border-top-color:rgba(234,88,12,0.15) !important;}
+/* Theme section */
+body.light-mode #pr-theme-section span[style*="color:var(--tx2)"]{color:#7C2D00 !important;}
+/* Personality brand */
+body.light-mode .bg2 > *{background:rgba(234,88,12,0.06) !important;border-color:rgba(234,88,12,0.15) !important;}
+/* Evolution model */
+body.light-mode .er > *{color:#7C2D00 !important;}
+/* Animal traits */
+body.light-mode #animal-traits > *{background:rgba(234,88,12,0.08) !important;border-color:rgba(234,88,12,0.2) !important;color:#C2410C !important;}
+/* Celebrity/movie grid */
+body.light-mode #celeb-grid > *,
+body.light-mode #movie-grid > *{background:rgba(234,88,12,0.06) !important;border-color:rgba(234,88,12,0.15) !important;}
+/* Roast text */
+body.light-mode #roast-text{background:rgba(234,88,12,0.05) !important;border-color:rgba(234,88,12,0.15) !important;color:#7C2D00 !important;}
+/* Color codes */
+body.light-mode #color-codes > *{background:rgba(234,88,12,0.06) !important;border-color:rgba(234,88,12,0.15) !important;color:#7C2D00 !important;}
+
 
 /* ===== MOBILE FIXES ===== */
 @media(max-width:768px){
