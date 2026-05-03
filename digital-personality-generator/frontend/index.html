@@ -685,10 +685,9 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:68px;display:flex;ali
 .qnav{display:flex;gap:10px;margin-top:1.5rem}
 .bbk{background:var(--glass);color:var(--tx);border:1px solid var(--bdr);padding:12px 22px;border-radius:30px;font-family:'Space Grotesk',sans-serif;font-size:0.88rem;cursor:pointer;transition:var(--tr)}
 .bbk:hover{border-color:var(--bdr2)}
-#pl{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2.5rem}
-.lb{font-family:'Syne',sans-serif;font-size:2rem;font-weight:900;background:var(--gr3);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-size:300%;animation:ga 3s ease infinite;letter-spacing:-0.03em;margin-bottom:0.5rem}
-.lb-sub{font-size:0.75rem;color:var(--tx3);letter-spacing:0.2em;text-transform:uppercase;margin-bottom:2rem;opacity:0.7}
-#pl{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;background:var(--void);position:relative;overflow:hidden}
+#pl{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.2rem;background:var(--void);position:relative;overflow:hidden}
+.lb{font-family:'Syne',sans-serif;font-size:2.2rem;font-weight:900;background:var(--gr3);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-size:300%;animation:ga 3s ease infinite;letter-spacing:-0.03em}
+.lb-sub{font-size:0.72rem;color:var(--tx3);letter-spacing:0.2em;text-transform:uppercase;opacity:0.7}
 #pl::before{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:600px;height:600px;background:radial-gradient(ellipse,rgba(139,92,246,0.08) 0%,transparent 70%);pointer-events:none;animation:glowPulse 3s ease-in-out infinite}
 .lv{display:flex;gap:6px;align-items:flex-end;height:48px}
 .lvb{width:4px;background:var(--gr);border-radius:4px;animation:bp 1.2s ease-in-out infinite}
@@ -2717,15 +2716,21 @@ body.light-mode #main-footer{
   </div>
 </div>
 <div id="pl" class="page hidden">
+  <!-- Ambient glow -->
+  <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:500px;height:500px;background:radial-gradient(ellipse,rgba(139,92,246,0.1) 0%,transparent 70%);pointer-events:none;animation:glowPulse 3s ease-in-out infinite;"></div>
+  <!-- Brand -->
   <div class="lb">✦ PersonaIQ</div>
   <div class="lb-sub">AI Personality Intelligence</div>
+  <!-- Bars -->
   <div class="lv"><div class="lvb"></div><div class="lvb"></div><div class="lvb"></div><div class="lvb"></div><div class="lvb"></div><div class="lvb"></div></div>
+  <!-- Message -->
   <div class="lm" id="lm">Initialising AI analysis</div>
   <!-- Progress bar -->
-  <div style="width:280px;height:3px;background:rgba(255,255,255,0.08);border-radius:10px;margin-top:20px;overflow:hidden;position:relative;">
-    <div id="load-progress" style="height:100%;background:linear-gradient(90deg,#8B5CF6,#06B6D4,#EC4899);border-radius:10px;width:0%;transition:width 0.4s ease;background-size:200%;animation:ga 2s ease infinite;"></div>
+  <div style="width:280px;height:3px;background:rgba(255,255,255,0.08);border-radius:10px;overflow:hidden;">
+    <div id="load-progress" style="height:100%;background:linear-gradient(90deg,#8B5CF6,#06B6D4,#EC4899);border-radius:10px;width:0%;transition:width 0.4s ease;"></div>
   </div>
-  <div id="load-pct" style="font-size:0.72rem;color:var(--tx3);margin-top:10px;letter-spacing:0.1em;">0%</div>
+  <!-- Percentage -->
+  <div id="load-pct" style="font-size:0.72rem;color:var(--tx3);letter-spacing:0.1em;">0%</div>
 </div>
 <div id="page-loader-results" class="page" style="display:none;">
   <div class="skel-hero">
