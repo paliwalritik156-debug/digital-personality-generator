@@ -1460,6 +1460,76 @@ body.light-mode #page-home button[style*="rgba(255,255,255,0.04)"][style*="borde
   border-color:rgba(234,88,12,0.2) !important;
   color:#C2410C !important;
 }
+/* ===== LIGHT MODE: HERO BUTTONS + STAT CARDS ===== */
+/* Start Free Analysis button - orange in light mode */
+body.light-mode #page-home button[style*="linear-gradient(135deg,#8B5CF6,#06B6D4)"][style*="border-radius:50px"]{
+  background:linear-gradient(135deg,#EA580C,#C2410C) !important;
+  box-shadow:0 0 0 1px rgba(234,88,12,0.5),0 8px 40px rgba(234,88,12,0.4) !important;
+}
+/* Sign In button */
+body.light-mode #page-home button[style*="rgba(255,255,255,0.04)"][style*="border-radius:50px"]{
+  background:rgba(234,88,12,0.06) !important;
+  border-color:rgba(234,88,12,0.3) !important;
+  color:#C2410C !important;
+}
+/* Stat card "25" purple gradient -> orange */
+body.light-mode #page-home div[style*="background:linear-gradient(135deg,#8B5CF6,#A78BFA)"][style*="-webkit-text-fill-color:transparent"]{
+  background:linear-gradient(135deg,#EA580C,#C2410C) !important;
+  -webkit-background-clip:text !important;
+  -webkit-text-fill-color:transparent !important;
+}
+/* Stat card "12+" cyan gradient -> orange */
+body.light-mode #page-home div[style*="background:linear-gradient(135deg,#06B6D4,#67E8F9)"][style*="-webkit-text-fill-color:transparent"]{
+  background:linear-gradient(135deg,#0891B2,#0E7490) !important;
+  -webkit-background-clip:text !important;
+  -webkit-text-fill-color:transparent !important;
+}
+/* Stat card "OCEAN" pink gradient -> keep but darker */
+body.light-mode #page-home div[style*="background:linear-gradient(135deg,#EC4899,#F9A8D4)"][style*="-webkit-text-fill-color:transparent"]{
+  background:linear-gradient(135deg,#BE185D,#DB2777) !important;
+  -webkit-background-clip:text !important;
+  -webkit-text-fill-color:transparent !important;
+}
+/* Stat card "100%" yellow gradient -> darker orange */
+body.light-mode #page-home div[style*="background:linear-gradient(135deg,#F59E0B,#FCD34D)"][style*="-webkit-text-fill-color:transparent"]{
+  background:linear-gradient(135deg,#D97706,#B45309) !important;
+  -webkit-background-clip:text !important;
+  -webkit-text-fill-color:transparent !important;
+}
+/* Stat card wrappers - stronger bg and border */
+body.light-mode #page-home div[style*="background:linear-gradient(135deg,rgba(139,92,246,0.1)"][style*="border-radius:22px"]{
+  background:linear-gradient(135deg,#ffffff,#FFF0E0) !important;
+  border-color:rgba(234,88,12,0.3) !important;
+  box-shadow:0 6px 24px rgba(234,88,12,0.12) !important;
+}
+body.light-mode #page-home div[style*="background:linear-gradient(135deg,rgba(6,182,212,0.1)"][style*="border-radius:22px"]{
+  background:linear-gradient(135deg,#ffffff,#E0F7FF) !important;
+  border-color:rgba(8,145,178,0.3) !important;
+  box-shadow:0 6px 24px rgba(8,145,178,0.1) !important;
+}
+body.light-mode #page-home div[style*="background:linear-gradient(135deg,rgba(236,72,153,0.1)"][style*="border-radius:22px"]{
+  background:linear-gradient(135deg,#ffffff,#FFF0F7) !important;
+  border-color:rgba(190,24,93,0.3) !important;
+  box-shadow:0 6px 24px rgba(190,24,93,0.1) !important;
+}
+body.light-mode #page-home div[style*="background:linear-gradient(135deg,rgba(245,158,11,0.1)"][style*="border-radius:22px"]{
+  background:linear-gradient(135deg,#ffffff,#FFFBEB) !important;
+  border-color:rgba(180,83,9,0.3) !important;
+  box-shadow:0 6px 24px rgba(180,83,9,0.1) !important;
+}
+/* Stat card labels (DEEP QUESTIONS etc) */
+body.light-mode #page-home div[style*="color:var(--tx3)"][style*="letter-spacing:0.12em"]{
+  color:#92400E !important;
+  font-weight:700 !important;
+}
+/* Trust badges text */
+body.light-mode #page-home div[style*="color:var(--tx3)"][style*="font-size:0.82rem"]{
+  color:#7C2D00 !important;
+}
+/* Trust badge green checkmarks - keep green */
+body.light-mode #page-home span[style*="background:linear-gradient(135deg,#10B981"]{
+  background:linear-gradient(135deg,#059669,#10B981) !important;
+}
 
 /* ===== MOBILE FIXES ===== */
 @media(max-width:768px){
