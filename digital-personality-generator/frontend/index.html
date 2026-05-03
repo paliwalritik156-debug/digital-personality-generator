@@ -3281,12 +3281,12 @@ function applyHomeSectionColors(isLight){
       s(el,'border-color','rgba(234,88,12,0.18)');
       s(el,'box-shadow','0 4px 24px rgba(234,88,12,0.1)');
     } else {
-      // Restore original gradient from style attribute
+      // Dark mode: read original bg from style attr and restore with !important
       var bgMatch = orig.match(/background:([^;]+linear-gradient[^;]+)/);
-      if(bgMatch){ el.style.setProperty('background', bgMatch[1].trim()); }
-      else { r(el,'background'); }
+      if(bgMatch){ s(el,'background', bgMatch[1].trim()); }
+      else { s(el,'background','rgba(255,255,255,0.04)'); }
       var bdrMatch = orig.match(/border:1px solid ([^;]+)/);
-      if(bdrMatch){ el.style.setProperty('border-color', bdrMatch[1].trim()); }
+      if(bdrMatch){ s(el,'border-color', bdrMatch[1].trim()); }
       else { r(el,'border-color'); }
       r(el,'box-shadow');
     }
