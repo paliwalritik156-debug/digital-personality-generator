@@ -1914,7 +1914,7 @@ body.light-mode #main-footer{
     </h1>
 
     <!-- SUBHEADLINE -->
-    <p style="font-size:clamp(1rem,2.5vw,1.3rem);color:var(--tx2);max-width:600px;line-height:1.75;margin:0 auto 3rem;animation:fadeSlideUp 0.9s ease 0.2s both;font-weight:400;">
+    <p class="reveal" style="font-size:clamp(1rem,2.5vw,1.3rem);color:var(--tx2);max-width:600px;line-height:1.75;margin:0 auto 3rem;animation:fadeSlideUp 0.9s ease 0.2s both;font-weight:400;">
       The world's most advanced AI personality engine. <strong style="color:var(--tx);font-weight:600;">25 deep questions.</strong> <strong style="color:var(--tx);font-weight:600;">12+ cinematic insights.</strong> Your complete psychological blueprint — in minutes.
     </p>
 
@@ -1986,7 +1986,7 @@ body.light-mode #main-footer{
     <div style="max-width:1200px;margin:0 auto;">
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:6rem;align-items:center;">
         <!-- Left: Text -->
-        <div>
+        <div class="reveal-left">
           <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(139,92,246,0.08);border:1px solid rgba(139,92,246,0.2);border-radius:50px;padding:6px 16px;margin-bottom:1.8rem;">
             <span style="width:6px;height:6px;border-radius:50%;background:#8B5CF6;animation:pulse 2s ease infinite;"></span>
             <span style="font-size:0.68rem;font-weight:700;letter-spacing:0.15em;color:#A78BFA;text-transform:uppercase;">About PersonaIQ</span>
@@ -2002,7 +2002,7 @@ body.light-mode #main-footer{
           </div>
         </div>
         <!-- Right: Visual cards -->
-        <div style="position:relative;display:flex;flex-direction:column;gap:16px;">
+        <div class="reveal-right" style="position:relative;display:flex;flex-direction:column;gap:16px;">
           <!-- Card 1 -->
           <div style="background:linear-gradient(135deg,rgba(139,92,246,0.1),rgba(6,182,212,0.05));border:1px solid rgba(139,92,246,0.2);border-radius:20px;padding:1.5rem;backdrop-filter:blur(20px);box-shadow:0 8px 32px rgba(139,92,246,0.1);transition:all 0.3s;" onmouseover="this.style.transform='translateX(8px)';this.style.borderColor='rgba(139,92,246,0.4)'" onmouseout="this.style.transform='translateX(0)';this.style.borderColor='rgba(139,92,246,0.2)'">
             <div style="display:flex;align-items:center;gap:14px;">
@@ -3280,26 +3280,61 @@ function goHome(){TK?showPage('pd'):showPage('page-home');}
 
 // ===== FEATURE 1: SCROLL REVEAL =====
 (function(){
+  var _observer = null;
+
   function initScrollReveal(){
-    var els = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale');
+    // Disconnect old observer
+    if(_observer) _observer.disconnect();
+
+    var ph = document.getElementById('page-home');
+    if(!ph || ph.classList.contains('hidden')) return;
+
+    var els = ph.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale');
     if(!els.length) return;
-    var observer = new IntersectionObserver(function(entries){
+
+    // Reset all to hidden first
+    els.forEach(function(el){ el.classList.remove('revealed'); });
+
+    _observer = new IntersectionObserver(function(entries){
       entries.forEach(function(entry){
         if(entry.isIntersecting){
           entry.target.classList.add('revealed');
-          observer.unobserve(entry.target);
+          _observer.unobserve(entry.target);
         }
       });
-    }, {threshold:0.12, rootMargin:'0px 0px -40px 0px'});
-    els.forEach(function(el){ observer.observe(el); });
+    }, {threshold:0.08, rootMargin:'0px 0px -30px 0px'});
+
+    els.forEach(function(el){ _observer.observe(el); });
+
+    // Also immediately reveal elements already in viewport
+    setTimeout(function(){
+      els.forEach(function(el){
+        var rect = el.getBoundingClientRect();
+        if(rect.top < window.innerHeight && rect.bottom > 0){
+          el.classList.add('revealed');
+        }
+      });
+    }, 50);
   }
 
-  // Run on page load and whenever page-home becomes visible
-  document.addEventListener('DOMContentLoaded', initScrollReveal);
+  document.addEventListener('DOMContentLoaded', function(){
+    setTimeout(initScrollReveal, 300);
+  });
 
-  // Re-run when navigating to home
-  var origShowPage = window.showPage;
   window._revealInit = initScrollReveal;
+
+  // Listen for scroll on page-home
+  window.addEventListener('scroll', function(){
+    var ph = document.getElementById('page-home');
+    if(!ph || ph.classList.contains('hidden')) return;
+    var els = ph.querySelectorAll('.reveal:not(.revealed), .reveal-left:not(.revealed), .reveal-right:not(.revealed), .reveal-scale:not(.revealed)');
+    els.forEach(function(el){
+      var rect = el.getBoundingClientRect();
+      if(rect.top < window.innerHeight - 30 && rect.bottom > 0){
+        el.classList.add('revealed');
+      }
+    });
+  }, {passive:true});
 })();
 
 // ===== FEATURE 2: MOUSE PARALLAX =====
@@ -3313,23 +3348,30 @@ function goHome(){TK?showPage('pd'):showPage('page-home');}
   });
 
   function parallaxLoop(){
-    targetX += (mouseX - targetX) * 0.06;
-    targetY += (mouseY - targetY) * 0.06;
+    targetX += (mouseX - targetX) * 0.05;
+    targetY += (mouseY - targetY) * 0.05;
 
-    // Move ambient orbs in page-home
-    var orbs = document.querySelectorAll('#page-home > div[style*="position:fixed"]');
-    orbs.forEach(function(orb, i){
-      var speed = (i % 3 === 0) ? 18 : (i % 3 === 1) ? 12 : 8;
-      orb.style.transform = 'translate(' + (targetX * speed) + 'px, ' + (targetY * speed) + 'px)';
-    });
+    var ph = document.getElementById('page-home');
+    if(ph && !ph.classList.contains('hidden')){
+      // Move ambient background orbs (position:fixed divs in page-home)
+      var orbs = ph.querySelectorAll('div[style*="position:fixed"][style*="radial-gradient"]');
+      orbs.forEach(function(orb, i){
+        var speed = i === 0 ? 20 : i === 1 ? 14 : 9;
+        orb.style.transform = 'translate(' + (targetX * speed) + 'px, ' + (targetY * speed) + 'px)';
+      });
 
-    // Subtle parallax on hero h1
-    var h1 = document.querySelector('#page-home h1');
-    if(h1) h1.style.transform = 'translate(' + (targetX * -4) + 'px, ' + (targetY * -3) + 'px)';
+      // Hero headline subtle movement
+      var h1 = ph.querySelector('section h1');
+      if(h1) h1.style.transform = 'translate(' + (targetX * -5) + 'px, ' + (targetY * -3) + 'px)';
 
-    // Hero badge
-    var badge = document.querySelector('#page-home .h-chip, #page-home div[style*="border-radius:50px"][style*="animation:fadeSlideDown"]');
-    if(badge) badge.style.transform = 'translate(' + (targetX * -6) + 'px, ' + (targetY * -4) + 'px)';
+      // Hero CTA buttons subtle movement
+      var cta = ph.querySelector('section > div[style*="gap:16px"]');
+      if(cta) cta.style.transform = 'translate(' + (targetX * -3) + 'px, ' + (targetY * -2) + 'px)';
+
+      // Stat cards opposite movement
+      var stats = ph.querySelector('div[style*="gap:14px"][style*="flex-wrap:wrap"]');
+      if(stats) stats.style.transform = 'translate(' + (targetX * 4) + 'px, ' + (targetY * 3) + 'px)';
+    }
 
     requestAnimationFrame(parallaxLoop);
   }
