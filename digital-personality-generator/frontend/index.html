@@ -2888,11 +2888,11 @@ body.light-mode #main-footer{
         <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
           <div style="width:40px;height:40px;background:linear-gradient(135deg,#8B5CF6,#06B6D4);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;">👤</div>
           <div style="min-width:0;flex:1;">
-            <div id="sb-name" style="font-weight:700;font-size:0.88rem;color:#1A0800;-webkit-text-fill-color:#1A0800;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">—</div>
-            <div id="sb-email" style="font-size:0.68rem;color:#7C2D00;-webkit-text-fill-color:#7C2D00;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">—</div>
+            <div id="sb-name" style="font-weight:800;font-size:0.9rem;color:var(--tx);-webkit-text-fill-color:var(--tx);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">—</div>
+            <div id="sb-email" style="font-size:0.68rem;color:var(--tx2);-webkit-text-fill-color:var(--tx2);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">—</div>
           </div>
         </div>
-        <div style="display:flex;align-items:center;gap:5px;font-size:0.68rem;color:#16A34A;-webkit-text-fill-color:#16A34A;font-weight:600;">
+        <div style="display:flex;align-items:center;gap:5px;font-size:0.68rem;color:#16A34A;font-weight:600;">
           <span style="width:5px;height:5px;border-radius:50%;background:#10B981;flex-shrink:0;"></span>
           Active session
         </div>
@@ -4164,8 +4164,8 @@ async function loadDash(){
   // Feature 11: animate counters after load
 if(!US)return;
   var dn=document.getElementById('dn');if(dn)dn.textContent=US.name.split(' ')[0];
-  var sbn=document.getElementById('sb-name');if(sbn){sbn.textContent=US.name;var _dark=!document.body.classList.contains('light-mode');sbn.style.color=_dark?'#FFFFFF':'#1A0800';sbn.style.webkitTextFillColor=_dark?'#FFFFFF':'#1A0800';sbn.style.fontWeight='800';sbn.style.fontSize='0.9rem';}
-  var sbe=document.getElementById('sb-email');if(sbe){sbe.textContent=US.email;var _dark2=!document.body.classList.contains('light-mode');sbe.style.color=_dark2?'#A78BFA':'#5C2800';sbe.style.webkitTextFillColor=_dark2?'#A78BFA':'#5C2800';sbe.style.fontSize='0.68rem';sbe.style.display='block';sbe.style.marginTop='2px';}
+  var sbn=document.getElementById('sb-name');if(sbn){sbn.textContent=US.name;}
+  var sbe=document.getElementById('sb-email');if(sbe){sbe.textContent=US.email;}
   // Load streak from server
   api('/api/auth/me').then(function(d){
     if(d.success&&d.user){
