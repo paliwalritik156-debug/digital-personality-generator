@@ -2118,6 +2118,8 @@ body.light-mode .tl{color:#C2410C !important;}
 body.light-mode .tv{color:#1A0800 !important;}
 
 
+.ib{background:linear-gradient(135deg,rgba(139,92,246,0.08),rgba(6,182,212,0.04));border:1px solid rgba(139,92,246,0.2);border-radius:18px;padding:1.5rem;text-align:center;}
+
 /* ===== MOBILE FIXES ===== */
 @media(max-width:768px){
   /* Share card buttons */
@@ -4398,7 +4400,7 @@ const sims=r.simulations||[{scene:'Job Interview',reaction:'Prepares meticulousl
 document.getElementById('rsim').innerHTML=sims.map(s=>'<div class="smc"><div class="sms">'+s.scene+'</div><div class="smr"><strong>💬 Reaction:</strong> '+s.reaction+'</div><div class="smr"><strong>💪 Strength:</strong> '+s.strength+'</div><div class="smr"><strong>⚠️ Risk:</strong> '+s.risk+'</div></div>').join('');
 const tp=r.thinkingPattern||{analyticalVsCreative:65,logicalVsEmotional:55,fastVsDeep:30};
 document.getElementById('rthk').innerHTML=[{l:'Analytical',r:'Creative',v:tp.analyticalVsCreative},{l:'Logical',r:'Emotional',v:tp.logicalVsEmotional},{l:'Fast',r:'Deep',v:tp.fastVsDeep}].map(p=>'<div style="margin-bottom:14px"><div style="display:flex;justify-content:space-between;font-size:0.72rem;color:var(--tx3);margin-bottom:5px"><span>'+p.l+'</span><span>'+p.r+'</span></div><div class="gb"><div class="gf" style="width:'+p.v+'%"></div></div></div>').join('');
-document.getElementById('rimp').textContent=r.firstImpression||'"Thoughtful and genuine. Listens before speaking. Depth shared selectively."';
+document.getElementById('rimp').innerHTML='<div style="font-size:2.5rem;margin-bottom:12px;">👁️</div><div style="font-size:1rem;color:var(--tx2);line-height:1.8;font-style:italic;position:relative;padding:0 1rem;">'+(r.firstImpression||'"Thoughtful and genuine. Listens before speaking. Depth shared selectively."')+'</div><div style="margin-top:16px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap;"><span style="font-size:0.7rem;background:rgba(139,92,246,0.1);border:1px solid rgba(139,92,246,0.2);color:var(--pu2);padding:4px 12px;border-radius:20px;font-weight:600;">✨ First Impression</span></div>';
 const con=r.contradictions||['Craves connection but needs solitude','Values structure yet resists routine','Empathetic but struggles to ask for help'];
 document.getElementById('rcon').innerHTML=con.map(c=>'<div class="ci">'+c+'</div>').join('');
 const gap=r.realityGap||{selfScore:72,detectedScore:58,explanation:'You see yourself as more confident than responses suggest. A healthy growth mindset.'};
