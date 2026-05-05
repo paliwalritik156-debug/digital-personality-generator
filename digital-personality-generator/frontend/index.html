@@ -3382,7 +3382,7 @@ body.light-mode .tv{color:#1A0800 !important;}
     <div class="rc w">
       <div class="cl">😂 Roast My Personality</div>
       <div style="padding:1rem 0;text-align:center;">
-        <div id="roast-text" style="font-size:0.95rem;color:var(--tx2);line-height:1.8;background:var(--glass);border:1px solid var(--bdr);border-radius:14px;padding:1.2rem;margin-bottom:16px;font-style:italic;min-height:60px;"></div>
+        <div id="roast-text" style="font-size:0.95rem;color:var(--tx2);line-height:1.8;background:linear-gradient(135deg,rgba(236,72,153,0.08),rgba(249,115,22,0.05));border:1px solid rgba(236,72,153,0.2);border-radius:18px;padding:1.8rem;margin-bottom:16px;min-height:80px;text-align:center;"></div>
         <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
           <button onclick="generateRoast()" style="padding:10px 22px;background:linear-gradient(135deg,#EC4899,#F97316);border:none;border-radius:12px;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:0.85rem;font-weight:600;cursor:pointer;">🔥 Roast Me Again</button>
           <button onclick="shareRoast()" style="padding:10px 22px;background:var(--gr);border:none;border-radius:12px;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:0.85rem;font-weight:600;cursor:pointer;">🔗 Share Roast</button>
@@ -5215,7 +5215,7 @@ function generateRoast(){
     .replace('{neuroticism}',s.neuroticism);
   window._currentRoast=roast;
   var el=document.getElementById('roast-text');
-  if(el){el.style.opacity='0';setTimeout(function(){el.textContent='"'+roast+'"';el.style.opacity='1';el.style.transition='opacity 0.5s';},200);}
+  if(el){el.style.opacity='0';setTimeout(function(){el.innerHTML='<div style="font-size:2rem;margin-bottom:10px;">🔥😂</div><div style="font-style:italic;line-height:1.8;">"'+roast+'"</div>';el.style.opacity='1';el.style.transition='opacity 0.5s';},200);}
 }
 
 function shareRoast(){
