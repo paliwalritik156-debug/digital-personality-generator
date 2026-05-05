@@ -2888,8 +2888,8 @@ body.light-mode #main-footer{
         <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
           <div style="width:40px;height:40px;background:linear-gradient(135deg,#8B5CF6,#06B6D4);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;">👤</div>
           <div style="min-width:0;flex:1;">
-            <div id="sb-name" style="font-weight:800;font-size:0.9rem;color:var(--tx);-webkit-text-fill-color:var(--tx);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">—</div>
-            <div id="sb-email" style="font-size:0.68rem;color:var(--tx2);-webkit-text-fill-color:var(--tx2);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">—</div>
+            <div id="sb-name" style="font-weight:800;font-size:0.9rem;color:#EEEAF8;-webkit-text-fill-color:#EEEAF8;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">—</div>
+            <div id="sb-email" style="font-size:0.68rem;color:#A78BFA;-webkit-text-fill-color:#A78BFA;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">—</div>
           </div>
         </div>
         <div style="display:flex;align-items:center;gap:5px;font-size:0.68rem;color:#16A34A;font-weight:600;">
@@ -4057,6 +4057,7 @@ function applyThemeMode(){
     if(btn) btn.textContent = '🌙';
   }
   applyHomeSectionColors(_isLight);
+  if(window._updateSidebarColors) window._updateSidebarColors();
 }
 function toggleDarkLight(){
   _isLight = !_isLight;
@@ -4166,6 +4167,16 @@ if(!US)return;
   var dn=document.getElementById('dn');if(dn)dn.textContent=US.name.split(' ')[0];
   var sbn=document.getElementById('sb-name');if(sbn){sbn.textContent=US.name;}
   var sbe=document.getElementById('sb-email');if(sbe){sbe.textContent=US.email;}
+  // Update sidebar colors based on current theme
+  function updateSidebarColors(){
+    var dark=!document.body.classList.contains('light-mode');
+    var n=document.getElementById('sb-name');
+    var e=document.getElementById('sb-email');
+    if(n){n.style.color=dark?'#EEEAF8':'#1A0800';n.style.webkitTextFillColor=dark?'#EEEAF8':'#1A0800';}
+    if(e){e.style.color=dark?'#C4B5FD':'#5C2800';e.style.webkitTextFillColor=dark?'#C4B5FD':'#5C2800';}
+  }
+  updateSidebarColors();
+  window._updateSidebarColors=updateSidebarColors;
   // Load streak from server
   api('/api/auth/me').then(function(d){
     if(d.success&&d.user){
