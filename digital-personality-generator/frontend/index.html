@@ -4428,7 +4428,7 @@ setTimeout(function(){generateRoast();},500);
 var _ts=document.getElementById('pr-theme-section');if(_ts)_ts.style.display='block';
 var _ab=document.getElementById('pr-action-bar');if(_ab)_ab.style.display='flex';
 showPage('pr');setTimeout(function(){updateAvatar(r,badge);},300);launchConfetti();}
-function hCard(r){const dom=r.personalityType||TL[r.dominantTrait]||'Balanced';const date=new Date(r.completedAt).toLocaleDateString('en-IN',{year:'numeric',month:'short',day:'numeric'});const pills=TR.map(t=>{const s=r.scores&&r.scores[t];const sc=s?(typeof s==='object'?s.score:s):0;return'<span class="hip">'+TL[t].slice(0,3)+': '+sc+'%</span>';}).join('');return'<div class="hi" onclick="viewR('+JSON.stringify(r.sessionId||r._id)+')"><div class="hil"><h4>'+dom+'</h4><p>'+date+'</p><div class="hips">'+pills+'</div></div><div class="hia">to</div></div>';}
+function hCard(r){const dom=r.personalityType||TL[r.dominantTrait]||'Balanced';const date=new Date(r.completedAt).toLocaleDateString('en-IN',{year:'numeric',month:'short',day:'numeric'});const pills=TR.map(t=>{const s=r.scores&&r.scores[t];const sc=s?(typeof s==='object'?s.score:s):0;return'<span class="hip">'+TL[t].slice(0,3)+': '+sc+'%</span>';}).join('');return'<div class="hi" onclick="viewR('+JSON.stringify(r.sessionId||r._id)+')"><div class="hil"><h4>✦ '+dom+'</h4><p>📅 '+date+'</p><div class="hips" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;">'+pills+'</div></div><div class="hia" style="color:var(--pu2);font-size:0.8rem;font-weight:600;">View →</div></div>';}
 async function loadHist(){
   const d=await api('/api/history');
   const l=document.getElementById('hlist');
