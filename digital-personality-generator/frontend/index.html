@@ -2159,6 +2159,23 @@ body.light-mode .hil h4{color:#1A0800 !important;-webkit-text-fill-color:#1A0800
 body.light-mode .hil p{color:#92400E !important;}
 body.light-mode .hia{color:#C2410C !important;}
 
+/* ── History page header ── */
+.hhdr{
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:12px;
+  padding:5rem 2rem 1.5rem;
+  max-width:1200px;margin:0 auto;
+}
+.hhdr h2{
+  font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;
+  letter-spacing:-0.03em;
+  background:linear-gradient(135deg,#EEEAF8,#A78BFA);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+#hlist{max-width:1200px;margin:0 auto;padding:0 2rem 3rem;}
+body.light-mode .hhdr h2{background:linear-gradient(135deg,#1A0800,#C2410C) !important;-webkit-background-clip:text !important;-webkit-text-fill-color:transparent !important;}
+
+
 /* ===== MOBILE FIXES ===== */
 @media(max-width:768px){
   /* Share card buttons */
