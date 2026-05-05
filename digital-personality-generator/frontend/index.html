@@ -2106,6 +2106,18 @@ body.light-mode .et{color:#7C2D00 !important;}
 }
 
 
+/* ── Digital Twin Card ── */
+.tg{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+.ti{background:rgba(255,255,255,0.03);border:1px solid rgba(139,92,246,0.15);border-radius:14px;padding:1rem 1.2rem;transition:all 0.3s;}
+.ti:hover{border-color:rgba(139,92,246,0.35);background:rgba(139,92,246,0.06);transform:translateY(-2px);}
+.tl{font-size:0.68rem;font-weight:700;color:var(--pu2);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:6px;}
+.tv{font-size:0.92rem;font-weight:600;color:var(--tx);line-height:1.4;}
+body.light-mode .ti{background:rgba(234,88,12,0.04) !important;border-color:rgba(234,88,12,0.15) !important;}
+body.light-mode .ti:hover{background:rgba(234,88,12,0.08) !important;border-color:rgba(234,88,12,0.3) !important;}
+body.light-mode .tl{color:#C2410C !important;}
+body.light-mode .tv{color:#1A0800 !important;}
+
+
 /* ===== MOBILE FIXES ===== */
 @media(max-width:768px){
   /* Share card buttons */
@@ -4381,9 +4393,9 @@ document.getElementById('rwk').innerHTML=wk.map(w=>'<div class="lit"><div class=
 const car=(r.insights&&r.insights.careers)||['Product Designer','UX Researcher','Therapist','Entrepreneur','Content Strategist'];
 document.getElementById('rcar').innerHTML=car.map(c=>'<div class="lit"><div class="ld" style="background:var(--cy)"></div>'+c+'</div>').join('');
 const twin=r.digitalTwin||{name:'The Thoughtful Architect',thinkingStyle:'Analytical-Creative hybrid',decisionStyle:'Data-informed intuition',behaviorPattern:'Observes deeply, acts deliberately'};
-document.getElementById('rtw').innerHTML='<div class="ti"><div class="tl">Twin Name</div><div class="tv">'+twin.name+'</div></div><div class="ti"><div class="tl">Thinking Style</div><div class="tv">'+twin.thinkingStyle+'</div></div><div class="ti"><div class="tl">Decision Style</div><div class="tv">'+twin.decisionStyle+'</div></div><div class="ti"><div class="tl">Behavior Pattern</div><div class="tv">'+twin.behaviorPattern+'</div></div>';
+document.getElementById('rtw').innerHTML='<div class="ti"><div class="tl">🧬 Twin Name</div><div class="tv">'+twin.name+'</div></div><div class="ti"><div class="tl">🧠 Thinking Style</div><div class="tv">'+twin.thinkingStyle+'</div></div><div class="ti"><div class="tl">⚡ Decision Style</div><div class="tv">'+twin.decisionStyle+'</div></div><div class="ti"><div class="tl">👁️ Behavior Pattern</div><div class="tv">'+twin.behaviorPattern+'</div></div>';
 const sims=r.simulations||[{scene:'Job Interview',reaction:'Prepares meticulously',strength:'Credible and thoughtful',risk:'May over-explain'},{scene:'Team Conflict',reaction:'Seeks all perspectives',strength:'Natural mediator',risk:'Avoids confrontation'},{scene:'Under Pressure',reaction:'Retreats to process',strength:'Calm decisions',risk:'Silence misread'}];
-document.getElementById('rsim').innerHTML=sims.map(s=>'<div class="smc"><div class="sms">'+s.scene+'</div><div class="smr"><strong>Reaction:</strong> '+s.reaction+'</div><div class="smr"><strong>Strength:</strong> '+s.strength+'</div><div class="smr"><strong>Risk:</strong> '+s.risk+'</div></div>').join('');
+document.getElementById('rsim').innerHTML=sims.map(s=>'<div class="smc"><div class="sms">'+s.scene+'</div><div class="smr"><strong>💬 Reaction:</strong> '+s.reaction+'</div><div class="smr"><strong>💪 Strength:</strong> '+s.strength+'</div><div class="smr"><strong>⚠️ Risk:</strong> '+s.risk+'</div></div>').join('');
 const tp=r.thinkingPattern||{analyticalVsCreative:65,logicalVsEmotional:55,fastVsDeep:30};
 document.getElementById('rthk').innerHTML=[{l:'Analytical',r:'Creative',v:tp.analyticalVsCreative},{l:'Logical',r:'Emotional',v:tp.logicalVsEmotional},{l:'Fast',r:'Deep',v:tp.fastVsDeep}].map(p=>'<div style="margin-bottom:14px"><div style="display:flex;justify-content:space-between;font-size:0.72rem;color:var(--tx3);margin-bottom:5px"><span>'+p.l+'</span><span>'+p.r+'</span></div><div class="gb"><div class="gf" style="width:'+p.v+'%"></div></div></div>').join('');
 document.getElementById('rimp').textContent=r.firstImpression||'"Thoughtful and genuine. Listens before speaking. Depth shared selectively."';
