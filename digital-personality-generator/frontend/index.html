@@ -2073,6 +2073,39 @@ body.light-mode .gb{background:rgba(234,88,12,0.1) !important;}
 body.light-mode .et{color:#7C2D00 !important;}
 
 
+/* ── Movie Trailer Section ── */
+.trl{
+  background:linear-gradient(135deg,rgba(139,92,246,0.12),rgba(6,182,212,0.06));
+  border-radius:20px;padding:2.5rem 2rem;text-align:center;
+  border:1px solid rgba(139,92,246,0.25);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,0.08),0 4px 24px rgba(139,92,246,0.1);
+  position:relative;overflow:hidden;
+}
+.trl::before{
+  content:'';position:absolute;top:-60px;left:50%;transform:translateX(-50%);
+  width:300px;height:200px;
+  background:radial-gradient(ellipse,rgba(139,92,246,0.15),transparent 70%);
+  pointer-events:none;
+}
+.trlt{
+  font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:900;
+  background:linear-gradient(135deg,#EEEAF8,#A78BFA,#67E8F9);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  margin-bottom:8px;letter-spacing:-0.02em;
+}
+.trlg{
+  font-size:0.78rem;font-weight:700;color:var(--pu2);
+  text-transform:uppercase;letter-spacing:0.15em;
+  margin-bottom:16px;
+  background:rgba(139,92,246,0.1);border:1px solid rgba(139,92,246,0.2);
+  display:inline-block;padding:4px 14px;border-radius:20px;
+}
+.trln{
+  font-size:0.95rem;color:var(--tx2);line-height:1.8;
+  max-width:500px;margin:0 auto;font-style:italic;
+}
+
+
 /* ===== MOBILE FIXES ===== */
 @media(max-width:768px){
   /* Share card buttons */
@@ -4363,7 +4396,7 @@ document.getElementById('rbrnd').innerHTML='<div class="bi"><div class="bl">Bran
 const ev=r.evolution||{present:'A thoughtful observer navigating self-discovery',future:'A confident leader inspiring through authenticity',path:'Build visibility. Share thinking. Embrace discomfort as data.'};
 document.getElementById('revo').innerHTML='<div class="ei"><div class="el" style="color:var(--cy)">Present</div><div class="et">'+ev.present+'</div></div><div class="ea">to</div><div class="ei"><div class="el" style="color:var(--gn)">Future</div><div class="et">'+ev.future+'</div></div><div class="ea">to</div><div class="ei"><div class="el" style="color:var(--pu2)">Path</div><div class="et">'+ev.path+'</div></div>';
 const trl=r.lifeTrailer||{title:'The Architect of Quiet Storms',genre:'Psychological Drama',narrative:'In a world that rewards noise, one person dares to be still. The most powerful revolutions begin within.'};
-document.getElementById('rtrl').innerHTML='<div class="trlt">'+trl.title+'</div><div class="trlg">'+trl.genre+'</div><div class="trln">'+trl.narrative+'</div>';
+document.getElementById('rtrl').innerHTML='<div class="trlt">🎬 '+trl.title+'</div><div class="trlg">🎭 '+trl.genre+'</div><div class="trln">'+trl.narrative+'</div>';
 PCTX=r;var dom=r.dominantTrait||'openness';applyPersonalityTheme(dom);
 // Render spirit animal
 if(r.scores) renderAnimal(r.scores);
