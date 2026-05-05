@@ -1214,7 +1214,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:68px;display:flex;ali
 .bg2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
 .tg{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
 .li{display:flex;flex-direction:column;gap:10px;}
-.ig{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:1rem;}
+.ig{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:1.2rem;}
 .bi{
   background:rgba(255,255,255,0.04);
   border:1px solid rgba(255,255,255,0.07);
@@ -2033,15 +2033,15 @@ body.light-mode #main-footer{
 
 
 /* ── Trait Breakdown Bars ── */
-.tr{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
-.tn{font-size:0.82rem;color:var(--tx2);font-weight:600;min-width:120px;flex-shrink:0;}
-.tt{flex:1;height:6px;background:rgba(255,255,255,0.08);border-radius:10px;overflow:hidden;}
-.tf2{height:100%;width:0%;border-radius:10px;transition:width 1s cubic-bezier(0.4,0,0.2,1);}
-.tp2{font-size:0.78rem;color:var(--tx2);font-weight:700;min-width:36px;text-align:right;}
+.tr{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+.tn{font-size:0.85rem;color:var(--tx);font-weight:600;min-width:130px;flex-shrink:0;}
+.tt{flex:1;height:8px;background:rgba(255,255,255,0.1);border-radius:10px;overflow:hidden;box-shadow:inset 0 1px 3px rgba(0,0,0,0.3);}
+.tf2{height:100%;width:0%;border-radius:10px;transition:width 1.2s cubic-bezier(0.4,0,0.2,1);box-shadow:0 0 8px currentColor;}
+.tp2{font-size:0.8rem;color:var(--tx);font-weight:700;min-width:40px;text-align:right;}
 /* Insight grid */
-.ig > div{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:0.8rem;text-align:center;}
-.ig .il{font-size:1.2rem;font-weight:800;color:var(--pu2);}
-.ig .is{font-size:0.7rem;color:var(--tx3);text-transform:uppercase;letter-spacing:0.08em;margin-top:2px;}
+.ig > div{background:linear-gradient(135deg,rgba(139,92,246,0.1),rgba(6,182,212,0.05));border:1px solid rgba(139,92,246,0.2);border-radius:14px;padding:1rem;text-align:center;}
+.ig .il{font-size:1.3rem;font-weight:900;background:linear-gradient(135deg,#8B5CF6,#06B6D4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.ig .is{font-size:0.68rem;color:var(--tx2);text-transform:uppercase;letter-spacing:0.1em;margin-top:4px;font-weight:600;}
 /* Trait bar light mode */
 body.light-mode .tn{color:#7C2D00 !important;}
 body.light-mode .tp2{color:#7C2D00 !important;}
