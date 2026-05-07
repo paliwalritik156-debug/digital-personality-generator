@@ -1773,6 +1773,11 @@ body.light-mode #animal-traits > *{background:rgba(234,88,12,0.08) !important;bo
 /* Celebrity/movie grid */
 body.light-mode #celeb-grid > *,
 body.light-mode #movie-grid > *{background:rgba(234,88,12,0.06) !important;border-color:rgba(234,88,12,0.15) !important;}
+body.light-mode #movie-grid span[style*="color:#8B5CF6"],
+body.light-mode #movie-grid span[style*="color:#EC4899"],
+body.light-mode #celeb-grid span[style*="color:#8B5CF6"],
+body.light-mode #celeb-grid span[style*="color:#EC4899"]{color:#EA580C !important;-webkit-text-fill-color:#EA580C !important;}
+body.light-mode #btn-share-char{background:linear-gradient(135deg,#EA580C,#C2410C) !important;}
 /* Roast text */
 body.light-mode #roast-text{background:rgba(234,88,12,0.05) !important;border-color:rgba(234,88,12,0.15) !important;color:#7C2D00 !important;}
 /* Color codes */
@@ -3431,7 +3436,7 @@ body.light-mode .hhdr h2{background:linear-gradient(135deg,#1A0800,#C2410C) !imp
       <div class="cl">🎬 What Movie Character Are You?</div>
       <div id="movie-result" style="padding:1rem 0;">
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;" id="movie-grid"></div>
-        <button onclick="shareMovieMatch()" style="margin-top:16px;padding:10px 22px;background:linear-gradient(135deg,#EC4899,#8B5CF6);border:none;border-radius:12px;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:0.85rem;font-weight:600;cursor:pointer;display:block;margin-left:auto;margin-right:auto;">🎬 Share My Character</button>
+        <button id="btn-share-char" onclick="shareMovieMatch()" style="margin-top:16px;padding:10px 22px;background:linear-gradient(135deg,#EC4899,#8B5CF6);border:none;border-radius:12px;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:0.85rem;font-weight:600;cursor:pointer;display:block;margin-left:auto;margin-right:auto;">🎬 Share My Character</button>
       </div>
     </div>
 
