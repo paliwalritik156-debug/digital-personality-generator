@@ -5,6 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#050508">
 <meta name="description" content="PersonaIQ — AI-powered Big Five OCEAN personality assessment. Discover your digital self.">
+<meta property="og:title" content="PersonaIQ — AI Personality Intelligence">
+<meta property="og:description" content="The world's most advanced AI personality engine. 25 deep questions. 12+ cinematic insights.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://digital-personality-generator.onrender.com">
+<meta property="og:image" content="https://digital-personality-generator.onrender.com/icons/icon-512.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="PersonaIQ — Discover Your Digital Soul">
+<meta name="twitter:description" content="AI-powered personality assessment. Free forever.">
+<link rel="canonical" href="https://digital-personality-generator.onrender.com">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -287,280 +296,7 @@ function resetTheme(){
 }
 
 </script>
-<script src="/js/chart.min.js">
-var CHAT_MSGS = [];
-var PCTX = null;
-function openChat(){
-  if(!TK){showPage('pa','login');return;}
-  showPage('page-chat');
-  if(CHAT_MSGS.length===0){addCMsg('ai','Hi! I am your AI Personality Twin. I have analyzed your unique personality using the OCEAN model. What would you like to explore about yourself?');}
-}
-function addCMsg(role,text){
-  var el=document.getElementById('chat-msgs');
-  var d=document.createElement('div');
-  d.className='cmsg '+role;
-  d.innerHTML='<div class="cmsg-av">'+(role==='ai'?'🧠':'👤')+'</div><div class="cmsg-bbl">'+text+'</div>';
-  el.appendChild(d);el.scrollTop=el.scrollHeight;
-  CHAT_MSGS.push({role:role,text:text});
-}
-function showTyping(){
-  var el=document.getElementById('chat-msgs');
-  var d=document.createElement('div');
-  d.className='cmsg ai';d.id='tping';
-  d.innerHTML='<div class="cmsg-av">🧠</div><div class="cmsg-bbl"><div class="tdots"><div class="tdot"></div><div class="tdot"></div><div class="tdot"></div></div></div>';
-  el.appendChild(d);el.scrollTop=el.scrollHeight;
-}
-function hideTyping(){var t=document.getElementById('tping');if(t)t.remove();}
-function getPCtx(){
-  if(!PCTX)return'User has completed a Big Five OCEAN personality assessment.';
-  var scores=TR.map(function(t){return TL[t]+': '+gs(PCTX.scores,t)+'%';}).join(', ');
-  return'Personality scores: '+scores+'. Summary: '+(PCTX.summary||'')+'Type: '+(PCTX.personalityType||'Balanced');
-}
-function getLocalR(msg){
-  var rs=['Based on your personality profile, you have a natural gift for deep thinking and empathy. Use this to build meaningful connections.','Your scores suggest you thrive when given autonomy and time to reflect before acting. Structure and spontaneity can coexist for you.','Your personality reveals someone driven by values and authenticity. This is a rare and powerful combination in todays world.','You tend to process emotions deeply, which makes you highly intuitive. Trust your instincts more often.','Your profile shows strong potential for leadership through quiet influence rather than loud authority.'];
-  return rs[Math.floor(Math.random()*rs.length)];
-}
-async function sendChat(){
-  var inp=document.getElementById('chat-inp');
-  var msg=inp.value.trim();
-  if(!msg)return;
-  inp.value='';
-  addCMsg('user',msg);
-  showTyping();
-  setTimeout(function(){
-    hideTyping();
-    addCMsg('ai',getLocalR(msg));
-  },1200+Math.random()*800);
-}
-function chatSug(el){document.getElementById('chat-inp').value=el.textContent;sendChat();}
 
-
-var AV_RENDERER = null, AV_SCENE = null, AV_CAMERA = null, AV_SPHERE = null, AV_FRAME = null;
-
-function initAvatar(dominantTrait){
-  var canvas = document.getElementById('avatar-canvas');
-  if(!canvas || !window.THREE) return;
-  if(AV_RENDERER){AV_RENDERER.dispose();cancelAnimationFrame(AV_FRAME);}
-
-  var traitColors2 = {
-    openness: {main:0x8B5CF6, glow:0xA78BFA},
-    conscientiousness: {main:0x06B6D4, glow:0x67E8F9},
-    extraversion: {main:0xEC4899, glow:0xF9A8D4},
-    agreeableness: {main:0x10B981, glow:0x6EE7B7},
-    neuroticism: {main:0xF59E0B, glow:0xFCD34D}
-  };
-  var colors = traitColors2[dominantTrait] || traitColors2.openness;
-
-  AV_RENDERER = new THREE.WebGLRenderer({canvas:canvas, alpha:true, antialias:true});
-  AV_RENDERER.setSize(200, 200);
-  AV_RENDERER.setPixelRatio(Math.min(devicePixelRatio, 2));
-
-  AV_SCENE = new THREE.Scene();
-  AV_CAMERA = new THREE.PerspectiveCamera(50, 1, 0.1, 100);
-  AV_CAMERA.position.z = 3;
-
-  // Main sphere
-  var geo = new THREE.SphereGeometry(0.9, 64, 64);
-  var mat = new THREE.MeshPhongMaterial({
-    color: colors.main,
-    emissive: colors.main,
-    emissiveIntensity: 0.3,
-    shininess: 100,
-    transparent: true,
-    opacity: 0.9
-  });
-  AV_SPHERE = new THREE.Mesh(geo, mat);
-  AV_SCENE.add(AV_SPHERE);
-
-  // Inner glow sphere
-  var igeo = new THREE.SphereGeometry(0.85, 32, 32);
-  var imat = new THREE.MeshBasicMaterial({
-    color: colors.glow,
-    transparent: true,
-    opacity: 0.15,
-    side: THREE.BackSide
-  });
-  var inner = new THREE.Mesh(igeo, imat);
-  AV_SCENE.add(inner);
-
-  // Outer glow sphere
-  var ogeo = new THREE.SphereGeometry(1.1, 32, 32);
-  var omat = new THREE.MeshBasicMaterial({
-    color: colors.main,
-    transparent: true,
-    opacity: 0.05,
-    side: THREE.BackSide
-  });
-  var outer = new THREE.Mesh(ogeo, omat);
-  AV_SCENE.add(outer);
-
-  // Particles around sphere
-  var pGeo = new THREE.BufferGeometry();
-  var pCount = 200;
-  var pPos = new Float32Array(pCount * 3);
-  for(var i = 0; i < pCount; i++){
-    var theta = Math.random() * Math.PI * 2;
-    var phi = Math.acos(2 * Math.random() - 1);
-    var r = 1.2 + Math.random() * 0.5;
-    pPos[i*3] = r * Math.sin(phi) * Math.cos(theta);
-    pPos[i*3+1] = r * Math.sin(phi) * Math.sin(theta);
-    pPos[i*3+2] = r * Math.cos(phi);
-  }
-  pGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
-  var pMat = new THREE.PointsMaterial({color: colors.glow, size: 0.02, transparent: true, opacity: 0.8});
-  var particles = new THREE.Points(pGeo, pMat);
-  AV_SCENE.add(particles);
-
-  // Lights
-  var ambLight = new THREE.AmbientLight(0xffffff, 0.4);
-  AV_SCENE.add(ambLight);
-  var pointLight1 = new THREE.PointLight(colors.main, 2, 10);
-  pointLight1.position.set(2, 2, 2);
-  AV_SCENE.add(pointLight1);
-  var pointLight2 = new THREE.PointLight(colors.glow, 1.5, 10);
-  pointLight2.position.set(-2, -1, 1);
-  AV_SCENE.add(pointLight2);
-
-  // Mouse interaction
-  var mx = 0, my = 0;
-  canvas.addEventListener('mousemove', function(e){
-    var rect = canvas.getBoundingClientRect();
-    mx = ((e.clientX - rect.left) / 200 - 0.5) * 2;
-    my = -((e.clientY - rect.top) / 200 - 0.5) * 2;
-  });
-
-  var t = 0;
-  function animate(){
-    AV_FRAME = requestAnimationFrame(animate);
-    t += 0.01;
-    AV_SPHERE.rotation.y += 0.005;
-    AV_SPHERE.rotation.x += 0.002;
-    AV_SPHERE.position.x += (mx * 0.1 - AV_SPHERE.position.x) * 0.05;
-    AV_SPHERE.position.y += (my * 0.1 - AV_SPHERE.position.y) * 0.05;
-    particles.rotation.y -= 0.003;
-    pointLight1.intensity = 2 + Math.sin(t * 2) * 0.5;
-    AV_RENDERER.render(AV_SCENE, AV_CAMERA);
-  }
-  animate();
-}
-
-function updateAvatar(r, badge){
-  var dom = r.dominantTrait || 'openness';
-  var traitEmojis = {openness:'🎨',conscientiousness:'📋',extraversion:'🌟',agreeableness:'💚',neuroticism:'🌊'};
-  var tc = {openness:'#8B5CF6',conscientiousness:'#06B6D4',extraversion:'#EC4899',agreeableness:'#10B981',neuroticism:'#F59E0B'};
-
-  var avName = document.getElementById('av-name');
-  var avType = document.getElementById('av-type');
-  var avOrbs = document.getElementById('av-orbs');
-
-  if(avName) avName.textContent = (US ? US.name : 'Your') + ' Twin';
-  if(avType) avType.textContent = badge;
-  if(avOrbs) avOrbs.innerHTML = TR.map(function(t,i){
-    return '<div class="avatar-orb" style="background:'+tc[t]+';animation-delay:'+(i*0.1)+'s" title="'+TL[t]+': '+gs(r.scores,t)+'%"></div>';
-  }).join('');
-
-  setTimeout(function(){ initAvatar(dom); }, 200);
-}
-
-
-function animateCounter(el, target, duration){
-  var start = 0;
-  var step = target / (duration / 16);
-  var timer = setInterval(function(){
-    start += step;
-    if(start >= target){start = target;clearInterval(timer);}
-    el.textContent = Math.round(start) + '%';
-  }, 16);
-}
-
-function animateTraitBars(){
-  setTimeout(function(){
-    TR.forEach(function(t){
-      var el = document.getElementById('tf-'+t);
-      if(el){
-        var w = el.getAttribute('data-w');
-        el.style.width = w + '%';
-      }
-      var pct = document.querySelector('.tpct[data-trait="'+t+'"]');
-      if(pct){
-        animateCounter(pct, parseInt(pct.getAttribute('data-val')), 1200);
-      }
-    });
-  }, 300);
-}
-
-function animateIntelScores(){
-  setTimeout(function(){
-    document.querySelectorAll('.iv[data-val]').forEach(function(el){
-      var target = parseInt(el.getAttribute('data-val'));
-      var start = 0;
-      var timer = setInterval(function(){
-        start += 0.2;
-        if(start >= target){start = target;clearInterval(timer);}
-        el.textContent = Math.round(start*10)/10 + '/10';
-      }, 30);
-    });
-  }, 500);
-}
-
-
-var TRAIT_THEMES = {
-  openness: {
-    pu:'#8B5CF6', cy:'#A78BFA', gr:'linear-gradient(135deg,#8B5CF6,#A78BFA)',
-    glow:'rgba(139,92,246,0.4)', bg:'rgba(139,92,246,0.08)'
-  },
-  conscientiousness: {
-    pu:'#06B6D4', cy:'#67E8F9', gr:'linear-gradient(135deg,#06B6D4,#0EA5E9)',
-    glow:'rgba(6,182,212,0.4)', bg:'rgba(6,182,212,0.08)'
-  },
-  extraversion: {
-    pu:'#EC4899', cy:'#F9A8D4', gr:'linear-gradient(135deg,#EC4899,#F472B6)',
-    glow:'rgba(236,72,153,0.4)', bg:'rgba(236,72,153,0.08)'
-  },
-  agreeableness: {
-    pu:'#10B981', cy:'#6EE7B7', gr:'linear-gradient(135deg,#10B981,#34D399)',
-    glow:'rgba(16,185,129,0.4)', bg:'rgba(16,185,129,0.08)'
-  },
-  neuroticism: {
-    pu:'#F59E0B', cy:'#FCD34D', gr:'linear-gradient(135deg,#F59E0B,#FBBF24)',
-    glow:'rgba(245,158,11,0.4)', bg:'rgba(245,158,11,0.08)'
-  }
-};
-
-function applyPersonalityTheme(trait){
-  var theme = TRAIT_THEMES[trait] || TRAIT_THEMES.openness;
-  var root = document.documentElement;
-  root.style.setProperty('--pu', theme.pu);
-  root.style.setProperty('--pu2', theme.cy);
-  root.style.setProperty('--cy', theme.cy);
-  root.style.setProperty('--gr', theme.gr);
-  root.style.setProperty('--gp', '0 0 40px ' + theme.glow);
-  root.style.setProperty('--bdr2', theme.glow);
-
-  // Show toast with theme change
-  var names = {
-    openness:'🎨 Creative Purple Theme',
-    conscientiousness:'💎 Intelligence Cyan Theme',
-    extraversion:'🌟 Energy Pink Theme',
-    agreeableness:'🌿 Harmony Green Theme',
-    neuroticism:'⚡ Depth Gold Theme'
-  };
-  setTimeout(function(){
-    toast('Theme: ' + (names[trait]||'Custom Theme') + ' applied!');
-  }, 500);
-}
-
-function resetTheme(){
-  var root = document.documentElement;
-  root.style.setProperty('--pu', '#8B5CF6');
-  root.style.setProperty('--pu2', '#A78BFA');
-  root.style.setProperty('--cy', '#06B6D4');
-  root.style.setProperty('--gr', 'linear-gradient(135deg,#8B5CF6,#06B6D4)');
-  root.style.setProperty('--gp', '0 0 40px rgba(139,92,246,0.3)');
-  root.style.setProperty('--bdr2', 'rgba(139,92,246,0.4)');
-}
-
-</script>
 <style>
 /* ===== INITIAL PAGE LOADER ===== */
 #init-loader{
@@ -746,7 +482,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:68px;display:flex;ali
 .sci{font-size:1.5rem;margin-bottom:0.8rem}
 .scv{font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;background:var(--gr);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .scl{font-size:0.74rem;color:var(--tx3);margin-top:0.2rem;text-transform:uppercase;letter-spacing:0.08em}
-.sh{font-size:0.68rem;font-weight:700;color:rgba(139,92,246,0.6);text-transform:uppercase;letter-spacing:0.14em;margin-bottom:1rem;display:flex;align-items:center;gap:10px}
 .sh::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,rgba(139,92,246,0.2),transparent)}
 #pq{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:5.5rem 2rem 3rem}
 .qs{width:100%;max-width:600px}
@@ -772,7 +507,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:68px;display:flex;ali
 .rb.sel{border-color:var(--pu);color:#fff;box-shadow:0 0 25px rgba(139,92,246,0.4);transform:scale(1.1)}.rb.sel::before{opacity:1}
 .sl{display:flex;justify-content:space-between;margin-top:10px;font-size:0.68rem;color:var(--tx3)}
 .kh{text-align:center;margin-top:1rem;font-size:0.7rem;color:var(--tx3)}
-.kk{background:var(--glass);border:1px solid var(--bdr);border-radius:5px;padding:1px 7px;font-size:0.65rem;color:var(--tx2);margin:0 2px}
 .qnav{display:flex;gap:10px;margin-top:1.5rem}
 .bbk{background:var(--glass);color:var(--tx);border:1px solid var(--bdr);padding:12px 22px;border-radius:30px;font-family:'Space Grotesk',sans-serif;font-size:0.88rem;cursor:pointer;transition:var(--tr)}
 .bbk:hover{border-color:var(--bdr2)}
@@ -930,11 +664,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:68px;display:flex;ali
 .dash-section > p{color:rgba(167,139,250,0.6);font-size:0.92rem;margin-bottom:2.5rem;}
 
 /* ── STAT CARDS ── */
-.overview-stats{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:1.2rem;margin-bottom:3rem;
-}
 .ov-stat{
   background:linear-gradient(135deg,
     rgba(139,92,246,0.08) 0%,
@@ -1101,17 +830,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:68px;display:flex;ali
   background-size:200%;animation:ga 6s ease infinite;
   filter:drop-shadow(0 0 40px rgba(139,92,246,0.35));
 }
-.reb{
-  display:inline-flex;align-items:center;gap:8px;
-  font-size:0.7rem;font-weight:700;
-  color:#A78BFA;text-transform:uppercase;letter-spacing:0.18em;
-  margin-bottom:1.5rem;
-  background:linear-gradient(135deg,rgba(139,92,246,0.15),rgba(6,182,212,0.08));
-  border:1px solid rgba(139,92,246,0.35);
-  padding:8px 22px;border-radius:50px;
-  box-shadow:0 0 30px rgba(139,92,246,0.2),inset 0 1px 0 rgba(255,255,255,0.1);
-  backdrop-filter:blur(20px);
-}
 .rdt{color:rgba(167,139,250,0.5);font-size:0.85rem;margin-bottom:1.5rem;letter-spacing:0.05em;}
 .pb{
   display:inline-flex;align-items:center;gap:12px;
@@ -1204,15 +922,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:68px;display:flex;ali
   animation:rot 10s linear infinite;
 }
 .shi{position:relative;z-index:1;}
-.trl{
-  background:linear-gradient(135deg,rgba(139,92,246,0.1),rgba(6,182,212,0.06));
-  border-radius:22px;padding:2rem;text-align:center;
-  border:1px solid rgba(139,92,246,0.2);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,0.06);
-}
 .er{display:flex;gap:1rem;align-items:flex-start;}
 .bg2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-.tg{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
 .li{display:flex;flex-direction:column;gap:10px;}
 .ig{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:1.2rem;}
 .bi{
@@ -2386,7 +2097,7 @@ body.light-mode #btn-update-pw{background:linear-gradient(135deg,#EA580C,#C2410C
 <nav>
   <div class="logo" onclick="goHome()"><div class="logo-i">🧠</div>PersonaIQ</div>
   <div style="display:flex;align-items:center;gap:8px;">
-    <button id="theme-toggle" onclick="toggleDarkLight()" title="Toggle Dark/Light Mode" style="background:var(--glass);border:1px solid var(--bdr);color:var(--tx);width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:0.3s;flex-shrink:0;">🌙</button>
+    <button id="theme-toggle" onclick="toggleDarkLight()" title="Toggle Dark/Light Mode" aria-label="Toggle theme" style="background:var(--glass);border:1px solid var(--bdr);color:var(--tx);width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:0.3s;flex-shrink:0;">🌙</button>
     <div class="nav-r" id="nav-area"></div>
   </div>
   <div class="mob-nav" onclick="toggleMobMenu()" id="mob-hamburger">
@@ -3040,7 +2751,7 @@ body.light-mode #btn-update-pw{background:linear-gradient(135deg,#EA580C,#C2410C
       <div class="am" id="am"></div>
       <div id="lf">
         <div class="fi"><label>Email</label><input type="email" id="le" placeholder="you@example.com"></div>
-        <div class="fi"><label>Password</label><input type="password" id="lp" placeholder="password" onkeydown="if(event.key==='Enter')doLogin()"></div>
+        <div class="fi"><label>Password</label><input type="password" id="lp" placeholder="password" required autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"></div>
         <button class="bsub" onclick="doLogin()">Sign In</button>
         <div style="text-align:right;margin-top:10px;margin-bottom:4px;"><a onclick="showForgotPassword()" style="font-size:0.78rem;color:var(--pu2);cursor:pointer;">Forgot password?</a></div>
         <div style="display:flex;align-items:center;gap:12px;margin:16px 0;">
@@ -4386,7 +4097,7 @@ if(!US)return;
       US.longestStreak=d.user.longestStreak||0;
     }
   }).catch(function(){});
-  try{const d=await api('/api/history');if(d.success){const h=d.results||d.data||[];document.getElementById('dt').textContent=h.length;var hb=document.getElementById('hist-badge');if(hb)hb.textContent=h.length;if(h.length>0){const l=h[0];var _ddMap={openness:'Open',conscientiousness:'Conscient.',extraversion:'Extravert',agreeableness:'Agreeable',neuroticism:'Neurotic'};var _rawTrait=(l.dominantTrait||'').toLowerCase();var _ddTrait=_ddMap[_rawTrait]||TL[_rawTrait]||l.dominantTrait||(l.personalityType?l.personalityType.split(' ').pop():'—');document.getElementById('dd').textContent=_ddTrait;document.getElementById('dl').textContent=l.completedAt?new Date(l.completedAt).toLocaleDateString('en',{month:'short',day:'numeric'}):l.lastTest?new Date(l.lastTest).toLocaleDateString('en',{month:'short',day:'numeric'}):'—';document.getElementById('dhl').innerHTML=h.slice(0,3).map(r=>hCard(r)).join('');}}}catch(e){console.error(e);}}
+  try{const d=await api('/api/history');if(d.success){const h=d.results||d.data||[];document.getElementById('dt').textContent=h.length;var hb=document.getElementById('hist-badge');if(hb)hb.textContent=h.length;if(h.length>0){const l=h[0];var _ddMap={openness:'Open',conscientiousness:'Conscient.',extraversion:'Extravert',agreeableness:'Agreeable',neuroticism:'Neurotic'};var _rawTrait=(l.dominantTrait||'').toLowerCase();var _ddTrait=_ddMap[_rawTrait]||TL[_rawTrait]||l.dominantTrait||(l.personalityType?l.personalityType.split(' ').pop():'—');document.getElementById('dd').textContent=_ddTrait;document.getElementById('dl').textContent=l.completedAt?new Date(l.completedAt).toLocaleDateString('en',{month:'short',day:'numeric'}):l.lastTest?new Date(l.lastTest).toLocaleDateString('en',{month:'short',day:'numeric'}):'—';document.getElementById('dhl').innerHTML=h.slice(0,3).map(r=>hCard(r)).join('');}}}catch(e){// error logged}}
 function handleStart(){if(!TK){showPage('pa','reg');return;}loadQuiz();}
 async function loadQuiz(){
   showPage('pl');animL();
