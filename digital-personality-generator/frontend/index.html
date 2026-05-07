@@ -2228,6 +2228,7 @@ body.light-mode #insights-content .ov-icon{-webkit-text-fill-color:initial !impo
 body.light-mode #insights-content .ov-val{background:linear-gradient(135deg,#EA580C,#C2410C) !important;-webkit-background-clip:text !important;-webkit-text-fill-color:transparent !important;}
 body.light-mode #insights-content .ov-lbl{color:#7C2D00 !important;}
 
+body.light-mode #btn-update-pw{background:linear-gradient(135deg,#EA580C,#C2410C) !important;box-shadow:0 4px 20px rgba(234,88,12,0.3) !important;}
 /* ===== MOBILE FIXES ===== */
 @media(max-width:768px){
   /* Share card buttons */
@@ -3288,7 +3289,7 @@ body.light-mode #insights-content .ov-lbl{color:#7C2D00 !important;}
             <input type="password" id="pw-current" placeholder="Current password" style="padding:12px 16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;color:var(--tx);font-family:'Space Grotesk',sans-serif;font-size:0.88rem;outline:none;transition:all 0.3s;" onfocus="this.style.borderColor='rgba(139,92,246,0.4)';this.style.boxShadow='0 0 0 3px rgba(139,92,246,0.1)'" onblur="this.style.borderColor='rgba(255,255,255,0.08)';this.style.boxShadow='none'"/>
             <input type="password" id="pw-new" placeholder="New password (min 6 chars)" style="padding:12px 16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;color:var(--tx);font-family:'Space Grotesk',sans-serif;font-size:0.88rem;outline:none;transition:all 0.3s;" onfocus="this.style.borderColor='rgba(139,92,246,0.4)';this.style.boxShadow='0 0 0 3px rgba(139,92,246,0.1)'" onblur="this.style.borderColor='rgba(255,255,255,0.08)';this.style.boxShadow='none'"/>
             <input type="password" id="pw-confirm" placeholder="Confirm new password" style="padding:12px 16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;color:var(--tx);font-family:'Space Grotesk',sans-serif;font-size:0.88rem;outline:none;transition:all 0.3s;" onfocus="this.style.borderColor='rgba(139,92,246,0.4)';this.style.boxShadow='0 0 0 3px rgba(139,92,246,0.1)'" onblur="this.style.borderColor='rgba(255,255,255,0.08)';this.style.boxShadow='none'"/>
-            <button onclick="changePassword()" style="padding:13px;background:linear-gradient(135deg,#8B5CF6,#06B6D4);border:none;border-radius:12px;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:0.9rem;font-weight:600;cursor:pointer;transition:all 0.3s;box-shadow:0 4px 20px rgba(139,92,246,0.3);" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 30px rgba(139,92,246,0.5)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 4px 20px rgba(139,92,246,0.3)'">Update Password</button>
+            <button id="btn-update-pw" onclick="changePassword()" style="padding:13px;background:linear-gradient(135deg,#8B5CF6,#06B6D4);border:none;border-radius:12px;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:0.9rem;font-weight:600;cursor:pointer;transition:all 0.3s;box-shadow:0 4px 20px rgba(139,92,246,0.3);" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">Update Password</button>
           </div>
         </div>
         <div style="display:flex;gap:12px;margin-top:1.2rem;flex-wrap:wrap;">
