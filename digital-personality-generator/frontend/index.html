@@ -1940,6 +1940,15 @@ body.light-mode #insights-content .ov-val{background:linear-gradient(135deg,#EA5
 body.light-mode #insights-content .ov-lbl{color:#7C2D00 !important;}
 
 body.light-mode #btn-update-pw{background:linear-gradient(135deg,#EA580C,#C2410C) !important;box-shadow:0 4px 20px rgba(234,88,12,0.3) !important;}
+/* ── History card inner layout ── */
+.hil{flex:1;}
+.hil h4{font-family:'Syne',sans-serif;font-weight:700;color:var(--tx);font-size:0.95rem;margin-bottom:4px;}
+.hil p{font-size:0.78rem;color:var(--tx3);margin-bottom:8px;}
+.hips{display:flex;gap:6px;flex-wrap:wrap;}
+.hia{color:var(--pu2);font-size:0.8rem;font-weight:600;margin-left:auto;align-self:center;flex-shrink:0;}
+.hi{display:flex;align-items:flex-start;gap:12px;background:linear-gradient(135deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02));border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:1.4rem;transition:all 0.3s;backdrop-filter:blur(20px);box-shadow:0 4px 16px rgba(0,0,0,0.3);margin-bottom:12px;cursor:pointer;}
+.hi:hover{border-color:rgba(139,92,246,0.35);transform:translateY(-3px);box-shadow:0 16px 40px rgba(139,92,246,0.15);}
+
 /* ===== MOBILE FIXES ===== */
 @media(max-width:768px){
   /* Share card buttons */
@@ -2093,9 +2102,10 @@ body.light-mode #btn-update-pw{background:linear-gradient(135deg,#EA580C,#C2410C
   </div>
 </div>
 
+<a href="#main-content" class="skip-link" style="position:absolute;top:-40px;left:0;background:#8B5CF6;color:#fff;padding:8px 16px;border-radius:0 0 8px 0;z-index:99999;transition:top 0.3s;" onfocus="this.style.top='0'" onblur="this.style.top='-40px'">Skip to content</a>
 <div id="cur"></div><div id="cur-ring"></div>
 <nav>
-  <div class="logo" onclick="goHome()"><div class="logo-i">🧠</div>PersonaIQ</div>
+  <div class="logo" onclick="goHome()" aria-label="PersonaIQ home" role="button"><div class="logo-i">🧠</div>PersonaIQ</div>
   <div style="display:flex;align-items:center;gap:8px;">
     <button id="theme-toggle" onclick="toggleDarkLight()" title="Toggle Dark/Light Mode" aria-label="Toggle theme" style="background:var(--glass);border:1px solid var(--bdr);color:var(--tx);width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:0.3s;flex-shrink:0;">🌙</button>
     <div class="nav-r" id="nav-area"></div>
@@ -2112,6 +2122,7 @@ body.light-mode #btn-update-pw{background:linear-gradient(135deg,#EA580C,#C2410C
   <div class="mob-item" id="mob-logout-btn" onclick="doLogout();closeMobMenu()" style="display:none">🚪 Logout</div>
 </div>
 <div class="toast" id="toast"></div>
+<div id="main-content"></div>
 <div id="page-home" class="page hidden" style="position:relative;overflow:hidden;">
 
   <!-- ══════════════════════════════════════════════════════════
@@ -2152,13 +2163,13 @@ body.light-mode #btn-update-pw{background:linear-gradient(135deg,#EA580C,#C2410C
 
     <!-- CTA BUTTONS -->
     <div style="display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin-bottom:4rem;animation:fadeSlideUp 0.9s ease 0.3s both;">
-      <button id="hero-cta-btn" onclick="handleStart()" style="position:relative;padding:18px 44px;background:linear-gradient(135deg,#8B5CF6,#06B6D4);border:none;border-radius:50px;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:1.05rem;font-weight:700;cursor:pointer;transition:all 0.3s;overflow:hidden;letter-spacing:-0.01em;box-shadow:0 0 0 1px rgba(139,92,246,0.5),0 8px 40px rgba(139,92,246,0.5),0 0 80px rgba(139,92,246,0.2);" onmouseover="this.style.transform='translateY(-3px) scale(1.04)'" onmouseout="this.style.transform='translateY(0) scale(1)'">
+      <button id="hero-cta-btn" onclick="handleStart()" aria-label="Start personality assessment" style="position:relative;padding:18px 44px;background:linear-gradient(135deg,#8B5CF6,#06B6D4);border:none;border-radius:50px;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:1.05rem;font-weight:700;cursor:pointer;transition:all 0.3s;overflow:hidden;letter-spacing:-0.01em;box-shadow:0 0 0 1px rgba(139,92,246,0.5),0 8px 40px rgba(139,92,246,0.5),0 0 80px rgba(139,92,246,0.2);" onmouseover="this.style.transform='translateY(-3px) scale(1.04)'" onmouseout="this.style.transform='translateY(0) scale(1)'">
         <span style="position:relative;z-index:1;display:flex;align-items:center;gap:10px;">
           <span style="font-size:1.1rem;">⚡</span> Start Free Analysis
         </span>
         <div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,0.15),transparent);border-radius:50px;"></div>
       </button>
-      <button id="hero-signin-btn" onclick="showPage('pa','login')" style="padding:18px 36px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.15);border-radius:50px;color:var(--tx);font-family:'Space Grotesk',sans-serif;font-size:1.05rem;cursor:pointer;transition:all 0.3s;backdrop-filter:blur(20px);box-shadow:inset 0 1px 0 rgba(255,255,255,0.08);" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+      <button id="hero-signin-btn" onclick="showPage('pa','login')" aria-label="Sign in to your account" style="padding:18px 36px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.15);border-radius:50px;color:var(--tx);font-family:'Space Grotesk',sans-serif;font-size:1.05rem;cursor:pointer;transition:all 0.3s;backdrop-filter:blur(20px);box-shadow:inset 0 1px 0 rgba(255,255,255,0.08);" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
         Sign In →
       </button>
     </div>
@@ -3292,9 +3303,9 @@ body.light-mode #btn-update-pw{background:linear-gradient(135deg,#EA580C,#C2410C
 <div id="email-modal" style="display:none;position:fixed;inset:0;background:rgba(5,5,8,0.85);z-index:9990;align-items:center;justify-content:center;backdrop-filter:blur(8px);">
   <div style="background:#0D0D18;border:1px solid rgba(139,92,246,0.3);border-radius:24px;padding:36px;width:100%;max-width:420px;margin:24px;box-shadow:0 0 60px rgba(139,92,246,0.2);">
     <h3 style="font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;margin-bottom:8px;letter-spacing:-0.02em;color:#ffffff;">📧 Email Your Report</h3>
-    <p style="color:#8892b0;font-size:0.88rem;margin-bottom:24px;line-height:1.6;">We'll send your full PDF personality report to your email address.</p>
+    <p style="color:var(--tx2);font-size:0.88rem;margin-bottom:24px;line-height:1.6;">We'll send your full PDF personality report to your email address.</p>
     <div style="margin-bottom:18px;">
-      <label style="display:block;font-size:0.72rem;font-weight:600;color:#8892b0;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.1em;">Email Address</label>
+      <label style="display:block;font-size:0.72rem;font-weight:600;color:var(--tx2);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.1em;">Email Address</label>
       <input type="email" id="email-modal-input" placeholder="you@example.com"
         style="width:100%;padding:13px 16px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:14px;color:#ffffff;font-family:'Space Grotesk',sans-serif;font-size:0.93rem;outline:none;transition:0.3s;"
         onfocus="this.style.borderColor='#8B5CF6';this.style.boxShadow='0 0 0 3px rgba(139,92,246,0.2)'"
