@@ -2182,6 +2182,15 @@ body.light-mode .hia{color:#C2410C !important;}
 body.light-mode .hhdr h2{background:linear-gradient(135deg,#1A0800,#C2410C) !important;-webkit-background-clip:text !important;-webkit-text-fill-color:transparent !important;}
 
 
+/* ── Light mode: Compatibility ── */
+body.light-mode #btn-compat-link{background:linear-gradient(135deg,#EA580C,#C2410C) !important;box-shadow:0 4px 16px rgba(234,88,12,0.3) !important;}
+body.light-mode #tab-compatibility .insight-tip h4{color:#C2410C !important;-webkit-text-fill-color:#C2410C !important;}
+body.light-mode #tab-compatibility .insight-tip{background:linear-gradient(135deg,rgba(234,88,12,0.08),rgba(251,146,60,0.04)) !important;border-color:rgba(234,88,12,0.2) !important;}
+body.light-mode #compat-grid > *{background:linear-gradient(135deg,#ffffff,#FFF0E0) !important;border:1px solid rgba(234,88,12,0.2) !important;}
+body.light-mode #compat-grid span[style*="color:#8B5CF6"],
+body.light-mode #compat-grid span[style*="color:#A78BFA"],
+body.light-mode #compat-grid div[style*="color:#8B5CF6"]{color:#EA580C !important;-webkit-text-fill-color:#EA580C !important;}
+
 /* ===== MOBILE FIXES ===== */
 @media(max-width:768px){
   /* Share card buttons */
@@ -3259,7 +3268,7 @@ body.light-mode .hhdr h2{background:linear-gradient(135deg,#1A0800,#C2410C) !imp
           <div class="insight-tip" style="margin-bottom:1.5rem;">
             <h4 style="font-family:'Syne',sans-serif;font-weight:700;margin-bottom:0.5rem;font-size:1rem;">🔗 Share Your Compatibility Link</h4>
             <p style="color:var(--tx2);font-size:0.87rem;line-height:1.7;margin-bottom:12px;">Share this link with a friend — they take the test and you both see your compatibility score!</p>
-            <button onclick="copyCompatLink()" style="padding:10px 22px;background:linear-gradient(135deg,#8B5CF6,#06B6D4);border:none;border-radius:12px;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:0.88rem;font-weight:600;cursor:pointer;box-shadow:0 4px 16px rgba(139,92,246,0.3);">🔗 Copy My Compatibility Link</button>
+            <button id="btn-compat-link" onclick="copyCompatLink()" style="padding:10px 22px;background:linear-gradient(135deg,#8B5CF6,#06B6D4);border:none;border-radius:12px;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:0.88rem;font-weight:600;cursor:pointer;box-shadow:0 4px 16px rgba(139,92,246,0.3);">🔗 Copy My Compatibility Link</button>
           </div>
           <div id="compat-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;"></div>
         </div>
