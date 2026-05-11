@@ -2229,6 +2229,82 @@ body.light-mode #insights-content .ov-val{background:linear-gradient(135deg,#EA5
 body.light-mode #insights-content .ov-lbl{color:#7C2D00 !important;}
 
 body.light-mode #btn-update-pw{background:linear-gradient(135deg,#EA580C,#C2410C) !important;box-shadow:0 4px 20px rgba(234,88,12,0.3) !important;}
+/* ── Streak Fire Animation ── */
+@keyframes fireFlicker{0%,100%{transform:scale(1) rotate(-2deg);filter:hue-rotate(0deg);}25%{transform:scale(1.1) rotate(2deg);filter:hue-rotate(10deg);}50%{transform:scale(0.95) rotate(-1deg);filter:hue-rotate(-5deg);}75%{transform:scale(1.05) rotate(1deg);filter:hue-rotate(5deg);}}
+@keyframes streakPop{0%{transform:scale(0.5);opacity:0;}60%{transform:scale(1.2);}100%{transform:scale(1);opacity:1;}}
+@keyframes horoscopeReveal{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+@keyframes achievementSlide{0%{transform:translateX(120%);opacity:0;}15%{transform:translateX(0);opacity:1;}85%{transform:translateX(0);opacity:1;}100%{transform:translateX(120%);opacity:0;}}
+@keyframes tipFade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+@keyframes resultReveal{0%{opacity:0;transform:scale(0.95) translateY(30px);}100%{opacity:1;transform:scale(1) translateY(0);}}
+
+/* Achievement notification */
+.achievement-notif{
+  position:fixed;bottom:5rem;right:1.5rem;z-index:9997;
+  background:linear-gradient(135deg,rgba(245,158,11,0.95),rgba(234,88,12,0.9));
+  border:1px solid rgba(245,158,11,0.5);
+  border-radius:20px;padding:1rem 1.4rem;
+  display:flex;align-items:center;gap:12px;
+  box-shadow:0 8px 40px rgba(245,158,11,0.4),0 0 0 1px rgba(255,255,255,0.1);
+  animation:achievementSlide 4s ease forwards;
+  max-width:320px;backdrop-filter:blur(20px);
+}
+.achievement-notif-icon{font-size:1.8rem;flex-shrink:0;}
+.achievement-notif-text{flex:1;}
+.achievement-notif-title{font-family:'Syne',sans-serif;font-weight:800;color:#fff;font-size:0.85rem;}
+.achievement-notif-desc{font-size:0.72rem;color:rgba(255,255,255,0.8);margin-top:2px;}
+
+/* Horoscope card */
+.horoscope-card{
+  background:linear-gradient(135deg,rgba(139,92,246,0.12),rgba(236,72,153,0.08));
+  border:1px solid rgba(139,92,246,0.25);
+  border-radius:20px;padding:1.5rem;margin-bottom:1.5rem;
+  position:relative;overflow:hidden;
+  animation:horoscopeReveal 0.6s ease both;
+}
+.horoscope-card::before{
+  content:'';position:absolute;top:-40px;right:-40px;
+  width:120px;height:120px;
+  background:radial-gradient(circle,rgba(139,92,246,0.2),transparent 70%);
+  pointer-events:none;
+}
+.horoscope-sign{font-size:2rem;margin-bottom:8px;}
+.horoscope-title{font-family:'Syne',sans-serif;font-weight:700;font-size:0.9rem;color:var(--pu2);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.1em;}
+.horoscope-text{font-size:0.88rem;color:var(--tx2);line-height:1.7;}
+.horoscope-trait{display:inline-flex;align-items:center;gap:6px;margin-top:10px;font-size:0.72rem;color:var(--tx3);background:rgba(139,92,246,0.08);border:1px solid rgba(139,92,246,0.15);padding:4px 12px;border-radius:20px;}
+
+/* Weekly tip */
+.weekly-tip{
+  background:linear-gradient(135deg,rgba(16,185,129,0.1),rgba(6,182,212,0.06));
+  border:1px solid rgba(16,185,129,0.25);
+  border-radius:18px;padding:1.2rem 1.5rem;margin-bottom:1.2rem;
+  display:flex;align-items:flex-start;gap:12px;
+  animation:tipFade 0.5s ease both;
+}
+.weekly-tip-icon{font-size:1.4rem;flex-shrink:0;margin-top:2px;}
+.weekly-tip-content{}
+.weekly-tip-label{font-size:0.65rem;font-weight:700;color:rgba(16,185,129,0.8);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:4px;}
+.weekly-tip-text{font-size:0.85rem;color:var(--tx2);line-height:1.65;}
+
+/* Streak display */
+.streak-display{
+  display:flex;align-items:center;gap:8px;
+  background:linear-gradient(135deg,rgba(249,115,22,0.12),rgba(245,158,11,0.08));
+  border:1px solid rgba(249,115,22,0.25);
+  border-radius:14px;padding:8px 16px;
+  margin-bottom:1rem;
+}
+.streak-fire{font-size:1.4rem;animation:fireFlicker 1.5s ease-in-out infinite;}
+.streak-count{font-family:'Syne',sans-serif;font-weight:900;font-size:1.2rem;background:linear-gradient(135deg,#F97316,#FBBF24);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.streak-label{font-size:0.72rem;color:var(--tx3);font-weight:600;}
+
+/* Light mode overrides */
+body.light-mode .horoscope-card{background:linear-gradient(135deg,rgba(234,88,12,0.07),rgba(251,146,60,0.04)) !important;border-color:rgba(234,88,12,0.2) !important;}
+body.light-mode .horoscope-title{color:#C2410C !important;}
+body.light-mode .horoscope-text{color:#5C2800 !important;}
+body.light-mode .weekly-tip{background:linear-gradient(135deg,rgba(234,88,12,0.07),rgba(251,146,60,0.04)) !important;border-color:rgba(234,88,12,0.2) !important;}
+body.light-mode .weekly-tip-label{color:#C2410C !important;}
+body.light-mode .streak-display{background:linear-gradient(135deg,rgba(234,88,12,0.1),rgba(251,146,60,0.06)) !important;border-color:rgba(234,88,12,0.25) !important;}
+
 /* ===== MOBILE FIXES ===== */
 @media(max-width:768px){
   /* Share card buttons */
@@ -3922,6 +3998,214 @@ window.scrollTo = function(x, y){
   }
 };
 
+
+// ═══════════════════════════════════════════════════════════════
+// FEATURE: ACHIEVEMENT NOTIFICATION
+// ═══════════════════════════════════════════════════════════════
+function showAchievementNotif(badge){
+  var existing = document.getElementById('achievement-notif');
+  if(existing) existing.remove();
+  
+  var notif = document.createElement('div');
+  notif.id = 'achievement-notif';
+  notif.className = 'achievement-notif';
+  notif.innerHTML = '<div class="achievement-notif-icon">'+badge.emoji+'</div>'
+    +'<div class="achievement-notif-text">'
+    +'<div class="achievement-notif-title">🏅 Achievement Unlocked!</div>'
+    +'<div class="achievement-notif-desc">'+badge.name+' — '+badge.desc+'</div>'
+    +'</div>';
+  document.body.appendChild(notif);
+  setTimeout(function(){ if(notif.parentNode) notif.remove(); }, 4200);
+}
+
+// Check for new achievements and notify
+function checkNewAchievements(history){
+  var prevEarned = JSON.parse(localStorage.getItem('piq_earned_badges') || '[]');
+  var nowEarned = ALL_BADGES.filter(function(b){ return b.check(history); }).map(function(b){ return b.id; });
+  
+  nowEarned.forEach(function(id){
+    if(prevEarned.indexOf(id) === -1){
+      var badge = ALL_BADGES.find(function(b){ return b.id === id; });
+      if(badge){
+        setTimeout(function(){ showAchievementNotif(badge); }, 1000);
+      }
+    }
+  });
+  localStorage.setItem('piq_earned_badges', JSON.stringify(nowEarned));
+}
+
+// ═══════════════════════════════════════════════════════════════
+// FEATURE: PERSONALITY HOROSCOPE
+// ═══════════════════════════════════════════════════════════════
+function generateHoroscope(dominantTrait, scores){
+  var horoscopes = {
+    openness: {
+      sign: '🎨', title: 'Creative Visionary Forecast',
+      texts: [
+        'Your creative energy peaks today. A new idea will spark unexpectedly — write it down immediately.',
+        'Your curiosity leads you somewhere unexpected today. Follow the thread, even if it seems unrelated.',
+        'Today favors artistic expression. Share something you have been keeping to yourself.',
+        'Your openness to new experiences brings a surprising connection today. Stay receptive.',
+      ]
+    },
+    conscientiousness: {
+      sign: '💎', title: 'Strategic Achiever Forecast',
+      texts: [
+        'Your planning instincts are sharp today. Tackle the task you have been postponing — you will finish faster than expected.',
+        'A systematic approach solves a problem others find chaotic. Your reliability is your superpower today.',
+        'Today rewards preparation. Your attention to detail catches something important others miss.',
+        'Your discipline creates momentum. One focused hour today is worth three scattered ones.',
+      ]
+    },
+    extraversion: {
+      sign: '⚡', title: 'Social Energy Forecast',
+      texts: [
+        'Your energy is magnetic today. A conversation you initiate leads somewhere meaningful.',
+        'Your enthusiasm inspires someone who needed it. Do not hold back your excitement.',
+        'Today favors collaboration. Your social instincts guide you to the right people.',
+        'Your presence energizes the room. Use this power intentionally today.',
+      ]
+    },
+    agreeableness: {
+      sign: '🌿', title: 'Harmony Seeker Forecast',
+      texts: [
+        'Your empathy is your greatest asset today. Someone needs exactly what you naturally offer.',
+        'A conflict you have been avoiding resolves itself when you approach it with your natural warmth.',
+        'Your ability to see all sides creates a breakthrough in a stuck situation today.',
+        'Today rewards kindness. A small act of generosity returns to you in an unexpected way.',
+      ]
+    },
+    neuroticism: {
+      sign: '🌊', title: 'Depth Navigator Forecast',
+      texts: [
+        'Your emotional depth gives you insight others miss today. Trust your gut feeling.',
+        'Channel your intensity into something creative — it transforms into your best work.',
+        'Your sensitivity picks up on something important that others overlook. Pay attention.',
+        'Today, your awareness of nuance is a gift. Use it to navigate a complex situation.',
+      ]
+    }
+  };
+  
+  var trait = dominantTrait || 'openness';
+  var h = horoscopes[trait] || horoscopes.openness;
+  var today = new Date().getDate();
+  var text = h.texts[today % h.texts.length];
+  
+  return { sign: h.sign, title: h.title, text: text, trait: trait };
+}
+
+function showHoroscope(dominantTrait, scores){
+  var card = document.getElementById('horoscope-card');
+  if(!card) return;
+  
+  var h = generateHoroscope(dominantTrait, scores);
+  
+  document.getElementById('horoscope-sign').textContent = h.sign;
+  document.getElementById('horoscope-title').textContent = h.title;
+  document.getElementById('horoscope-text').textContent = h.text;
+  document.getElementById('horoscope-trait-text').textContent = 
+    'Based on your ' + (TL[h.trait] || h.trait) + ' trait';
+  
+  card.style.display = 'block';
+}
+
+// ═══════════════════════════════════════════════════════════════
+// FEATURE: WEEKLY PERSONALITY TIP
+// ═══════════════════════════════════════════════════════════════
+function showWeeklyTip(dominantTrait){
+  var tips = {
+    openness: [
+      'Try one completely new activity this week — even 20 minutes of something unfamiliar rewires your brain.',
+      'Journal about a belief you hold. Then argue the opposite. Your openness grows through challenge.',
+      'Seek out someone whose worldview differs from yours. Listen more than you speak.',
+    ],
+    conscientiousness: [
+      'Review your top 3 priorities this week. Are your daily actions aligned with them?',
+      'Build one new micro-habit this week. Consistency compounds — even 5 minutes daily matters.',
+      'Delegate one task you have been holding onto. Your perfectionism sometimes blocks progress.',
+    ],
+    extraversion: [
+      'Schedule one deep 1-on-1 conversation this week instead of group interactions.',
+      'Practice active listening in your next conversation — resist the urge to respond immediately.',
+      'Use your social energy to lift someone quieter around you into the spotlight.',
+    ],
+    agreeableness: [
+      'Practice saying no to one request this week. Your boundaries protect your energy.',
+      'Share a genuine disagreement with someone you trust. Healthy conflict builds stronger relationships.',
+      'Recognize when you are helping from obligation vs. genuine desire. Choose the latter.',
+    ],
+    neuroticism: [
+      'Try a 5-minute grounding exercise when you feel overwhelmed: name 5 things you can see.',
+      'Write down your worry, then write the most realistic outcome. Usually it is less scary than imagined.',
+      'Your emotional sensitivity is a gift. Channel it into creative expression this week.',
+    ]
+  };
+  
+  var card = document.getElementById('weekly-tip-card');
+  var tipEl = document.getElementById('weekly-tip-text');
+  if(!card || !tipEl) return;
+  
+  var trait = dominantTrait || 'openness';
+  var traitTips = tips[trait] || tips.openness;
+  var weekNum = Math.floor(Date.now() / (7 * 24 * 60 * 60 * 1000));
+  var tip = traitTips[weekNum % traitTips.length];
+  
+  tipEl.textContent = tip;
+  card.style.display = 'flex';
+}
+
+// ═══════════════════════════════════════════════════════════════
+// FEATURE: STREAK DISPLAY
+// ═══════════════════════════════════════════════════════════════
+function showStreakDisplay(streak){
+  var display = document.getElementById('streak-display');
+  var countEl = document.getElementById('streak-count-big');
+  var iconEl = document.getElementById('streak-badge-icon');
+  if(!display || !countEl) return;
+  
+  if(streak > 0){
+    countEl.textContent = streak;
+    // Badge based on streak
+    var icon = streak >= 30 ? '👑' : streak >= 14 ? '💎' : streak >= 7 ? '🏆' : streak >= 3 ? '⭐' : '🔥';
+    if(iconEl) iconEl.textContent = icon;
+    display.style.display = 'flex';
+    display.style.animation = 'streakPop 0.5s ease both';
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// FEATURE: RESULT PAGE CINEMATIC INTRO
+// ═══════════════════════════════════════════════════════════════
+function playResultIntro(){
+  var rh = document.querySelector('.rh');
+  if(!rh) return;
+  
+  rh.style.opacity = '0';
+  rh.style.transform = 'scale(0.95) translateY(20px)';
+  rh.style.transition = 'none';
+  
+  setTimeout(function(){
+    rh.style.transition = 'opacity 0.8s cubic-bezier(0.22,1,0.36,1), transform 0.8s cubic-bezier(0.22,1,0.36,1)';
+    rh.style.opacity = '1';
+    rh.style.transform = 'scale(1) translateY(0)';
+  }, 100);
+  
+  // Animate result cards with stagger
+  setTimeout(function(){
+    var cards = document.querySelectorAll('.rc');
+    cards.forEach(function(card, i){
+      card.style.opacity = '0';
+      card.style.transform = 'translateY(30px)';
+      card.style.transition = 'none';
+      setTimeout(function(){
+        card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        card.style.opacity = '1';
+        card.style.transform = 'translateY(0)';
+      }, i * 80);
+    });
+  }, 400);
+}
+
 // ===== INITIAL PAGE LOADER =====
 (function(){
   var bar = document.getElementById('init-bar');
@@ -4036,6 +4320,15 @@ function loadDashHistory(){
     else { var s=document.getElementById('pot-section'); if(s) s.style.display='none'; }
     // Render badges
     renderBadges(h);
+    checkNewAchievements(h);
+    // Show streak display
+    if(US && US.currentStreak > 0) showStreakDisplay(US.currentStreak);
+    // Show horoscope and weekly tip based on dominant trait
+    if(h.length > 0){
+      var dom = h[0].dominantTrait || 'openness';
+      showHoroscope(dom, h[0].scores);
+      showWeeklyTip(dom);
+    }
   });
 }
 function loadInsights(){
@@ -4536,7 +4829,7 @@ setTimeout(function(){generateRoast();},500);
 // Reveal results-only UI (theme switcher + action bar) now that results exist
 var _ts=document.getElementById('pr-theme-section');if(_ts)_ts.style.display='block';
 var _ab=document.getElementById('pr-action-bar');if(_ab)_ab.style.display='flex';
-showPage('pr');setTimeout(function(){updateAvatar(r,badge);},300);launchConfetti();}
+showPage('pr');setTimeout(function(){updateAvatar(r,badge);playResultIntro();},300);launchConfetti();}
 function hCard(r){const dom=r.personalityType||TL[r.dominantTrait]||'Balanced';const date=new Date(r.completedAt).toLocaleDateString('en-IN',{year:'numeric',month:'short',day:'numeric'});const pills=TR.map(t=>{const s=r.scores&&r.scores[t];const sc=s?(typeof s==='object'?s.score:s):0;return'<span class="hip">'+TL[t].slice(0,3)+': '+sc+'%</span>';}).join('');return'<div class="hi" onclick="viewR('+JSON.stringify(r.sessionId||r._id)+')"><div class="hil"><h4>✦ '+dom+'</h4><p>📅 '+date+'</p><div class="hips" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;">'+pills+'</div></div><div class="hia" style="color:var(--pu2);font-size:0.8rem;font-weight:600;">View →</div></div>';}
 async function loadHist(){
   const d=await api('/api/history');
@@ -5257,41 +5550,41 @@ function shareMovieMatch(){
 // ===== ROAST MY PERSONALITY =====
 var ROASTS = {
   high_openness:[
-    "You scored {openness}% Openness. Basically you'd try eating sand if someone called it 'artisanal'. Your bookshelf has 47 unfinished books and you're proud of it. 📚",
-    "With {openness}% Openness, you've probably already planned 3 career changes while reading this. Your browser has 200 tabs open and you call it 'research'. 🌀",
-    "You're so open-minded your brain is basically a revolving door. {openness}% Openness means you've considered becoming a monk, a DJ, and a marine biologist — this week. 🎭",
+    "You scored {openness}% Openness. Basically you would try eating sand if someone called it 'artisanal'. Your bookshelf has 47 unfinished books and you are proud of it. 📚",
+    "With {openness}% Openness, you have probably already planned 3 career changes while reading this. Your browser has 200 tabs open and you call it 'research'. 🌀",
+    "You are so open-minded your brain is basically a revolving door. {openness}% Openness means you have considered becoming a monk, a DJ, and a marine biologist — this week. 🎭",
   ],
   low_openness:[
-    "Only {openness}% Openness? You've been eating the same lunch for 7 years and you call it 'consistency'. Your idea of adventure is trying a new Netflix show. 📺",
-    "With {openness}% Openness, you still use Internet Explorer and think it's 'reliable'. Change is your villain origin story. 🏠",
+    "Only {openness}% Openness? You have been eating the same lunch for 7 years and you call it 'consistency'. Your idea of adventure is trying a new Netflix show. 📺",
+    "With {openness}% Openness, you still use Internet Explorer and think it is 'reliable'. Change is your villain origin story. 🏠",
   ],
   high_conscientiousness:[
-    "You're {conscientiousness}% Conscientious. Your to-do list has a to-do list. You color-code your calendar and judge people who don't. 📋",
-    "{conscientiousness}% Conscientiousness? You've already planned your retirement at age 23. Your idea of fun is optimizing your morning routine. ⏰",
+    "You are {conscientiousness}% Conscientious. Your to-do list has a to-do list. You color-code your calendar and judge people who do not. 📋",
+    "{conscientiousness}% Conscientiousness? You have already planned your retirement at age 23. Your idea of fun is optimizing your morning routine. ⏰",
   ],
   low_conscientiousness:[
-    "Only {conscientiousness}% Conscientiousness. You've 'started' the same project 14 times. Your room is a crime scene but you know exactly where everything is. 🌪️",
+    "Only {conscientiousness}% Conscientiousness. You have 'started' the same project 14 times. Your room is a crime scene but you know exactly where everything is. 🌪️",
   ],
   high_extraversion:[
-    "You're {extraversion}% Extraverted. You've made friends with the cashier, their manager, and their dog. Silence makes you physically uncomfortable. 🎉",
-    "{extraversion}% Extraversion means you've never eaten alone in your life — not because you're popular, but because you literally cannot stop talking to strangers. 🗣️",
+    "You are {extraversion}% Extraverted. You have made friends with the cashier, their manager, and their dog. Silence makes you physically uncomfortable. 🎉",
+    "{extraversion}% Extraversion means you have never eaten alone in your life — not because you are popular, but because you literally cannot stop talking to strangers. 🗣️",
   ],
   low_extraversion:[
     "Only {extraversion}% Extraversion. You cancelled plans to stay home and called it 'self-care'. Your social battery dies during eye contact. 🔋",
-    "With {extraversion}% Extraversion, you've rehearsed 'I'm fine thanks' in the mirror. Parties are your personal horror movie. 🏠",
+    "With {extraversion}% Extraversion, you have rehearsed 'I am fine thanks' in the mirror. Parties are your personal horror movie. 🏠",
   ],
   high_neuroticism:[
-    "You're {neuroticism}% Neurotic. You've already imagined 47 ways this could go wrong. You apologize to furniture when you bump into it. 😰",
-    "{neuroticism}% Neuroticism means you've googled your symptoms and diagnosed yourself with 3 rare diseases today. Your anxiety has anxiety. 🌊",
+    "You are {neuroticism}% Neurotic. You have already imagined 47 ways this could go wrong. You apologize to furniture when you bump into it. 😰",
+    "{neuroticism}% Neuroticism means you have googled your symptoms and diagnosed yourself with 3 rare diseases today. Your anxiety has anxiety. 🌊",
   ],
   low_neuroticism:[
-    "Only {neuroticism}% Neuroticism. You're so calm you probably slept through your own existential crisis. Nothing bothers you — which bothers everyone else. 😎",
+    "Only {neuroticism}% Neuroticism. You are so calm you probably slept through your own existential crisis. Nothing bothers you — which bothers everyone else. 😎",
   ],
   high_agreeableness:[
-    "You're {agreeableness}% Agreeable. You've said 'no problem!' to things that were absolutely a problem. You apologize when someone bumps into YOU. 🕊️",
+    "You are {agreeableness}% Agreeable. You have said 'no problem!' to things that were absolutely a problem. You apologize when someone bumps into YOU. 🕊️",
   ],
   low_agreeableness:[
-    "Only {agreeableness}% Agreeableness. You've started 3 arguments today and called it 'healthy debate'. Your resting face is a TED talk on intimidation. 😤",
+    "Only {agreeableness}% Agreeableness. You have started 3 arguments today and called it 'healthy debate'. Your resting face is a TED talk on intimidation. 😤",
   ],
 };
 
