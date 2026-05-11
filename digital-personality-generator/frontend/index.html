@@ -4295,13 +4295,7 @@ function setBottomNav(activeId){
   if(active) active.classList.add('active');
 }
 // Update bottom nav on page change
-var _origShowPage = showPage;
-function showPage(n, sub){
-  _origShowPage(n, sub);
-  // Update bottom nav active state
-  var map = {'page-home':'bn-home','pd':'bn-dash','pq':'bn-test','ph':'bn-hist','page-chat':'bn-chat'};
-  if(map[n]) setBottomNav(map[n]);
-}
+
 
 
 // ===== FEATURE 1: SCROLL REVEAL =====
