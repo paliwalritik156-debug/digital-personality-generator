@@ -2305,6 +2305,317 @@ body.light-mode .weekly-tip{background:linear-gradient(135deg,rgba(234,88,12,0.0
 body.light-mode .weekly-tip-label{color:#C2410C !important;}
 body.light-mode .streak-display{background:linear-gradient(135deg,rgba(234,88,12,0.1),rgba(251,146,60,0.06)) !important;border-color:rgba(234,88,12,0.25) !important;}
 
+/* ── Dark/Light Smooth Transition ── */
+body, body *{transition-property:background-color,border-color,color,box-shadow;transition-duration:0.3s;transition-timing-function:ease;}
+body canvas, body img, body video, body .page, body .page *{transition:none !important;}
+
+/* ── Bottom Navigation (Mobile) ── */
+.bottom-nav{
+  display:none;
+  position:fixed;bottom:0;left:0;right:0;z-index:200;
+  background:rgba(5,5,8,0.97);
+  backdrop-filter:blur(30px) saturate(180%);
+  border-top:1px solid rgba(139,92,246,0.15);
+  padding:8px 0 max(8px,env(safe-area-inset-bottom));
+  box-shadow:0 -4px 30px rgba(0,0,0,0.4);
+}
+.bottom-nav-items{display:flex;justify-content:space-around;align-items:center;}
+.bottom-nav-item{
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  padding:6px 12px;border-radius:12px;cursor:pointer;
+  transition:all 0.2s;color:rgba(167,139,250,0.5);
+  font-size:0.6rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;
+  min-width:56px;
+}
+.bottom-nav-item.active{color:#A78BFA;background:rgba(139,92,246,0.12);}
+.bottom-nav-item:active{transform:scale(0.92);}
+.bottom-nav-icon{font-size:1.3rem;line-height:1;}
+@media(max-width:768px){
+  .bottom-nav{display:block;}
+  #pd .dash-main{padding-bottom:80px;}
+  #pr{padding-bottom:80px;}
+}
+body.light-mode .bottom-nav{background:rgba(255,250,245,0.97) !important;border-top-color:rgba(234,88,12,0.15) !important;}
+body.light-mode .bottom-nav-item{color:rgba(124,45,0,0.5) !important;}
+body.light-mode .bottom-nav-item.active{color:#C2410C !important;background:rgba(234,88,12,0.1) !important;}
+
+/* ── Career Roadmap ── */
+.career-roadmap{display:flex;flex-direction:column;gap:12px;margin-top:8px;}
+.career-step{
+  display:flex;gap:14px;align-items:flex-start;
+  background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);
+  border-radius:16px;padding:1rem 1.2rem;
+  transition:all 0.3s;
+}
+.career-step:hover{border-color:rgba(139,92,246,0.3);background:rgba(139,92,246,0.05);transform:translateX(4px);}
+.career-step-num{
+  width:32px;height:32px;border-radius:50%;
+  background:linear-gradient(135deg,#8B5CF6,#06B6D4);
+  display:flex;align-items:center;justify-content:center;
+  font-size:0.8rem;font-weight:800;color:#fff;flex-shrink:0;
+  box-shadow:0 4px 12px rgba(139,92,246,0.3);
+}
+.career-step-content{}
+.career-step-month{font-size:0.65rem;color:var(--pu2);font-weight:700;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:3px;}
+.career-step-action{font-size:0.88rem;color:var(--tx);font-weight:600;margin-bottom:3px;}
+.career-step-why{font-size:0.78rem;color:var(--tx2);line-height:1.5;}
+
+/* ── Daily Challenge ── */
+.daily-challenge{
+  background:linear-gradient(135deg,rgba(236,72,153,0.1),rgba(139,92,246,0.08));
+  border:1px solid rgba(236,72,153,0.25);
+  border-radius:20px;padding:1.5rem;margin-bottom:1.5rem;
+  position:relative;overflow:hidden;
+}
+.daily-challenge::before{
+  content:'';position:absolute;top:-30px;right:-30px;
+  width:100px;height:100px;
+  background:radial-gradient(circle,rgba(236,72,153,0.15),transparent 70%);
+  pointer-events:none;
+}
+.challenge-header{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.challenge-icon{font-size:1.6rem;}
+.challenge-label{font-size:0.65rem;font-weight:700;color:rgba(236,72,153,0.8);text-transform:uppercase;letter-spacing:0.12em;}
+.challenge-title{font-family:'Syne',sans-serif;font-weight:700;font-size:0.95rem;color:var(--tx);margin-bottom:6px;}
+.challenge-desc{font-size:0.82rem;color:var(--tx2);line-height:1.65;margin-bottom:12px;}
+.challenge-complete-btn{
+  padding:8px 20px;background:linear-gradient(135deg,#EC4899,#8B5CF6);
+  border:none;border-radius:20px;color:#fff;
+  font-family:'Space Grotesk',sans-serif;font-size:0.8rem;font-weight:600;
+  cursor:pointer;transition:all 0.3s;
+}
+.challenge-complete-btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(236,72,153,0.4);}
+.challenge-done{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:0.82rem;color:rgba(16,185,129,0.9);font-weight:600;
+}
+
+/* ── Growth Tracker ── */
+.growth-item{
+  display:flex;align-items:center;gap:12px;
+  padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.05);
+}
+.growth-item:last-child{border-bottom:none;}
+.growth-trait-name{font-size:0.82rem;color:var(--tx2);min-width:120px;}
+.growth-bar-wrap{flex:1;height:6px;background:rgba(255,255,255,0.08);border-radius:10px;overflow:hidden;position:relative;}
+.growth-bar-old{height:100%;border-radius:10px;opacity:0.4;position:absolute;top:0;left:0;}
+.growth-bar-new{height:100%;border-radius:10px;position:absolute;top:0;left:0;transition:width 1s ease;}
+.growth-diff{font-size:0.75rem;font-weight:700;min-width:40px;text-align:right;}
+.growth-diff.up{color:#10B981;}
+.growth-diff.down{color:#F59E0B;}
+.growth-diff.same{color:var(--tx3);}
+
+/* ── Compatibility Calculator ── */
+.compat-calc{
+  background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);
+  border-radius:20px;padding:1.5rem;margin-bottom:1.5rem;
+}
+.compat-result{
+  text-align:center;padding:1.5rem;
+  background:linear-gradient(135deg,rgba(139,92,246,0.1),rgba(6,182,212,0.06));
+  border-radius:16px;margin-top:1rem;
+  border:1px solid rgba(139,92,246,0.2);
+}
+.compat-score{
+  font-family:'Syne',sans-serif;font-size:3rem;font-weight:900;
+  background:linear-gradient(135deg,#8B5CF6,#06B6D4);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.compat-label{font-size:0.85rem;color:var(--tx2);margin-top:4px;}
+.compat-desc{font-size:0.82rem;color:var(--tx2);margin-top:8px;line-height:1.6;}
+
+/* Light mode */
+body.light-mode .career-step{background:rgba(234,88,12,0.04) !important;border-color:rgba(234,88,12,0.12) !important;}
+body.light-mode .career-step:hover{background:rgba(234,88,12,0.08) !important;border-color:rgba(234,88,12,0.25) !important;}
+body.light-mode .career-step-month{color:#C2410C !important;}
+body.light-mode .career-step-action{color:#1A0800 !important;}
+body.light-mode .career-step-why{color:#5C2800 !important;}
+body.light-mode .daily-challenge{background:linear-gradient(135deg,rgba(234,88,12,0.08),rgba(251,146,60,0.04)) !important;border-color:rgba(234,88,12,0.2) !important;}
+body.light-mode .challenge-label{color:#C2410C !important;}
+body.light-mode .challenge-title{color:#1A0800 !important;}
+body.light-mode .challenge-desc{color:#5C2800 !important;}
+body.light-mode .compat-calc{background:rgba(234,88,12,0.04) !important;border-color:rgba(234,88,12,0.12) !important;}
+body.light-mode .compat-result{background:linear-gradient(135deg,rgba(234,88,12,0.08),rgba(251,146,60,0.04)) !important;border-color:rgba(234,88,12,0.2) !important;}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   COMPREHENSIVE MOBILE RESPONSIVE CSS
+═══════════════════════════════════════════════════════════════ */
+
+/* ── Bottom Navigation Bar for Mobile ── */
+.bottom-nav{
+  display:none;
+  position:fixed;bottom:0;left:0;right:0;z-index:200;
+  background:rgba(5,5,8,0.95);
+  backdrop-filter:blur(30px) saturate(180%);
+  border-top:1px solid rgba(139,92,246,0.15);
+  padding:8px 0 max(8px, env(safe-area-inset-bottom));
+  box-shadow:0 -4px 30px rgba(0,0,0,0.4);
+}
+.bottom-nav-items{
+  display:flex;align-items:center;justify-content:space-around;
+  max-width:500px;margin:0 auto;
+}
+.bottom-nav-item{
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  padding:6px 12px;border-radius:12px;cursor:pointer;
+  transition:all 0.2s;color:rgba(167,139,250,0.5);
+  font-size:0.6rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;
+  min-width:56px;
+}
+.bottom-nav-item.active{color:#A78BFA;background:rgba(139,92,246,0.12);}
+.bottom-nav-item:active{transform:scale(0.92);}
+.bottom-nav-icon{font-size:1.3rem;line-height:1;}
+
+@media(max-width:768px){
+  /* Show bottom nav */
+  .bottom-nav{display:block;}
+  
+  /* Dashboard layout - full width, no sidebar */
+  .dash-layout{grid-template-columns:1fr !important;margin-top:60px;}
+  .sidebar{display:none !important;}
+  .dash-main{padding:1.2rem 1rem 100px !important;}
+  
+  /* Dashboard heading */
+  .dash-section h3{font-size:1.5rem !important;}
+  
+  /* Stat cards - 2 columns */
+  .overview-stats{grid-template-columns:1fr 1fr !important;gap:10px !important;}
+  .ov-stat{padding:1rem !important;}
+  .ov-val{font-size:0.95rem !important;}
+  .ov-lbl{font-size:0.6rem !important;}
+  
+  /* Quick action cards - 1 column */
+  .quick-actions{grid-template-columns:1fr !important;}
+  
+  /* Result page */
+  .rg{grid-template-columns:1fr !important;padding:0 1rem 100px !important;gap:1rem !important;}
+  .rc{padding:1.2rem !important;}
+  .rc.w{grid-column:1 !important;}
+  .rh{padding:4rem 1rem 2rem !important;}
+  .rh h2{font-size:clamp(1.8rem,8vw,3rem) !important;}
+  .pb{padding:10px 20px !important;font-size:0.85rem !important;}
+  
+  /* Result action bar */
+  .ra{flex-direction:column !important;align-items:stretch !important;padding:1.5rem 1rem !important;}
+  .ra .btn-p,.ra .btn-g{text-align:center !important;justify-content:center !important;}
+  
+  /* Nav bar */
+  nav{padding:0 1rem !important;height:60px !important;}
+  .logo{font-size:1rem !important;}
+  
+  /* Hero section */
+  #page-home section:first-of-type{padding:5rem 1.2rem 3rem !important;}
+  #page-home h1{font-size:clamp(2.5rem,10vw,4rem) !important;}
+  
+  /* Features grid - 1 column */
+  #page-home section div[style*="grid-template-columns:repeat(auto-fit,minmax(340px"]{
+    grid-template-columns:1fr !important;
+  }
+  #page-home section div[style*="grid-template-columns:repeat(auto-fit,minmax(300px"]{
+    grid-template-columns:1fr !important;
+  }
+  #page-home section div[style*="grid-template-columns:repeat(auto-fit,minmax(280px"]{
+    grid-template-columns:1fr !important;
+  }
+  #page-home section div[style*="grid-template-columns:repeat(auto-fit,minmax(220px"]{
+    grid-template-columns:1fr 1fr !important;
+  }
+  
+  /* Pricing - 1 column */
+  #page-home section div[style*="grid-template-columns:repeat(auto-fit,minmax(280px,1fr))"][style*="gap:24px"]{
+    grid-template-columns:1fr !important;
+  }
+  
+  /* Footer grid - 2 columns */
+  #main-footer div[style*="grid-template-columns:repeat(auto-fit,minmax(180px"]{
+    grid-template-columns:1fr 1fr !important;gap:1.5rem !important;
+  }
+  
+  /* Quiz page */
+  .qs{padding:1rem !important;}
+  .qcard{padding:1.2rem !important;}
+  .rr{grid-template-columns:1fr 1fr !important;}
+  
+  /* Auth page */
+  .al{display:none !important;}
+  .ac{padding:5rem 1.2rem 2rem !important;border-right:none !important;}
+  .acard{padding:1.8rem !important;}
+  
+  /* History page */
+  .hhdr{padding:4rem 1rem 1rem !important;flex-direction:column !important;align-items:flex-start !important;}
+  #hlist{padding:0 1rem 100px !important;}
+  
+  /* Chat page */
+  .chat-wrap{padding:1rem 1rem 0 !important;}
+  .chat-bar{padding:0.8rem 1rem !important;}
+  
+  /* Modals */
+  #forgot-modal > div{margin:12px !important;padding:20px !important;}
+  #email-modal > div{margin:12px !important;padding:20px !important;}
+  
+  /* Trl section */
+  .trl{padding:1.2rem !important;}
+  .trlt{font-size:1.1rem !important;}
+  
+  /* Digital twin grid */
+  .tg{grid-template-columns:1fr !important;}
+  
+  /* Intelligence grid */
+  .ig{grid-template-columns:repeat(3,1fr) !important;}
+  
+  /* Share card */
+  #personality-share-card .shi > div:last-child{flex-direction:column !important;}
+  #personality-share-card button{width:100% !important;}
+  
+  /* About/Privacy/Terms pages */
+  #page-about > div,#page-privacy > div,#page-terms > div,#page-contact > div{
+    padding:4rem 1.2rem 2rem !important;
+  }
+  
+  /* Horoscope + weekly tip */
+  .horoscope-card,.weekly-tip,.streak-display{margin-bottom:1rem !important;}
+  
+  /* Compatibility tab */
+  #compat-grid{grid-template-columns:1fr 1fr !important;}
+  
+  /* Profile tab */
+  #tab-profile > div:nth-child(2){flex-direction:column !important;}
+  #profile-type-badge{margin-left:0 !important;width:100% !important;}
+  
+  /* Scroll indicator hide on mobile */
+  #page-home section:first-of-type > div[style*="position:absolute;bottom"]{
+    display:none !important;
+  }
+  
+  /* Stat cards in hero */
+  #page-home div[style*="gap:14px"][style*="flex-wrap:wrap"]{
+    gap:10px !important;
+  }
+  #page-home div[style*="border-radius:22px"][style*="padding:20px 30px"]{
+    padding:14px 18px !important;
+  }
+}
+
+/* ── Tablet (768px - 1024px) ── */
+@media(min-width:769px) and (max-width:1024px){
+  .dash-layout{grid-template-columns:220px 1fr !important;}
+  .sidebar{padding:1.2rem 0.8rem !important;}
+  .dash-main{padding:2rem 1.5rem !important;}
+  .rg{grid-template-columns:1fr 1fr !important;padding:0 1.5rem 3rem !important;}
+  #page-home h1{font-size:clamp(3rem,7vw,5rem) !important;}
+}
+
+/* ── Small phones (< 380px) ── */
+@media(max-width:380px){
+  .overview-stats{grid-template-columns:1fr 1fr !important;}
+  .ov-val{font-size:0.85rem !important;}
+  #page-home h1{font-size:2.2rem !important;}
+  .rh h2{font-size:1.6rem !important;}
+  .bottom-nav-item{min-width:44px;padding:6px 8px;}
+  .bottom-nav-icon{font-size:1.1rem;}
+}
+
 /* ===== MOBILE FIXES ===== */
 @media(max-width:768px){
   /* Share card buttons */
@@ -2476,7 +2787,60 @@ body.light-mode .streak-display{background:linear-gradient(135deg,rgba(234,88,12
   <div class="mob-item" id="mob-chat-btn" onclick="openChat();closeMobMenu()" style="display:none">🤖 Chat Twin</div>
   <div class="mob-item" id="mob-logout-btn" onclick="doLogout();closeMobMenu()" style="display:none">🚪 Logout</div>
 </div>
+
+<!-- Bottom Navigation for Mobile -->
+<div class="bottom-nav" id="bottom-nav">
+  <div class="bottom-nav-items">
+    <div class="bottom-nav-item active" id="bn-home" onclick="goHome();setBottomNav('bn-home')">
+      <span class="bottom-nav-icon">🏠</span>
+      <span>Home</span>
+    </div>
+    <div class="bottom-nav-item" id="bn-dash" onclick="if(TK){showPage('pd');setBottomNav('bn-dash');}else{showPage('pa','login');}">
+      <span class="bottom-nav-icon">📊</span>
+      <span>Dashboard</span>
+    </div>
+    <div class="bottom-nav-item" id="bn-test" onclick="handleStart();setBottomNav('bn-test')">
+      <span class="bottom-nav-icon">⚡</span>
+      <span>Test</span>
+    </div>
+    <div class="bottom-nav-item" id="bn-hist" onclick="if(TK){showPage('ph');setBottomNav('bn-hist');}else{showPage('pa','login');}">
+      <span class="bottom-nav-icon">📈</span>
+      <span>History</span>
+    </div>
+    <div class="bottom-nav-item" id="bn-chat" onclick="if(TK){openChat();setBottomNav('bn-chat');}else{showPage('pa','login');}">
+      <span class="bottom-nav-icon">🤖</span>
+      <span>Twin</span>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
+
+<!-- Bottom Navigation (Mobile) -->
+<div class="bottom-nav" id="bottom-nav" style="display:none;">
+  <div class="bottom-nav-items">
+    <div class="bottom-nav-item active" id="bn-home" onclick="goHome();updateBottomNav('home')">
+      <span class="bottom-nav-icon">🏠</span>
+      <span>Home</span>
+    </div>
+    <div class="bottom-nav-item" id="bn-dash" onclick="showPage('pd');updateBottomNav('dash')">
+      <span class="bottom-nav-icon">📊</span>
+      <span>Dashboard</span>
+    </div>
+    <div class="bottom-nav-item" id="bn-test" onclick="handleStart();updateBottomNav('test')">
+      <span class="bottom-nav-icon">⚡</span>
+      <span>Test</span>
+    </div>
+    <div class="bottom-nav-item" id="bn-hist" onclick="showPage('ph');updateBottomNav('hist')">
+      <span class="bottom-nav-icon">📈</span>
+      <span>History</span>
+    </div>
+    <div class="bottom-nav-item" id="bn-chat" onclick="openChat();updateBottomNav('chat')">
+      <span class="bottom-nav-icon">🤖</span>
+      <span>Twin</span>
+    </div>
+  </div>
+</div>
 <div id="page-home" class="page hidden" style="position:relative;overflow:hidden;">
 
   <!-- ══════════════════════════════════════════════════════════
@@ -3265,6 +3629,9 @@ body.light-mode .streak-display{background:linear-gradient(135deg,rgba(234,88,12
           </div>
         </div>
 
+        <!-- Daily Challenge -->
+        <div id="daily-challenge-section" style="display:none;"></div>
+
         <!-- Quick Actions -->
         <div style="display:flex;align-items:center;gap:12px;margin-bottom:1.4rem;">
           <span style="font-size:0.65rem;font-weight:700;color:rgba(139,92,246,0.6);text-transform:uppercase;letter-spacing:0.16em;white-space:nowrap;">Quick Actions</span>
@@ -3312,6 +3679,24 @@ body.light-mode .streak-display{background:linear-gradient(135deg,rgba(234,88,12
           <p id="daily-insight" style="color:var(--tx2);font-size:0.88rem;line-height:1.7;">Complete an assessment to unlock personalized AI insights about your personality, career paths, and growth opportunities.</p>
         </div>
         <div id="insights-content"><p style="color:var(--tx3);text-align:center;padding:3rem">Complete an assessment to see insights</p></div>
+
+      <!-- Career Roadmap Section -->
+      <div id="career-roadmap-section" style="display:none;margin-top:1.5rem;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:1.2rem;">
+          <span style="font-size:0.65rem;font-weight:700;color:rgba(6,182,212,0.7);text-transform:uppercase;letter-spacing:0.16em;">🗺️ Your 6-Month Career Roadmap</span>
+          <div style="flex:1;height:1px;background:linear-gradient(90deg,rgba(6,182,212,0.3),transparent);"></div>
+        </div>
+        <div class="career-roadmap" id="career-roadmap-list"></div>
+      </div>
+
+      <!-- Growth Tracker Section -->
+      <div id="growth-tracker-section" style="display:none;margin-top:1.5rem;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:1.2rem;">
+          <span style="font-size:0.65rem;font-weight:700;color:rgba(16,185,129,0.7);text-transform:uppercase;letter-spacing:0.16em;">📈 Personality Growth Tracker</span>
+          <div style="flex:1;height:1px;background:linear-gradient(90deg,rgba(16,185,129,0.3),transparent);"></div>
+        </div>
+        <div id="growth-tracker-list"></div>
+      </div>
       </div>
 
       <!-- ── HISTORY TAB ── -->
@@ -3384,6 +3769,35 @@ body.light-mode .streak-display{background:linear-gradient(135deg,rgba(234,88,12
             <p style="color:var(--tx2);font-size:0.87rem;line-height:1.7;margin-bottom:12px;">Share this link with a friend — they take the test and you both see your compatibility score!</p>
             <button id="btn-compat-link" onclick="copyCompatLink()" style="padding:10px 22px;background:linear-gradient(135deg,#8B5CF6,#06B6D4);border:none;border-radius:12px;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:0.88rem;font-weight:600;cursor:pointer;box-shadow:0 4px 16px rgba(139,92,246,0.3);">🔗 Copy My Compatibility Link</button>
           </div>
+          <!-- Compatibility Calculator -->
+          <div class="compat-calc" style="margin-bottom:1.5rem;">
+            <h4 style="font-family:'Syne',sans-serif;font-weight:700;font-size:0.95rem;margin-bottom:12px;background:linear-gradient(135deg,#A78BFA,#67E8F9);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">🧮 Personality Compatibility Calculator</h4>
+            <p style="font-size:0.82rem;color:var(--tx2);margin-bottom:12px;">Enter a personality type to see your compatibility score:</p>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;">
+              <select id="compat-type-select" style="flex:1;padding:10px 14px;background:rgba(255,255,255,0.04);border:1px solid rgba(139,92,246,0.2);border-radius:12px;color:var(--tx);font-family:'Space Grotesk',sans-serif;font-size:0.88rem;outline:none;cursor:pointer;">
+                <option value="">Select a personality type...</option>
+                <option value="The Architect">The Architect (INTJ)</option>
+                <option value="The Logician">The Logician (INTP)</option>
+                <option value="The Commander">The Commander (ENTJ)</option>
+                <option value="The Debater">The Debater (ENTP)</option>
+                <option value="The Advocate">The Advocate (INFJ)</option>
+                <option value="The Mediator">The Mediator (INFP)</option>
+                <option value="The Protagonist">The Protagonist (ENFJ)</option>
+                <option value="The Campaigner">The Campaigner (ENFP)</option>
+                <option value="The Diplomat">The Diplomat</option>
+                <option value="The Analyst">The Analyst</option>
+                <option value="The Explorer">The Explorer</option>
+                <option value="The Sentinel">The Sentinel</option>
+              </select>
+              <button onclick="calculateCompatibility()" style="padding:10px 20px;background:linear-gradient(135deg,#8B5CF6,#06B6D4);border:none;border-radius:12px;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:0.88rem;font-weight:600;cursor:pointer;">Calculate</button>
+            </div>
+            <div id="compat-calc-result" style="display:none;" class="compat-result">
+              <div class="compat-score" id="compat-calc-score">0%</div>
+              <div class="compat-label" id="compat-calc-label">Compatibility</div>
+              <div class="compat-desc" id="compat-calc-desc"></div>
+            </div>
+          </div>
+
           <div id="compat-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;"></div>
         </div>
       </div>
@@ -3884,6 +4298,20 @@ function showPage(n,sub){
 }
 function showResultSkeleton(){document.querySelectorAll('.page').forEach(p=>p.classList.add('hidden'));var s=document.getElementById('page-loader-results');if(s){s.classList.remove('hidden');s.style.display='block';window.scrollTo(0,0);}}
 function goHome(){TK?showPage('pd'):showPage('page-home');}
+function setBottomNav(activeId){
+  var items = document.querySelectorAll('.bottom-nav-item');
+  items.forEach(function(item){ item.classList.remove('active'); });
+  var active = document.getElementById(activeId);
+  if(active) active.classList.add('active');
+}
+// Update bottom nav on page change
+var _origShowPage = showPage;
+function showPage(n, sub){
+  _origShowPage(n, sub);
+  // Update bottom nav active state
+  var map = {'page-home':'bn-home','pd':'bn-dash','pq':'bn-test','ph':'bn-hist','page-chat':'bn-chat'};
+  if(map[n]) setBottomNav(map[n]);
+}
 
 
 // ===== FEATURE 1: SCROLL REVEAL =====
@@ -4206,6 +4634,288 @@ function playResultIntro(){
   }, 400);
 }
 
+
+// ═══════════════════════════════════════════════════════════════
+// BOTTOM NAV
+// ═══════════════════════════════════════════════════════════════
+function updateBottomNav(active){
+  var items = ['home','dash','test','hist','chat'];
+  items.forEach(function(id){
+    var el = document.getElementById('bn-'+id);
+    if(el) el.classList.toggle('active', id === active);
+  });
+}
+function initBottomNav(){
+  var nav = document.getElementById('bottom-nav');
+  if(nav && TK && US) nav.style.display = 'block';
+  else if(nav) nav.style.display = 'none';
+}
+
+// ═══════════════════════════════════════════════════════════════
+// AI CAREER ROADMAP
+// ═══════════════════════════════════════════════════════════════
+function generateCareerRoadmap(dominantTrait, scores){
+  var roadmaps = {
+    openness: [
+      {month:'Month 1-2', action:'Explore 3 new creative fields', why:'Your openness thrives on novelty. Audit courses, attend workshops, try side projects.'},
+      {month:'Month 3', action:'Build a portfolio of experiments', why:'Document your explorations. Openness without output is just curiosity.'},
+      {month:'Month 4', action:'Find your creative niche', why:'Narrow from exploration to specialization. What energizes you most?'},
+      {month:'Month 5', action:'Collaborate with a specialist', why:'Your breadth + their depth = powerful combination.'},
+      {month:'Month 6', action:'Launch a creative project publicly', why:'Your ideas deserve an audience. Ship something imperfect but real.'},
+    ],
+    conscientiousness: [
+      {month:'Month 1-2', action:'Audit your current skills vs market demand', why:'Your systematic nature makes you excellent at gap analysis.'},
+      {month:'Month 3', action:'Build one high-value certification', why:'Conscientiousness + credentials = career acceleration.'},
+      {month:'Month 4', action:'Optimize your workflow and document it', why:'Your process is your competitive advantage. Make it repeatable.'},
+      {month:'Month 5', action:'Take on a leadership role in a project', why:'Your reliability makes you a natural project lead.'},
+      {month:'Month 6', action:'Mentor someone junior', why:'Teaching solidifies mastery and builds your reputation.'},
+    ],
+    extraversion: [
+      {month:'Month 1-2', action:'Attend 4 industry events or meetups', why:'Your social energy is your career superpower. Use it deliberately.'},
+      {month:'Month 3', action:'Build a personal brand on one platform', why:'Extraverts thrive when visible. LinkedIn, Twitter, or YouTube.'},
+      {month:'Month 4', action:'Conduct 10 informational interviews', why:'Your natural charisma opens doors others cannot.'},
+      {month:'Month 5', action:'Speak at an event or host a workshop', why:'Public speaking accelerates career growth 3x faster.'},
+      {month:'Month 6', action:'Build a community around your expertise', why:'Your energy sustains communities. This becomes your moat.'},
+    ],
+    agreeableness: [
+      {month:'Month 1-2', action:'Identify your unique value in team settings', why:'Your collaborative nature is rare. Quantify its impact.'},
+      {month:'Month 3', action:'Learn negotiation and assertiveness skills', why:'Your agreeableness needs a counterbalance to avoid being undervalued.'},
+      {month:'Month 4', action:'Take on a client-facing or HR-adjacent role', why:'Your empathy creates exceptional client relationships.'},
+      {month:'Month 5', action:'Build a reputation as a conflict resolver', why:'This skill is worth more than most technical skills.'},
+      {month:'Month 6', action:'Transition into a people-leadership role', why:'Teams led by high-agreeableness leaders have 40% less turnover.'},
+    ],
+    neuroticism: [
+      {month:'Month 1-2', action:'Build a stress management system', why:'Your emotional depth is powerful when channeled. Protect your energy first.'},
+      {month:'Month 3', action:'Find work that aligns with your values', why:'Misalignment amplifies anxiety. Alignment amplifies performance.'},
+      {month:'Month 4', action:'Develop your analytical or creative depth', why:'Your sensitivity makes you exceptional at nuanced work.'},
+      {month:'Month 5', action:'Build psychological safety in your team', why:'Your awareness of emotional dynamics is a leadership superpower.'},
+      {month:'Month 6', action:'Create systems that reduce uncertainty', why:'Structure reduces anxiety and increases your output quality.'},
+    ]
+  };
+  
+  var trait = dominantTrait || 'openness';
+  return roadmaps[trait] || roadmaps.openness;
+}
+
+function showCareerRoadmap(dominantTrait, scores){
+  var section = document.getElementById('career-roadmap-section');
+  var list = document.getElementById('career-roadmap-list');
+  if(!section || !list) return;
+  
+  var steps = generateCareerRoadmap(dominantTrait, scores);
+  var colors = ['#8B5CF6','#06B6D4','#EC4899','#10B981','#F59E0B'];
+  
+  list.innerHTML = steps.map(function(step, i){
+    return '<div class="career-step">'
+      +'<div class="career-step-num" style="background:linear-gradient(135deg,'+colors[i]+','+colors[(i+1)%colors.length]+')">'+(i+1)+'</div>'
+      +'<div class="career-step-content">'
+      +'<div class="career-step-month">'+step.month+'</div>'
+      +'<div class="career-step-action">'+step.action+'</div>'
+      +'<div class="career-step-why">'+step.why+'</div>'
+      +'</div></div>';
+  }).join('');
+  
+  section.style.display = 'block';
+}
+
+// ═══════════════════════════════════════════════════════════════
+// DAILY CHALLENGE
+// ═══════════════════════════════════════════════════════════════
+function generateDailyChallenge(dominantTrait){
+  var challenges = {
+    openness: [
+      {icon:'🎨', title:'Creative Constraint Challenge', desc:'Create something using only 3 colors, 3 words, or 3 minutes. Constraints breed creativity.'},
+      {icon:'📚', title:'Learn Something Weird', desc:'Spend 20 minutes learning about a topic completely outside your field. Connect it to your work.'},
+      {icon:'🗺️', title:'Take a Different Route', desc:'Change your routine in one small way today. Different inputs create different outputs.'},
+      {icon:'💭', title:'Question a Belief', desc:'Pick one thing you believe strongly. Spend 10 minutes arguing the opposite. What did you learn?'},
+      {icon:'🎭', title:'Perspective Swap', desc:'Describe your current challenge from the perspective of someone who would solve it differently.'},
+    ],
+    conscientiousness: [
+      {icon:'📋', title:'The 2-Minute Rule', desc:'Do every task that takes less than 2 minutes immediately. Clear your backlog of small items.'},
+      {icon:'🎯', title:'Single-Tasking Sprint', desc:'Work on ONE thing for 90 minutes with no interruptions. Measure your output vs. normal.'},
+      {icon:'📊', title:'Audit Your Time', desc:'Track every 30 minutes of your day today. Where does your time actually go?'},
+      {icon:'🔄', title:'System Improvement', desc:'Identify one repetitive task and create a checklist or template to make it 50% faster.'},
+      {icon:'🌱', title:'Habit Stack', desc:'Attach one new positive habit to an existing one. Do it immediately after your morning coffee.'},
+    ],
+    extraversion: [
+      {icon:'🤝', title:'Reconnect Challenge', desc:'Reach out to someone you have not spoken to in 3+ months. No agenda, just genuine connection.'},
+      {icon:'🎤', title:'Share Your Expertise', desc:'Post one insight from your field on social media or share it in a group chat today.'},
+      {icon:'👂', title:'Deep Listening', desc:'In your next conversation, ask 3 follow-up questions before sharing your own perspective.'},
+      {icon:'🌟', title:'Spotlight Someone', desc:'Publicly recognize someone who deserves appreciation. Tag them, tell their manager, or just tell them.'},
+      {icon:'🎯', title:'Cold Connection', desc:'Reach out to one person you admire but have never met. One genuine message can change everything.'},
+    ],
+    agreeableness: [
+      {icon:'🛡️', title:'Boundary Practice', desc:'Say no to one request today that does not align with your priorities. Notice how it feels.'},
+      {icon:'💬', title:'Honest Feedback', desc:'Give one piece of constructive feedback you have been holding back. Do it kindly but clearly.'},
+      {icon:'🎯', title:'Advocate for Yourself', desc:'Ask for something you want but have been hesitant to request. Your needs matter too.'},
+      {icon:'⚖️', title:'Disagree Respectfully', desc:'In one conversation today, share a genuine disagreement. Practice the phrase: I see it differently.'},
+      {icon:'🌱', title:'Self-Care First', desc:'Do one thing purely for yourself today before helping others. You cannot pour from an empty cup.'},
+    ],
+    neuroticism: [
+      {icon:'🌊', title:'5-4-3-2-1 Grounding', desc:'Name 5 things you see, 4 you hear, 3 you can touch, 2 you smell, 1 you taste. Do this now.'},
+      {icon:'📝', title:'Worry Dump', desc:'Write every worry on paper for 10 minutes. Then close the notebook. Your brain can let go now.'},
+      {icon:'🎯', title:'One Brave Action', desc:'Do one small thing today that makes you slightly uncomfortable. Courage is a muscle.'},
+      {icon:'💪', title:'Reframe a Setback', desc:'Think of a recent failure. Write 3 things it taught you. Every setback is data.'},
+      {icon:'🌟', title:'Celebrate a Win', desc:'Write down 3 things you did well this week. Your brain is wired to notice problems. Override it.'},
+    ]
+  };
+  
+  var trait = dominantTrait || 'openness';
+  var traitChallenges = challenges[trait] || challenges.openness;
+  var dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(),0,0)) / 86400000);
+  return traitChallenges[dayOfYear % traitChallenges.length];
+}
+
+function showDailyChallenge(dominantTrait){
+  var section = document.getElementById('daily-challenge-section');
+  if(!section) return;
+  
+  var challenge = generateDailyChallenge(dominantTrait);
+  var doneKey = 'piq_challenge_' + new Date().toDateString();
+  var isDone = localStorage.getItem(doneKey) === '1';
+  
+  section.innerHTML = '<div class="daily-challenge">'
+    +'<div class="challenge-header">'
+    +'<span class="challenge-icon">'+challenge.icon+'</span>'
+    +'<div><div class="challenge-label">Daily Challenge</div></div>'
+    +'</div>'
+    +'<div class="challenge-title">'+challenge.title+'</div>'
+    +'<div class="challenge-desc">'+challenge.desc+'</div>'
+    +(isDone 
+      ? '<div class="challenge-done">✅ Completed today! Come back tomorrow.</div>'
+      : '<button class="challenge-complete-btn" onclick="completeChallenge()">Mark as Done ✓</button>')
+    +'</div>';
+  section.style.display = 'block';
+}
+
+function completeChallenge(){
+  var doneKey = 'piq_challenge_' + new Date().toDateString();
+  localStorage.setItem(doneKey, '1');
+  launchConfetti();
+  toast('Challenge completed! 🎉 +1 streak');
+  // Refresh the challenge display
+  if(window._lastDominantTrait) showDailyChallenge(window._lastDominantTrait);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// GROWTH TRACKER
+// ═══════════════════════════════════════════════════════════════
+function showGrowthTracker(history){
+  var section = document.getElementById('growth-tracker-section');
+  var list = document.getElementById('growth-tracker-list');
+  if(!section || !list || history.length < 2) return;
+  
+  var first = history[history.length - 1]; // oldest
+  var latest = history[0]; // newest
+  
+  var traitColors = {
+    openness:'#8B5CF6', conscientiousness:'#06B6D4',
+    extraversion:'#EC4899', agreeableness:'#10B981', neuroticism:'#F59E0B'
+  };
+  
+  var html = '<div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:16px;padding:1.2rem;">';
+  html += '<div style="font-size:0.72rem;color:var(--tx3);margin-bottom:12px;">First test vs Latest test</div>';
+  
+  var TR_local = ['openness','conscientiousness','extraversion','agreeableness','neuroticism'];
+  var TL_local = {openness:'Openness',conscientiousness:'Conscientiousness',extraversion:'Extraversion',agreeableness:'Agreeableness',neuroticism:'Neuroticism'};
+  
+  TR_local.forEach(function(trait){
+    var getScore = function(r){ var s=r.scores&&r.scores[trait]; return s?(typeof s==='object'?s.score:s):0; };
+    var oldScore = getScore(first);
+    var newScore = getScore(latest);
+    var diff = newScore - oldScore;
+    var color = traitColors[trait];
+    
+    html += '<div class="growth-item">'
+      +'<div class="growth-trait-name">'+TL_local[trait]+'</div>'
+      +'<div class="growth-bar-wrap">'
+      +'<div class="growth-bar-old" style="width:'+oldScore+'%;background:'+color+'"></div>'
+      +'<div class="growth-bar-new" style="width:'+newScore+'%;background:'+color+'"></div>'
+      +'</div>'
+      +'<div class="growth-diff '+(diff>0?'up':diff<0?'down':'same')+'">'
+      +(diff>0?'+':'')+diff+'%'
+      +'</div>'
+      +'</div>';
+  });
+  
+  html += '</div>';
+  list.innerHTML = html;
+  section.style.display = 'block';
+}
+
+// ═══════════════════════════════════════════════════════════════
+// COMPATIBILITY CALCULATOR
+// ═══════════════════════════════════════════════════════════════
+function calculateCompatibility(){
+  var select = document.getElementById('compat-type-select');
+  var result = document.getElementById('compat-calc-result');
+  var scoreEl = document.getElementById('compat-calc-score');
+  var labelEl = document.getElementById('compat-calc-label');
+  var descEl = document.getElementById('compat-calc-desc');
+  
+  if(!select || !select.value || !result) return;
+  
+  if(!RC || !RC.personalityType){
+    toast('Complete an assessment first!');
+    return;
+  }
+  
+  var myType = RC.personalityType || '';
+  var theirType = select.value;
+  
+  // Compatibility matrix based on personality archetypes
+  var compatMatrix = {
+    'The Diplomat': {
+      'The Architect':72,'The Logician':68,'The Commander':65,'The Debater':70,
+      'The Advocate':95,'The Mediator':92,'The Protagonist':88,'The Campaigner':85,
+      'The Diplomat':90,'The Analyst':70,'The Explorer':75,'The Sentinel':80
+    },
+    'The Analyst': {
+      'The Architect':90,'The Logician':95,'The Commander':85,'The Debater':88,
+      'The Advocate':72,'The Mediator':68,'The Protagonist':70,'The Campaigner':65,
+      'The Diplomat':70,'The Analyst':88,'The Explorer':75,'The Sentinel':80
+    },
+    'The Explorer': {
+      'The Architect':65,'The Logician':70,'The Commander':75,'The Debater':85,
+      'The Advocate':75,'The Mediator':80,'The Protagonist':85,'The Campaigner':92,
+      'The Diplomat':75,'The Analyst':75,'The Explorer':88,'The Sentinel':70
+    },
+    'The Sentinel': {
+      'The Architect':80,'The Logician':75,'The Commander':85,'The Debater':70,
+      'The Advocate':80,'The Mediator':75,'The Protagonist':88,'The Campaigner':72,
+      'The Diplomat':80,'The Analyst':80,'The Explorer':70,'The Sentinel':92
+    }
+  };
+  
+  // Determine my archetype
+  var myArch = 'The Diplomat';
+  if(myType.includes('Architect')||myType.includes('Logician')||myType.includes('Commander')||myType.includes('Debater')||myType.includes('Analyst')) myArch = 'The Analyst';
+  else if(myType.includes('Explorer')||myType.includes('Campaigner')||myType.includes('Debater')) myArch = 'The Explorer';
+  else if(myType.includes('Sentinel')||myType.includes('Protagonist')) myArch = 'The Sentinel';
+  
+  var score = (compatMatrix[myArch] && compatMatrix[myArch][theirType]) || Math.floor(60 + Math.random() * 30);
+  
+  var labels = {
+    90: 'Exceptional Match', 80: 'Strong Compatibility', 70: 'Good Potential',
+    60: 'Moderate Compatibility', 0: 'Growth Opportunity'
+  };
+  var descs = {
+    90: 'Your personalities complement each other beautifully. You share core values while bringing different strengths.',
+    80: 'Strong foundation for collaboration. Your differences create productive tension and mutual growth.',
+    70: 'Good compatibility with some areas to navigate. Communication and mutual respect bridge the gaps.',
+    60: 'Moderate compatibility. Success depends on shared goals and willingness to understand each other.',
+    0: 'Different approaches, but opposites can attract. This pairing requires intentional effort but can be transformative.'
+  };
+  
+  var labelKey = score >= 90 ? 90 : score >= 80 ? 80 : score >= 70 ? 70 : score >= 60 ? 60 : 0;
+  
+  scoreEl.textContent = score + '%';
+  labelEl.textContent = labels[labelKey];
+  descEl.textContent = descs[labelKey];
+  result.style.display = 'block';
+  result.style.animation = 'streakPop 0.5s ease both';
+}
+
 // ===== INITIAL PAGE LOADER =====
 (function(){
   var bar = document.getElementById('init-bar');
@@ -4323,12 +5033,17 @@ function loadDashHistory(){
     checkNewAchievements(h);
     // Show streak display
     if(US && US.currentStreak > 0) showStreakDisplay(US.currentStreak);
-    // Show horoscope and weekly tip based on dominant trait
+    // Show horoscope, weekly tip, daily challenge, career roadmap, growth tracker
     if(h.length > 0){
       var dom = h[0].dominantTrait || 'openness';
+      window._lastDominantTrait = dom;
       showHoroscope(dom, h[0].scores);
       showWeeklyTip(dom);
+      showDailyChallenge(dom);
+      showCareerRoadmap(dom, h[0].scores);
+      if(h.length >= 2) showGrowthTracker(h);
     }
+    initBottomNav();
   });
 }
 function loadInsights(){
@@ -4383,7 +5098,7 @@ function updateNav(){updateMobMenu();const a=document.getElementById('nav-area')
 function toggleAuth(m){const r=m==='reg';document.getElementById('lf').classList.toggle('hidden',r);document.getElementById('rf').classList.toggle('hidden',!r);document.getElementById('at').textContent=r?'Create account':'Welcome back';document.getElementById('as').textContent=r?'Start your AI personality journey':'Sign in to access your AI reports';document.getElementById('am').style.display='none';}
 async function doLogin(){const e=document.getElementById('le').value.trim(),p=document.getElementById('lp').value;if(!e||!p)return aMsg('Please fill all fields');const d=await api('/api/auth/login','POST',{email:e,password:p});if(d.success){saveS(d);showPage('pd');toast('Welcome back!');}else aMsg(d.message||'Login failed');}
 async function doRegister(){const n=document.getElementById('rn').value.trim(),e=document.getElementById('re').value.trim(),p=document.getElementById('rp').value;if(!n||!e||!p)return aMsg('Please fill all fields');if(p.length<6)return aMsg('Password min 6 chars');const d=await api('/api/auth/register','POST',{name:n,email:e,password:p});if(d.success){saveS(d);showPage('pd');toast('Account created!');}else aMsg(d.message||'Failed');}
-function saveS(d){TK=d.token;US=d.user;localStorage.setItem('piq_token',TK);localStorage.setItem('piq_user',JSON.stringify(US));updateNav();}
+function saveS(d){TK=d.token;US=d.user;localStorage.setItem('piq_token',TK);localStorage.setItem('piq_user',JSON.stringify(US));updateNav();initBottomNav();}
 function doLogout(){TK=null;US=null;localStorage.removeItem('piq_token');localStorage.removeItem('piq_user');resetTheme();updateNav();showPage('page-home');toast('Logged out');}
 
 // ===== DARK/LIGHT MODE =====
