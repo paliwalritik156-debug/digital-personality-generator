@@ -2839,6 +2839,246 @@ body.light-mode #page-home div[style*="color:var(--tx3)"][style*="font-size:0.85
   #page-home section > div > div[style*="grid-template-columns:1fr 1fr"]{grid-template-columns:1fr!important;}
   #page-home section > div > div[style*="grid-template-columns:1fr 1fr"] > div:last-child{display:none!important;}
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   MOBILE RESPONSIVE - COMPREHENSIVE FIX
+   Targets: 768px and below
+═══════════════════════════════════════════════════════════════ */
+@media screen and (max-width:768px){
+
+  /* ── Global ── */
+  *{box-sizing:border-box;}
+  body{overflow-x:hidden;}
+  
+  /* ── Navigation ── */
+  nav{padding:0 1rem !important;height:60px !important;}
+  .logo{font-size:1rem !important;}
+  .logo-i{width:28px !important;height:28px !important;font-size:0.9rem !important;}
+  #nav-area .nb{display:none !important;}
+  #nav-area .nu{display:none !important;}
+  #nav-area{display:none !important;}
+  .mob-nav{display:flex !important;}
+  
+  /* ── Hero Section ── */
+  #page-home{overflow-x:hidden !important;}
+  #page-home section:first-of-type{
+    padding:5rem 1.2rem 3rem !important;
+    min-height:auto !important;
+  }
+  #page-home h1{
+    font-size:clamp(2.2rem,9vw,3.5rem) !important;
+    letter-spacing:-0.03em !important;
+  }
+  #page-home p[style*="font-size:clamp(1rem"]{
+    font-size:0.95rem !important;
+    max-width:100% !important;
+  }
+  /* Hero stat cards - 2x2 */
+  #page-home div[style*="gap:14px"][style*="flex-wrap:wrap"]{
+    gap:8px !important;
+  }
+  #page-home div[style*="border-radius:22px"][style*="padding:20px 30px"]{
+    padding:12px 16px !important;
+  }
+  /* CTA buttons */
+  #page-home div[style*="gap:16px"][style*="flex-wrap:wrap"]{
+    flex-direction:column !important;
+    align-items:center !important;
+  }
+  #hero-cta-btn{width:100% !important;max-width:320px !important;}
+  #hero-signin-btn{width:100% !important;max-width:320px !important;}
+  /* Scroll indicator hide */
+  #page-home section > div > div[style*="position:absolute;bottom"]{display:none !important;}
+
+  /* ── About Section ── */
+  #page-home section div[style*="grid-template-columns:1fr 1fr"]{
+    grid-template-columns:1fr !important;
+  }
+  #page-home section div[style*="grid-template-columns:1fr 1fr"] > div:last-child{
+    display:none !important;
+  }
+
+  /* ── Features Section ── */
+  #page-home section div[style*="minmax(340px"]{
+    grid-template-columns:1fr !important;
+  }
+  #page-home section div[style*="minmax(300px"]{
+    grid-template-columns:1fr !important;
+  }
+
+  /* ── AI Showcase ── */
+  #page-home section div[style*="minmax(220px"]{
+    grid-template-columns:1fr 1fr !important;
+  }
+
+  /* ── Pricing ── */
+  #page-home section div[style*="minmax(280px"][style*="gap:24px"]{
+    grid-template-columns:1fr !important;
+  }
+
+  /* ── FAQ ── */
+  #page-home section div[style*="max-width:800px"]{
+    padding:0 !important;
+  }
+
+  /* ── Contact ── */
+  #page-home section div[style*="max-width:700px"]{
+    padding:0 !important;
+  }
+
+  /* ── Footer ── */
+  #main-footer div[style*="grid-template-columns"]{
+    grid-template-columns:1fr 1fr !important;
+    gap:2rem !important;
+  }
+  #main-footer > div > div:first-child{
+    grid-column:1/-1 !important;
+  }
+  #main-footer div[style*="justify-content:space-between"][style*="flex-wrap"]{
+    flex-direction:column !important;
+    gap:8px !important;
+    text-align:center !important;
+  }
+
+  /* ── Dashboard ── */
+  .dash-layout{
+    grid-template-columns:1fr !important;
+    margin-top:60px !important;
+  }
+  .sidebar{display:none !important;}
+  .dash-main{
+    padding:1.2rem 1rem 90px !important;
+  }
+  .dash-section h3{font-size:1.5rem !important;}
+  .overview-stats{
+    grid-template-columns:1fr 1fr !important;
+    gap:10px !important;
+  }
+  .ov-stat{padding:1rem !important;}
+  .ov-val{font-size:0.9rem !important;}
+  .quick-actions{grid-template-columns:1fr !important;}
+
+  /* ── Result Page ── */
+  #pr{padding-bottom:90px !important;}
+  .rg{
+    grid-template-columns:1fr !important;
+    padding:0 1rem 90px !important;
+    gap:1rem !important;
+  }
+  .rc{padding:1.2rem !important;}
+  .rc.w{grid-column:1 !important;}
+  .rh{padding:4rem 1rem 2rem !important;}
+  .rh h2{font-size:clamp(1.8rem,8vw,2.5rem) !important;}
+  .pb{padding:10px 18px !important;font-size:0.82rem !important;}
+  .ra{
+    flex-direction:column !important;
+    align-items:stretch !important;
+    padding:1.2rem 1rem !important;
+  }
+  .ra button{text-align:center !important;justify-content:center !important;}
+  #pr > div:first-child{
+    padding:8px 1rem !important;
+    flex-wrap:wrap !important;
+    gap:6px !important;
+  }
+  #pr > div:first-child button{font-size:0.75rem !important;padding:6px 12px !important;}
+  .tg{grid-template-columns:1fr !important;}
+  .ig{grid-template-columns:repeat(3,1fr) !important;}
+  .er{flex-direction:column !important;}
+  .bg2{grid-template-columns:1fr !important;}
+
+  /* ── Quiz Page ── */
+  #pq{padding-bottom:90px !important;}
+  .qs{padding:0.8rem !important;}
+  .qcard{padding:1.2rem !important;}
+  .rr{grid-template-columns:1fr 1fr !important;}
+  .qt{padding:0 0.5rem !important;}
+  #pq > div:first-child{padding:8px 1rem !important;}
+
+  /* ── Auth Page ── */
+  .al{display:none !important;}
+  .ac{
+    padding:4rem 1.2rem 2rem !important;
+    border-right:none !important;
+    min-height:auto !important;
+  }
+  .acard{padding:1.8rem 1.4rem !important;}
+  #pa{min-height:100vh !important;}
+
+  /* ── History Page ── */
+  .hhdr{
+    padding:4rem 1rem 1rem !important;
+    flex-direction:column !important;
+    align-items:flex-start !important;
+    gap:10px !important;
+  }
+  #hlist{padding:0 1rem 90px !important;}
+  .hi{padding:1rem !important;}
+  .hips{gap:4px !important;}
+
+  /* ── Chat Page ── */
+  .chat-wrap{padding:0.8rem 0.8rem 0 !important;}
+  .chat-bar{padding:0.8rem !important;}
+  .chat-bar-in{gap:8px !important;}
+
+  /* ── Static Pages ── */
+  #page-about > div,
+  #page-privacy > div,
+  #page-terms > div,
+  #page-contact > div{
+    padding:4rem 1.2rem 3rem !important;
+    max-width:100% !important;
+  }
+  #page-about h1,
+  #page-privacy h1,
+  #page-terms h1,
+  #page-contact h1{
+    font-size:1.8rem !important;
+  }
+
+  /* ── Modals ── */
+  #forgot-modal > div{
+    margin:12px !important;
+    padding:20px !important;
+    width:calc(100% - 24px) !important;
+  }
+  #email-modal > div{
+    margin:12px !important;
+    padding:20px !important;
+  }
+
+  /* ── Bottom Nav ── */
+  .bottom-nav{display:block !important;}
+  
+  /* ── Share Card ── */
+  #personality-share-card .shi > div:last-child{
+    flex-direction:column !important;
+  }
+  #personality-share-card button{width:100% !important;}
+
+  /* ── Action bars padding for bottom nav ── */
+  #pd .dash-main,#pr,#pq,#ph,#page-chat{
+    padding-bottom:90px !important;
+  }
+}
+
+/* ── Small phones ── */
+@media screen and (max-width:380px){
+  #page-home h1{font-size:2rem !important;}
+  .rh h2{font-size:1.6rem !important;}
+  .overview-stats{grid-template-columns:1fr 1fr !important;}
+  .ov-val{font-size:0.8rem !important;}
+  nav{padding:0 0.8rem !important;}
+  .logo{font-size:0.9rem !important;}
+}
+
+/* ── Tablet ── */
+@media screen and (min-width:769px) and (max-width:1024px){
+  .dash-layout{grid-template-columns:220px 1fr !important;}
+  .rg{padding:0 1.5rem 3rem !important;}
+  #page-home h1{font-size:clamp(3rem,7vw,5rem) !important;}
+  .dash-main{padding:2rem 1.5rem !important;}
+}
 </style>
 </head>
 <body>
