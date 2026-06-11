@@ -3082,13 +3082,13 @@ body.light-mode #page-home div[style*="color:var(--tx3)"][style*="font-size:0.85
 
 /* ── Auth page mobile fix ── */
 @media screen and (max-width:768px){
-  #pa{
+  #pa:not(.hidden){
     display:flex !important;
     flex-direction:column !important;
     min-height:100vh !important;
     padding-top:60px !important;
   }
-  #pa > div{
+  #pa:not(.hidden) > div{
     display:flex !important;
     flex-direction:column !important;
     min-height:calc(100vh - 60px) !important;
@@ -3117,6 +3117,26 @@ body.light-mode #page-home div[style*="color:var(--tx3)"][style*="font-size:0.85
     margin:0 auto !important;
     padding:2rem 1.5rem !important;
   }
+}
+
+/* ── CRITICAL: .hidden must always work ── */
+.hidden,
+.page.hidden,
+#pa.hidden,
+#pd.hidden,
+#pr.hidden,
+#pq.hidden,
+#pl.hidden,
+#ph.hidden,
+#page-home.hidden,
+#page-chat.hidden,
+#page-about.hidden,
+#page-privacy.hidden,
+#page-terms.hidden,
+#page-contact.hidden{
+  display:none !important;
+  visibility:hidden !important;
+  pointer-events:none !important;
 }
 </style>
 </head>
