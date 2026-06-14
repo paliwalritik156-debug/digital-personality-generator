@@ -2311,7 +2311,7 @@ body canvas, body img, body video, body .page, body .page *{transition:none !imp
 
 /* ── Bottom Navigation (Mobile) ── */
 .bottom-nav{
-  display:none;
+  display:none !important;
   position:fixed;bottom:0;left:0;right:0;z-index:200;
   background:rgba(5,5,8,0.97);
   backdrop-filter:blur(30px) saturate(180%);
@@ -2331,9 +2331,7 @@ body canvas, body img, body video, body .page, body .page *{transition:none !imp
 .bottom-nav-item:active{transform:scale(0.92);}
 .bottom-nav-icon{font-size:1.3rem;line-height:1;}
 @media(max-width:768px){
-  .bottom-nav{display:block;}
-  #pd .dash-main{padding-bottom:80px;}
-  #pr{padding-bottom:80px;}
+  .bottom-nav{display:none !important;}
 }
 body.light-mode .bottom-nav{background:rgba(255,250,245,0.97) !important;border-top-color:rgba(234,88,12,0.15) !important;}
 body.light-mode .bottom-nav-item{color:rgba(124,45,0,0.5) !important;}
@@ -2958,7 +2956,7 @@ body.light-mode #page-home div[style*="color:var(--tx3)"][style*="font-size:0.85
   .quick-actions{grid-template-columns:1fr !important;}
 
   /* ── Result Page ── */
-  #pr{padding-bottom:90px !important;}
+  #pr{padding-bottom:20px !important;}
   .rg{
     grid-template-columns:1fr !important;
     padding:0 1rem 90px !important;
@@ -2987,7 +2985,7 @@ body.light-mode #page-home div[style*="color:var(--tx3)"][style*="font-size:0.85
   .bg2{grid-template-columns:1fr !important;}
 
   /* ── Quiz Page ── */
-  #pq{padding-bottom:90px !important;}
+  #pq{padding-bottom:20px !important;}
   .qs{padding:0.8rem !important;}
   .qcard{padding:1.2rem !important;}
   .rr{grid-template-columns:1fr 1fr !important;}
@@ -3057,7 +3055,7 @@ body.light-mode #page-home div[style*="color:var(--tx3)"][style*="font-size:0.85
 
   /* ── Action bars padding for bottom nav ── */
   #pd .dash-main,#pr,#pq,#ph,#page-chat{
-    padding-bottom:90px !important;
+    padding-bottom:20px !important;
   }
 }
 
