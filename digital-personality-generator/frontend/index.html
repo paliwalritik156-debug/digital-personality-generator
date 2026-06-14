@@ -3152,58 +3152,13 @@ html body .page.hidden{display:none!important;}
   <div class="mob-item" id="mob-logout-btn" onclick="doLogout();closeMobMenu()" style="display:none">🚪 Logout</div>
 </div>
 
-<!-- Bottom Navigation for Mobile -->
-<div class="bottom-nav" id="bottom-nav">
-  <div class="bottom-nav-items">
-    <div class="bottom-nav-item active" id="bn-home" onclick="goHome();setBottomNav('bn-home')">
-      <span class="bottom-nav-icon">🏠</span>
-      <span>Home</span>
-    </div>
-    <div class="bottom-nav-item" id="bn-dash" onclick="if(TK){showPage('pd');setBottomNav('bn-dash');}else{showPage('pa','login');}">
-      <span class="bottom-nav-icon">📊</span>
-      <span>Dashboard</span>
-    </div>
-    <div class="bottom-nav-item" id="bn-test" onclick="handleStart();setBottomNav('bn-test')">
-      <span class="bottom-nav-icon">⚡</span>
-      <span>Test</span>
-    </div>
-    <div class="bottom-nav-item" id="bn-hist" onclick="if(TK){showPage('ph');setBottomNav('bn-hist');}else{showPage('pa','login');}">
-      <span class="bottom-nav-icon">📈</span>
-      <span>History</span>
-    </div>
-    <div class="bottom-nav-item" id="bn-chat" onclick="if(TK){openChat();setBottomNav('bn-chat');}else{showPage('pa','login');}">
-      <span class="bottom-nav-icon">🤖</span>
-      <span>Twin</span>
-    </div>
-  </div>
+
 </div>
 
 <div class="toast" id="toast"></div>
 
 <!-- Bottom Navigation (Mobile) -->
-<div class="bottom-nav" id="bottom-nav" style="display:none;">
-  <div class="bottom-nav-items">
-    <div class="bottom-nav-item active" id="bn-home" onclick="goHome();updateBottomNav('home')">
-      <span class="bottom-nav-icon">🏠</span>
-      <span>Home</span>
-    </div>
-    <div class="bottom-nav-item" id="bn-dash" onclick="showPage('pd');updateBottomNav('dash')">
-      <span class="bottom-nav-icon">📊</span>
-      <span>Dashboard</span>
-    </div>
-    <div class="bottom-nav-item" id="bn-test" onclick="handleStart();updateBottomNav('test')">
-      <span class="bottom-nav-icon">⚡</span>
-      <span>Test</span>
-    </div>
-    <div class="bottom-nav-item" id="bn-hist" onclick="showPage('ph');updateBottomNav('hist')">
-      <span class="bottom-nav-icon">📈</span>
-      <span>History</span>
-    </div>
-    <div class="bottom-nav-item" id="bn-chat" onclick="openChat();updateBottomNav('chat')">
-      <span class="bottom-nav-icon">🤖</span>
-      <span>Twin</span>
-    </div>
-  </div>
+
 </div>
 <div id="page-home" class="page hidden" style="position:relative;overflow:hidden;">
 
